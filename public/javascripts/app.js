@@ -39,12 +39,13 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "categoryController",
         templateUrl : "../modules/admin/views/categories.html"
     })
-    .when("/admin/categories/add", {
+    .when("/admin/category/add", {
         controller : "categoryController",
         templateUrl : "../modules/admin/views/addCategory.html"
     })
-    .when("/blue", {
-        templateUrl : "blue.htm"
+    .when("/admin/category/update/:id", {
+        controller : "categoryController",
+        templateUrl : "../modules/admin/views/addCategory.html"
     });
 });
 

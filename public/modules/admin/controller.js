@@ -144,5 +144,16 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
             });
         }
     }
+
+    $scope.getCategoryById = function(){
+        var id = $route.params.id;
+
+        adminService.getCategoryById(id).then(function(response){
+            $scope.category = response.data;
+            }).catch(function(response) {
+                
+            });
+    }
+
 }]);
 
