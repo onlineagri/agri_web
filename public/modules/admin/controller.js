@@ -33,6 +33,19 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
     
     $scope.category = {};
 
+    $scope.uploadImage = function(files) {
+        $scope.showMsg = false;
+        if (files.length == 1) {
+            $scope.selectedImg = true;
+        } else {
+            $scope.selectedImg = false;
+        }
+
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    }
+
     $scope.getCategories = function(){
         adminService.getCategories().then(function(response){
             if(response.data.code == 200){
@@ -51,7 +64,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
                     paginationMinBlocks: 2,
                     dataset: categoryArray
                   };
-                  return new NgTableParams(initialParams, initialSettings);
+                  $scope.tableParams = new NgTableParams(initialParams, initialSettings);
             } else {
                 toaster.pop({
                     type: 'error',
@@ -68,30 +81,67 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
         });
     }
 
-    $scope.addCategory = function(){
-
-        adminService.addCategory($scope.category).then(function(response){
-            if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
-                $location.path('/admin/categories');
-            } else {
+    $scope.addCategory = function(category){
+        if (document.getElementById("image").files[0] && $scope.selectedImg) {
+            var imgElem = document.getElementById("image").files[0];
+            var reader = new FileReader();
+            reader.readAsDataURL(imgElem);
+            reader.onload = function(onLoadEvent) {
+                if (onLoadEvent.target.result) {
+                    var image = new Image();
+                    image.src = onLoadEvent.target.result;
+                    image.onload = function() {
+                        $scope.category["image"] = onLoadEvent.target.result;
+                        // console.log('category', category);
+                        adminService.addCategory($scope.category).then(function(response){
+                            if(response.data.code == 200){
+                                toaster.pop({
+                                    type: 'success',
+                                    title: '',
+                                    body: response.data.message
+                                });
+                                $location.path('/admin/categories');
+                            } else {
+                                toaster.pop({
+                                    type: 'error',
+                                    title: '',
+                                    body: response.data.message
+                                });
+                            }
+                        }).catch(function(response) {
+                            toaster.pop({
+                                type: 'error',
+                                title: '',
+                                body: response.data.message
+                            });
+                        });
+                    }
+                }
+            }
+        }else{
+            adminService.addCategory($scope.category).then(function(response){
+                if(response.data.code == 200){
+                    toaster.pop({
+                        type: 'success',
+                        title: '',
+                        body: response.data.message
+                    });
+                    $location.path('/admin/categories');
+                } else {
+                    toaster.pop({
+                        type: 'error',
+                        title: '',
+                        body: response.data.message
+                    });
+                }
+            }).catch(function(response) {
                 toaster.pop({
                     type: 'error',
                     title: '',
                     body: response.data.message
                 });
-            }
-        }).catch(function(response) {
-            toaster.pop({
-                type: 'error',
-                title: '',
-                body: response.data.message
             });
-        });
+        }
     }
 }]);
 

@@ -6,29 +6,51 @@
   <div class="col-md-8">
     <h3 class="text-center" style="margin-top: 10px;">Add Category</h3>
     <form name="categoryForm">
+      <div class="form-group" style="margin-top: 15px;">
+        <label for="type" class="col-md-4 col-md-offset-2">Type:*</label>
+        <label class="col-sm-2 control-label" for="organic">
+          <input type="radio" name="type" id="organic" ng-model="category.type" value="organic" required> Organic
+        </label>
+        <label class="col-sm-2" for="nonorganic">
+          <input type="radio" name="type" id="nonorganic" ng-model="category.type" value="nonorganic" required> Non-organic
+        </label>
+        <span class="error-messages" ng-show="categoryForm.type.$dirty && categoryForm.type.$invalid">
+          <span  ng-show="categoryForm.type.$error.required">please select type</span>
+        </span>
+      </div>
       <div class="form-group">
         <label for="name" class="col-md-4 col-md-offset-2">Name:*</label>
         <input type="text" class="col-md-4 " id="name" name="name" ng-model="category.name" required>
+        <span class="error-messages" ng-show="categoryForm.name.$dirty && categoryForm.name.$invalid">
+          <span  ng-show="categoryForm.name.$error.required">please enter category name</span>
+        </span>
       </div>
       <div class="form-group">
-        <label for="description" class="col-md-4 col-md-offset-2">Description:*</label>
+        <label for="description" class="col-md-4 col-md-offset-2">Description:</label>
         <textarea name="description" class="col-md-4 " rows="5" cols="30" id="description" ng-model="category.description"></textarea>
       </div>
       <div class="form-group">
         <label class="col-md-4">Active:</label>
-        <label class="switch"><input type="checkbox" ng-model="category.status">
+        <label class="switch"><input type="checkbox" name="status" ng-model="category.status">
         <span class="slider"></span>
       </label>
     </div>
     <div class="form-group">
-      <label class="col-md-4" for="image">Image</label>
+      <label class="col-md-4" for="image">Image:*</label>
       <span class="col-md-4">
-        <input type="file"  name='image' id="img" accept="image/*" ng-model="category.image">
+        <input type="file" name='image' id="image" accept="image/jpeg,image/png,image/jpg" ng-model="category.image" onchange="angular.element(this).scope().uploadImage(this.files)">
       </span>
+    </div>
+    <div class="form-group" ng-if="image.imageUrl" ng-show="image.imageUrl">
+        <label class="col-sm-4 control-label" for="imageshow">Image</label>
+        <br/>
+        <div class="col-sm-8 thumbnail">
+            <img class="loyaltyimg-thumbnail" ng-src="{{image.imageUrl}}" id="imageshow" name='imageshow' crossOrigin="Anonymous">
+        </div>
     </div>
     <div class="form-group" style="margin-top: 50px;">
       <label class="col-md-4"></label>
-      <button type="submit" class="btn btn-default">Submit</button>
+      <input type="submit" class="btn btn-primary" ng-disabled="categoryForm.$invalid" value="Submit" ng-click="addCategory(category)">
     </div>
   </form>
 </div>
