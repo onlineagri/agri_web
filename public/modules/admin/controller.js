@@ -29,7 +29,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
             });
         });
     }
-}]).controller('categoryController', ['$scope', 'adminService','toaster','$localStorage','$location', 'NgTableParams', function($scope, adminService, toaster, $localStorage, $location, NgTableParams) {
+}]).controller('categoryController', ['$scope', 'adminService','toaster','$localStorage','$location', 'NgTableParams', '$route', function($scope, adminService, toaster, $localStorage, $location, NgTableParams, $route) {
     
     $scope.category = {};
 
