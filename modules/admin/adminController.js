@@ -20,19 +20,25 @@ exports.addCategory = function(req, res){
         },
         function(callback) {
             //validation for unique
-            CategoryModel.findOne({ name: categoryParams.name, isDeleted: false}, function (err, category) {
-            	if(err){
-            		console.log("dberror addCategory", err);
-            		callback("Internal server error");
-            	} else {
-            		if(common.isValid(category)){
-            			callback("This category is already available");
-            		} else {
-            			callback();
-            		}
-            	}
-            })
-                
+	        if (!common.isValid(categoryParams.id)) {
+	            CategoryModel.findOne({
+	                name: categoryParams.name,
+	                isDeleted: false
+	            }, function(err, category) {
+	                if (err) {
+	                    console.log("dberror addCategory", err);
+	                    callback("Internal server error");
+	                } else {
+	                    if (common.isValid(category)) {
+	                        callback("This category is already available");
+	                    } else {
+	                        callback();
+	                    }
+	                }
+	            })
+	        } else {
+	        	callback();
+	        }
         },
         function(callback) {
             var imageName = categoryParams.image;
@@ -75,16 +81,28 @@ exports.addCategory = function(req, res){
             }
         },
         function(callback){
-        	let categoryData = new CategoryModel(saveParams);
+        	if(!common.isValid(categoryParams.id)){
+        		let categoryData = new CategoryModel(saveParams);
 				categoryData.save(function(err, data){
 					if(err){
 						console.log("dberror addCategory", err);
-            			callback("Internal server error");
+	        			callback("Internal server error");
 					} else {
-						callback()
+						callback();
 					}
 				})
+        	} else {
+        		let id = categoryParams.id;
+        		categoryData.update({_id: id}, { $set: saveParams}, function(err, data){
+        			if(err){
+        				console.log("dberror addCategory", err);
+	        			callback("Internal server error");
+        			} else {
+        				callback();
+        			}
+        		})
         	}
+        }
     ], function(err) {
     	if(err){
     		res.json({code : 400, message: err});
@@ -93,6 +111,39 @@ exports.addCategory = function(req, res){
     	}  
     });
 
+}
+
+exports.deleteCategory = function(req, res) {
+	let id = req.params.id;
+	if(!common.isValid(id)){
+		res.json({code: 400, message:"Parameters missing"});
+	}
+	categoryData.update({_id: id}, { $set: {'isDeleted': true}}, function(err, data){
+		if(err){
+			console.log("dberror addCategory", err);
+			res.json({code: 400, message:"Internal server error"});
+		} else {
+			res.json({code: 200, message:"Category deleted Successfuly", data: []});
+		}
+	})
+	
+}
+
+
+exports.getCategoryById = function(req, res) {
+	let id = req.params.id;
+	if(!common.isValid(id)){
+		res.json({code: 400, message:"Parameters missing"});
+	}
+	categoryData.findOne({_id: id}, function(err, data){
+		if(err){
+			console.log("dberror addCategory", err);
+			res.json({code: 400, message:"Internal server error"});
+		} else {
+			res.json({code: 200, message:"Category Fetched Successfuly", data: data});
+		}
+	})
+	
 }
 
 exports.getCategories = function(req, res) {
@@ -107,3 +158,4 @@ exports.getCategories = function(req, res) {
 			}
 		})
 }
+
