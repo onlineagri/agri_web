@@ -1,10 +1,8 @@
 var db = require("../../db.js");
 var CategoryModel = db.CategoryModel();
-var multer = require('multer');
-var upload = multer({ dest: '/uploads/' });
-upload.any();
 var common = require("../../config/common.js");
 var async =require('async');
+var fs = require('fs');
 
 exports.addCategory = function(req, res){
 	let categoryParams = req.body;
@@ -38,7 +36,7 @@ exports.addCategory = function(req, res){
         },
         function(callback) {
             var imageName = categoryParams.image;
-            if (common.isValid(image) && !common.isEmptyString(image)) {
+            if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
                 var imageTypeRegularExpression = /\/(.*?)$/;
                 var file = {};
                 var fileName = common.slugify(categoryParams.name) + "_" + new Date().getTime();

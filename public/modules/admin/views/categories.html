@@ -15,6 +15,8 @@
 				<td title="'Status'">
 				<span ng-if="category.status"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
 				<span ng-if="!category.status"><i class="fa fa-times" aria-hidden="true"></i></span></td>
+				<td title="'Actions'" filter="{ name: 'text'}" sortable="'name'">
+				{{category.name}}</td>
 			</tr>
 		</table>
 	</div>
