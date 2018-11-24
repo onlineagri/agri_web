@@ -47,6 +47,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
     }
 
     $scope.getCategories = function(){
+        // console.log("getCategories");
         adminService.getCategories().then(function(response){
             if(response.data.code == 200){
                 toaster.pop({
@@ -64,7 +65,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
                     paginationMinBlocks: 2,
                     dataset: categoryArray
                   };
-                  $scope.tableParams = new NgTableParams(initialParams, initialSettings);
+                  $scope.tableParams =  new NgTableParams(initialParams, initialSettings);
             } else {
                 toaster.pop({
                     type: 'error',
