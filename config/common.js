@@ -1,6 +1,8 @@
 var default_set = require('./default.js');
 var jwt = require("jsonwebtoken");
 const slug = require('slug');
+const lodash = require('lodash');
+const validImageTypes = ['image/gif', 'image/png', 'image/jpeg'];
 
 
 const isValid = exports.isValid = function(data) {
@@ -61,5 +63,11 @@ exports.decodeBase64Image = function(dataString, res) {
 
 }
 
+exports.capitalizeFirstLetter = function(str) {
+    if(lodash.isString(str) && str.length)
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    else
+        return str;
+}
 exports.default_set = default_set;
     
