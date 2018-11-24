@@ -52,7 +52,5 @@ typings/
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 
-# CSV file
-taecout-webapp/uploads/*
-!taecout-webapp/uploads/orderPdf.html
+
 
