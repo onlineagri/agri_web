@@ -1,0 +1,21 @@
+<div class="row">
+	<div class="col-md-3">
+		<div ng-include="'../../../staticViews/adminAside.html'"></div>
+	</div>
+	
+	<div class="col-md-8">
+		<h3 class="text-center" style="margin-top: 10px;">Manage Categories</h3>
+		<span class="float-right"><a href="#!/admin/categories/add" class="btn btn-success">ADD</a></span>
+		<table ng-table="tableParams" class="table" show-filter="true" style="margin-top: 55px;">
+			<tr ng-repeat="category in $data">
+				<td title="'Name'" filter="{ name: 'text'}" sortable="'name'">
+				{{category.name}}</td>
+				<td title="'Details'">
+				{{category.description}}</td>
+				<td title="'Status'">
+				<span ng-if="category.status"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
+				<span ng-if="!category.status"><i class="fa fa-times" aria-hidden="true"></i></span></td>
+			</tr>
+		</table>
+	</div>
+</div>

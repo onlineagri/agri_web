@@ -1,0 +1,47 @@
+<div class="row">
+	<div class="col-md-3">
+		<div ng-include="'../../../staticViews/adminAside.html'"></div>
+	</div>
+	<div class="col-md-8">
+      <div class="card-deck mb-2 text-center cardtop">
+        <div class="card mb-3 shadow-sm">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Transactions</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">&#x20b9; 0 </h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>{{totalOrders}} Orders</li>
+            </ul>
+            <button type="button" class="btn btn-lg btn-block btn-primary">Manage</button>
+          </div>
+        </div>
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Customers</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">{{totalCustomers ? totalCustomers : 0}}</h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li> Customers</li>
+            </ul>
+            <button type="button" class="btn btn-lg btn-block btn-primary">Manage</button>
+          </div>
+        </div>
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Farmers</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">{{totalFarmers ? totalFarmers : 0}}</h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>Farmers</li>
+            </ul>
+            <button type="button" class="btn btn-lg btn-block btn-primary">Manage</button>
+          </div>
+        </div>
+      </div>
+	<div class="col-md-1"></div>
+</div>
+
+

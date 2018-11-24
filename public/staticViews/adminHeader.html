@@ -1,0 +1,11 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+   <a class="navbar-brand" href="#">
+    <img src="/images/homelogo.png" alt="Logo" style="width:50px; height: 50px;">
+  </a>
+  <div class="navbar-nav ml-auto" ng-controller="staticController">
+ 
+  	<a ng-if="logOut == 'Login'" href="#!/admin/login" class="btn btn-success">{{logOut}}</a>
+  	<a ng-if="logOut == 'Logout'" href="javascript:void(0)" ng-click="adminLogout()" class="btn btn-success">{{logOut}}</a>
+  </div>
+
+</nav>
