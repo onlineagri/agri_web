@@ -41,11 +41,11 @@
         <input type="file" name='image' id="image" accept="image/jpeg,image/png,image/jpg" ng-model="category.image" onchange="angular.element(this).scope().uploadImage(this.files)">
       </span>
     </div>
-    <div class="form-group" ng-if="image.imageUrl" ng-show="image.imageUrl">
+    <div class="form-group" ng-if="category.imageName" ng-show="category.imageName">
         <label class="col-sm-4 control-label" for="imageshow">Image</label>
         <br/>
         <div class="col-sm-8 thumbnail">
-            <img class="loyaltyimg-thumbnail" ng-src="{{image.imageUrl}}" id="imageshow" name='imageshow' crossOrigin="Anonymous">
+            <img class="loyaltyimg-thumbnail" ng-src="{{category.imageName}}" id="imageshow" name='imageshow' crossOrigin="Anonymous">
         </div>
     </div>
     <div class="form-group" style="margin-top: 50px;">
