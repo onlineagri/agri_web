@@ -5,7 +5,7 @@
 	
 	<div class="col-md-8" ng-init="getCategories()">
 		<h3 class="text-center" style="margin-top: 10px;">Manage Categories</h3>
-		<span class="float-right"><a href="#!/admin/categories/add" class="btn btn-success">ADD</a></span>
+		<span class="float-right"><a href="#!/admin/category/add" class="btn btn-success">ADD</a></span>
 		<table ng-table="tableParams" class="table table-bordered table-hover" show-filter="true" style="margin-top: 55px;">
 			<tr class="text-center" ng-repeat="category in $data">
 				<td title="'Name'" filter="{ name: 'text'}" sortable="'name'" ng-bind="category.name"></td>

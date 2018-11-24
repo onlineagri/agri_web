@@ -149,7 +149,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
         var id = $routeParams.id;
 
         adminService.getCategoryById(id).then(function(response){
-            $scope.category = response.data;
+            $scope.category = response.data.data;
             }).catch(function(response) {
                 toaster.pop({
                     type: 'error',
