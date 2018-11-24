@@ -20,7 +20,7 @@ exports.addCategory = function(req, res){
         },
         function(callback) {
             //validation for unique
-	        if (!common.isValid(categoryParams.id)) {
+	        if (!common.isValid(categoryParams._id)) {
 	            CategoryModel.findOne({
 	                name: categoryParams.name,
 	                isDeleted: false
@@ -81,7 +81,7 @@ exports.addCategory = function(req, res){
             }
         },
         function(callback){
-        	if(!common.isValid(categoryParams.id)){
+        	if(!common.isValid(categoryParams._id)){
         		let categoryData = new CategoryModel(saveParams);
 				categoryData.save(function(err, data){
 					if(err){
@@ -92,7 +92,7 @@ exports.addCategory = function(req, res){
 					}
 				})
         	} else {
-        		let id = categoryParams.id;
+        		let id = categoryParams._id;
         		CategoryModel.update({_id: id}, { $set: saveParams}, function(err, data){
         			if(err){
         				console.log("dberror addCategory", err);
@@ -140,6 +140,7 @@ exports.getCategoryById = function(req, res) {
 			console.log("dberror addCategory", err);
 			res.json({code: 400, message:"Internal server error"});
 		} else {
+			console.log(data)
 			let resdata = {
 				_id: data._id,
 				type: data.type,

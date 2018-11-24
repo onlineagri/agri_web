@@ -7,7 +7,7 @@ var adminController = require("../modules/admin/adminController.js");
 router.post('/category/add', adminController.addCategory);
 router.get('/category', adminController.getCategories);
 router.get('/category/:id', adminController.getCategoryById);
-router.post('/category/update', adminController.addCategory);
+router.put('/category/update', adminController.addCategory);
 router.delete('/category/delete/:id', adminController.deleteCategory);
 
 
