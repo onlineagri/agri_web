@@ -37,12 +37,12 @@ exports.addCategory = function(req, res){
                 
         },
         function(callback) {
-            var imageName = categoryParams.imageName;
-            if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
+            var imageName = categoryParams.image;
+            if (common.isValid(image) && !common.isEmptyString(image)) {
                 var imageTypeRegularExpression = /\/(.*?)$/;
                 var file = {};
                 var fileName = common.slugify(categoryParams.name) + "_" + new Date().getTime();
-                var imageBuffer = common.decodeBase64Image(categoryParams.imageName);
+                var imageBuffer = common.decodeBase64Image(categoryParams.image);
                 if (imageBuffer == "err") {
                     callback('Not a valid image type');
                 } else {
@@ -98,7 +98,7 @@ exports.addCategory = function(req, res){
 }
 
 exports.getCategories = function(req, res) {
-	
+
 	CategoryModel.find()
 		.select({'_id': 1, 'name': 1, 'description':1, 'status': 1})
 		.exec(function(err, data){
