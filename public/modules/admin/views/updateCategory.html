@@ -3,7 +3,7 @@
     <div ng-include="'../../../staticViews/adminAside.html'"></div>
   </div>
   
-  <div class="col-md-8">
+  <div class="col-md-8" ng-init="getCategoryById()">
     <h3 class="text-center" style="margin-top: 10px;">Add Category</h3>
     <form name="categoryForm">
       <div class="form-group" style="margin-top: 15px;">
@@ -50,7 +50,7 @@
     </div>
     <div class="form-group" style="margin-top: 50px;">
       <label class="col-md-4"></label>
-      <input type="submit" class="btn btn-primary" ng-disabled="categoryForm.$invalid" value="Submit" ng-click="addCategory(category)">
+      <input type="submit" class="btn btn-primary" ng-disabled="categoryForm.$invalid" value="Submit" ng-click="updateCategory(category)">
     </div>
   </form>
 </div>

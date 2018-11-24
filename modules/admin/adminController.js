@@ -52,7 +52,7 @@ exports.addCategory = function(req, res){
                 } else {
                     var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
                     if (common.isValidImageType(imageTypeDetected.input)) {
-                        var userUploadedImagePath = "/uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
+                        var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
                         imageName = fileName + "." + imageTypeDetected[1];
                         file.path = userUploadedImagePath,
                             file.name = fileName + '.' + imageTypeDetected[1],
