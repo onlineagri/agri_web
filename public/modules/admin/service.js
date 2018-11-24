@@ -53,5 +53,15 @@ app.factory('adminService',['$http', function ($http) {
       }).catch(function () {
       });
     },
+
+    deleteCategory : function(id){
+      return $http({
+        method: 'DELETE',
+        url: webservices.deleteCategory + "/" + id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
   }
 }]);

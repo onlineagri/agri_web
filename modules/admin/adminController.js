@@ -140,7 +140,6 @@ exports.getCategoryById = function(req, res) {
 			console.log("dberror addCategory", err);
 			res.json({code: 400, message:"Internal server error"});
 		} else {
-			console.log(data)
 			let resdata = {
 				_id: data._id,
 				type: data.type,
@@ -157,7 +156,7 @@ exports.getCategoryById = function(req, res) {
 
 exports.getCategories = function(req, res) {
 
-	CategoryModel.find()
+	CategoryModel.find({isDeleted: false})
 		.select({'_id': 1, 'name': 1, 'description':1, 'status': 1})
 		.exec(function(err, data){
 			if(err){

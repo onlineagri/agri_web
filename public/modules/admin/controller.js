@@ -29,7 +29,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
             });
         });
     }
-}]).controller('categoryController', ['$scope', 'adminService','toaster','$localStorage','$location', 'NgTableParams', '$routeParams', function($scope, adminService, toaster, $localStorage, $location, NgTableParams, $routeParams) {
+}]).controller('categoryController', ['$scope', 'adminService','toaster','$localStorage','$location', 'NgTableParams', '$routeParams','$route', function($scope, adminService, toaster, $localStorage, $location, NgTableParams, $routeParams, $route) {
     
     $scope.category = {};
 
@@ -149,7 +149,41 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
         var id = $routeParams.id;
 
         adminService.getCategoryById(id).then(function(response){
-            $scope.category = response.data.data;
+                if(response.data.code == 200){
+                    $scope.category = response.data.data;
+                } else {
+                    toaster.pop({
+                        type: 'error',
+                        title: '',
+                        body: response.data.message
+                    });
+                }
+            }).catch(function(response) {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: "Something went wrong"
+                });
+            });
+    }
+
+
+    $scope.deleteCategory = function(id){
+        adminService.deleteCategory(id).then(function(response){
+                if(response.data.code == 200){
+                    toaster.pop({
+                        type: 'success',
+                        title: '',
+                        body: response.data.message
+                    });
+                    $route.reload('/admin/categories');
+                } else {
+                    toaster.pop({
+                        type: 'error',
+                        title: '',
+                        body: response.data.message
+                    });
+                }
             }).catch(function(response) {
                 toaster.pop({
                     type: 'error',
@@ -199,6 +233,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
         }else{
             adminService.updateCategory($scope.category).then(function(response){
                 if(response.data.code == 200){
+
                     toaster.pop({
                         type: 'success',
                         title: '',
