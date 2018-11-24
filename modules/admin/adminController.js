@@ -146,7 +146,7 @@ exports.getCategoryById = function(req, res) {
 				name: data.name,
 				status: data.status,
 				description: data.description,
-				imageName: data.imageName
+				imageName: '/uploads/' +data.imageName
 			}
 			res.json({code: 200, message:"Category Fetched Successfuly", data: resdata});
 		}
