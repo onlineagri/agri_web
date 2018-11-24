@@ -11,7 +11,7 @@ exports.addCategory = function(req, res){
         function(callback) {
         	saveParams = {
         		type : categoryParams.type,
-        		name : categoryParams.name,
+        		name : common.capitalizeFirstLetter(categoryParams.name),
         		description : categoryParams.description,
         		status : categoryParams.status,
         	}
