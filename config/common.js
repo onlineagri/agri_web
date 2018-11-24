@@ -1,5 +1,8 @@
 var default_set = require('./default.js');
 var jwt = require("jsonwebtoken");
+const slug = require('slug');
+
+
 const isValid = exports.isValid = function(data) {
     if (data !== null && data !== undefined) {
         return true;
