@@ -31,6 +31,16 @@ app.factory('adminService',['$http', function ($http) {
           return response;
       }).catch(function () {
       });
+    },
+
+    getCategoryById: function(id){
+      return $http({
+        method: 'GET',
+        url: webservices.getCategoryById + "/" + id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
     }
   }
 }]);

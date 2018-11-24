@@ -6,17 +6,18 @@
 	<div class="col-md-8" ng-init="getCategories()">
 		<h3 class="text-center" style="margin-top: 10px;">Manage Categories</h3>
 		<span class="float-right"><a href="#!/admin/categories/add" class="btn btn-success">ADD</a></span>
-		<table ng-table="tableParams" class="table" show-filter="true" style="margin-top: 55px;">
-			<tr ng-repeat="category in $data">
-				<td title="'Name'" filter="{ name: 'text'}" sortable="'name'">
-				{{category.name}}</td>
-				<td title="'Details'">
-				{{category.description}}</td>
+		<table ng-table="tableParams" class="table table-bordered table-hover" show-filter="true" style="margin-top: 55px;">
+			<tr class="text-center" ng-repeat="category in $data">
+				<td title="'Name'" filter="{ name: 'text'}" sortable="'name'" ng-bind="category.name"></td>
+				<td title="'Details'" ng-bind="category.description">
+				</td>
 				<td title="'Status'">
 				<span ng-if="category.status"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
 				<span ng-if="!category.status"><i class="fa fa-times" aria-hidden="true"></i></span></td>
-				<td title="'Actions'" filter="{ name: 'text'}" sortable="'name'">
-				{{category.name}}</td>
+				<td title="'Actions'">
+					<a href="/#/admin/category/update/{{category._id}}" alt="Click to edit" title="Click to delete"><i class="fa fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
+					<a href="javascript:void(0);" alt="Click to delete" title="Click to delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+				</td>
 			</tr>
 		</table>
 	</div>
