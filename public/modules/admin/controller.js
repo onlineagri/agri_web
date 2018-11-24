@@ -47,7 +47,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
     }
 
     $scope.getCategories = function(){
-        console.log("getCategories");
+        // console.log("getCategories");
         adminService.getCategories().then(function(response){
             if(response.data.code == 200){
                 toaster.pop({
