@@ -93,7 +93,7 @@ exports.addCategory = function(req, res){
 				})
         	} else {
         		let id = categoryParams.id;
-        		categoryData.update({_id: id}, { $set: saveParams}, function(err, data){
+        		CategoryModel.update({_id: id}, { $set: saveParams}, function(err, data){
         			if(err){
         				console.log("dberror addCategory", err);
 	        			callback("Internal server error");
@@ -118,7 +118,7 @@ exports.deleteCategory = function(req, res) {
 	if(!common.isValid(id)){
 		res.json({code: 400, message:"Parameters missing"});
 	}
-	categoryData.update({_id: id}, { $set: {'isDeleted': true}}, function(err, data){
+	CategoryModel.update({_id: id}, { $set: {'isDeleted': true}}, function(err, data){
 		if(err){
 			console.log("dberror addCategory", err);
 			res.json({code: 400, message:"Internal server error"});
@@ -135,7 +135,7 @@ exports.getCategoryById = function(req, res) {
 	if(!common.isValid(id)){
 		res.json({code: 400, message:"Parameters missing"});
 	}
-	categoryData.findOne({_id: id}, function(err, data){
+	CategoryModel.findOne({_id: id}, function(err, data){
 		if(err){
 			console.log("dberror addCategory", err);
 			res.json({code: 400, message:"Internal server error"});
