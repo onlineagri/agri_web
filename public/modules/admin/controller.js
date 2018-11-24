@@ -25,7 +25,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
     		toaster.pop({
                 type: 'error',
                 title: '',
-                body: response.data.message
+                body: "Something went wrong"
             });
         });
     }
@@ -77,7 +77,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
             toaster.pop({
                 type: 'error',
                 title: '',
-                body: response.data.message
+                body: "Something went wrong"
             });
         });
     }
@@ -113,7 +113,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
                             toaster.pop({
                                 type: 'error',
                                 title: '',
-                                body: response.data.message
+                                body: "Something went wrong"
                             });
                         });
                     }
@@ -139,7 +139,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
                 toaster.pop({
                     type: 'error',
                     title: '',
-                    body: response.data.message
+                    body: "Something went wrong"
                 });
             });
         }
@@ -151,8 +151,75 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
         adminService.getCategoryById(id).then(function(response){
             $scope.category = response.data;
             }).catch(function(response) {
-                
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: "Something went wrong"
+                });
             });
+    }
+
+    $scope.updateCategory = function(category){
+        if (document.getElementById("image").files[0] && $scope.selectedImg) {
+            var imgElem = document.getElementById("image").files[0];
+            var reader = new FileReader();
+            reader.readAsDataURL(imgElem);
+            reader.onload = function(onLoadEvent) {
+                if (onLoadEvent.target.result) {
+                    var image = new Image();
+                    image.src = onLoadEvent.target.result;
+                    image.onload = function() {
+                        $scope.category["image"] = onLoadEvent.target.result;
+                        // console.log('category', category);
+                        adminService.updateCategory($scope.category).then(function(response){
+                            if(response.data.code == 200){
+                                toaster.pop({
+                                    type: 'success',
+                                    title: '',
+                                    body: response.data.message
+                                });
+                                $location.path('/admin/categories');
+                            } else {
+                                toaster.pop({
+                                    type: 'error',
+                                    title: '',
+                                    body: response.data.message
+                                });
+                            }
+                        }).catch(function(response) {
+                            toaster.pop({
+                                type: 'error',
+                                title: '',
+                                body: "Something went wrong"
+                            });
+                        });
+                    }
+                }
+            }
+        }else{
+            adminService.updateCategory($scope.category).then(function(response){
+                if(response.data.code == 200){
+                    toaster.pop({
+                        type: 'success',
+                        title: '',
+                        body: response.data.message
+                    });
+                    $location.path('/admin/categories');
+                } else {
+                    toaster.pop({
+                        type: 'error',
+                        title: '',
+                        body: response.data.message
+                    });
+                }
+            }).catch(function(response) {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: "Something went wrong"
+                });
+            });
+        }
     }
 
 }]);
