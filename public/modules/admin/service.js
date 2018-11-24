@@ -41,6 +41,17 @@ app.factory('adminService',['$http', function ($http) {
           return response;
       }).catch(function () {
       });
-    }
+    },
+
+    updateCategory: function (params) {
+      return $http({
+        method: 'PUT',
+        data: params,
+        url: webservices.updateCategory
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
   }
 }]);
