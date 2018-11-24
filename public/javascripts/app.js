@@ -19,7 +19,8 @@ app.factory('basicAuthenticationInterceptor',['$localStorage' , '$location', fun
     return basicAuthenticationInterceptor;
 }])
 
-app.config(function($routeProvider) {
+app.config(function($routeProvider, $httpProvider) {
+    $httpProvider.interceptors.push('basicAuthenticationInterceptor');
     $routeProvider
     
     .when("/", {
