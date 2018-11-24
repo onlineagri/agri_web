@@ -140,7 +140,15 @@ exports.getCategoryById = function(req, res) {
 			console.log("dberror addCategory", err);
 			res.json({code: 400, message:"Internal server error"});
 		} else {
-			res.json({code: 200, message:"Category Fetched Successfuly", data: data});
+			let resdata = {
+				_id: data._id,
+				type: data.type,
+				name: data.name,
+				status: data.status,
+				description: data.description,
+				imageName: data.imageName
+			}
+			res.json({code: 200, message:"Category Fetched Successfuly", data: resdata});
 		}
 	})
 	
