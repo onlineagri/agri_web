@@ -29,7 +29,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
             });
         });
     }
-}]).controller('categoryController', ['$scope', 'adminService','toaster','$localStorage','$location', 'NgTableParams', '$route', function($scope, adminService, toaster, $localStorage, $location, NgTableParams, $route) {
+}]).controller('categoryController', ['$scope', 'adminService','toaster','$localStorage','$location', 'NgTableParams', '$routeParams', function($scope, adminService, toaster, $localStorage, $location, NgTableParams, $routeParams) {
     
     $scope.category = {};
 
@@ -146,7 +146,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
     }
 
     $scope.getCategoryById = function(){
-        var id = $route.params.id;
+        var id = $routeParams.id;
 
         adminService.getCategoryById(id).then(function(response){
             $scope.category = response.data;
