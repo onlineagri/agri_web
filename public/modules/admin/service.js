@@ -22,5 +22,15 @@ app.factory('adminService',['$http', function ($http) {
       }).catch(function () {
       });
     },
+
+    getCategories: function(){
+      return $http({
+        method: 'GET',
+        url: webservices.getCategories
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    }
   }
 }]);
