@@ -45,7 +45,7 @@ app.config(function($routeProvider, $httpProvider) {
     })
     .when("/admin/category/update/:id", {
         controller : "categoryController",
-        templateUrl : "../modules/admin/views/addCategory.html"
+        templateUrl : "../modules/admin/views/updateCategory.html"
     });
 });
 
