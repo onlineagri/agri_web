@@ -1,5 +1,10 @@
 var default_set = require('./default.js');
 var jwt = require("jsonwebtoken");
+const slug = require('slug');
+const lodash = require('lodash');
+const validImageTypes = ['image/gif', 'image/png', 'image/jpeg'];
+
+
 const isValid = exports.isValid = function(data) {
     if (data !== null && data !== undefined) {
         return true;
@@ -23,5 +28,46 @@ exports.jwtSign = function(data) {
     }
 }
 
+exports.slugify = function(name){
+    return slug(name); 
+}
+
+exports.isValidImageType = function(type){
+    var found = lodash.indexOf(validImageTypes, type);
+    if (found === -1) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+exports.decodeBase64Image = function(dataString, res) {
+    var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    //console.log("dataString", dataString)
+    var response = {};
+    if (matches) {
+        if (matches.length !== 3) {
+            res.json({
+                "code": 401,
+                "message": "Invalid input string"
+            });
+            //return new Error('Invalid input string');
+        }
+        response.type = matches[1];
+        response.data = new Buffer(matches[2], 'base64');
+        return response;
+    } else {
+        return "err";
+        //return new Error('Invalid base64 input string');
+    }
+
+}
+
+exports.capitalizeFirstLetter = function(str) {
+    if(lodash.isString(str) && str.length)
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    else
+        return str;
+}
 exports.default_set = default_set;
     

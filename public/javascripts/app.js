@@ -19,7 +19,8 @@ app.factory('basicAuthenticationInterceptor',['$localStorage' , '$location', fun
     return basicAuthenticationInterceptor;
 }])
 
-app.config(function($routeProvider) {
+app.config(function($routeProvider, $httpProvider) {
+    $httpProvider.interceptors.push('basicAuthenticationInterceptor');
     $routeProvider
     
     .when("/", {
@@ -38,12 +39,13 @@ app.config(function($routeProvider) {
         controller : "categoryController",
         templateUrl : "../modules/admin/views/categories.html"
     })
-    .when("/admin/categories/add", {
+    .when("/admin/category/add", {
         controller : "categoryController",
         templateUrl : "../modules/admin/views/addCategory.html"
     })
-    .when("/blue", {
-        templateUrl : "blue.htm"
+    .when("/admin/category/update/:id", {
+        controller : "categoryController",
+        templateUrl : "../modules/admin/views/updateCategory.html"
     });
 });
 
@@ -81,3 +83,32 @@ app.run(['$rootScope', '$location', '$http', '$localStorage',
     //      $location.path('/login');
     // }
 }]);
+
+app.filter('capitalize', function() {
+    return function(input, scope) {
+        if (input != null)
+            input = input.toLowerCase();
+        if (input != undefined)
+            return input.substring(0, 1).toUpperCase() + input.substring(1);
+    }
+});
+
+app.directive('capitalizeFirst', function($parse) {
+   return {
+     require: 'ngModel',
+     link: function(scope, element, attrs, modelCtrl) {
+        var capitalize = function(inputValue) {
+           if (inputValue === undefined) { inputValue = ''; }
+           var capitalized = inputValue.charAt(0).toUpperCase() +
+                             inputValue.substring(1);
+           if(capitalized !== inputValue) {
+              modelCtrl.$setViewValue(capitalized);
+              modelCtrl.$render();
+            }         
+            return capitalized;
+         }
+         modelCtrl.$parsers.push(capitalize);
+         capitalize($parse(attrs.ngModel)(scope)); // capitalize initial value
+     }
+   };
+});

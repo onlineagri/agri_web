@@ -358,4 +358,28 @@ input:checked + .slider:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
- 
+
+.error-messages {
+    font-size: 16px;
+    /*color:#a94442;*/
+    color: #cc0000;
+    margin-left: -1px;
+}
+
+.thumbnail {
+    position: relative;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.category-thumbnail {
+    width: 40%;
+    height: 200px;
+}
+
+.containeradmin {
+  margin-top: 83px;
+}

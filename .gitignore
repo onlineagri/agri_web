@@ -55,4 +55,4 @@ typings/
 # CSV file
 taecout-webapp/uploads/*
 !taecout-webapp/uploads/orderPdf.html
-
+uploads/*

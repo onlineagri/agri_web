@@ -3,11 +3,12 @@ var router = express.Router();
 var adminController = require("../modules/admin/adminController.js");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-	console.log(req.user)
-  res.json({code: 200, message: "Hey admin welcome"});
-});
 
-router.post('/category/add', adminController.addCategory);
+router.post('/category', adminController.addCategory);
+router.get('/category', adminController.getCategories);
+router.get('/category/:id', adminController.getCategoryById);
+router.put('/category', adminController.addCategory);
+router.delete('/category/:id', adminController.deleteCategory);
+
 
 module.exports = router;
