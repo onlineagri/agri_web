@@ -63,5 +63,57 @@ app.factory('adminService',['$http', function ($http) {
       }).catch(function () {
       });
     },
+
+    getCustomers : function(){
+      return $http({
+        method: 'GET',
+        url: webservices.getCustomers
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    adminAddCustomer: function(user){
+      return $http({
+        method: 'POST',
+        url: webservices.adminAddCustomer,
+        data : user
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    getCustomer: function(id) {
+      return $http({
+        method: 'GET',
+        url: webservices.getCustomer + "/" + id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    adminUpdateCustomer: function(user){
+      return $http({
+        method: 'PUT',
+        url: webservices.adminAddCustomer,
+        data : user
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    }, 
+
+    adminDeleteCustomer: function(id) {
+      return $http({
+        method: 'DELETE',
+        url: webservices.getCustomer + "/" + id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    }
   }
 }]);
