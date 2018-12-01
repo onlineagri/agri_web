@@ -257,5 +257,216 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
         }
     }
 
-}]);
+}]).controller('customerController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route) {
+    $scope.states = [{
+        name: "Andhra Pradesh"
+    }, {
+        name: "Arunachal Pradesh"
+    }, {
+        name: "Assam"
+    }, {
+        name: "Bihar"
+    }, {
+        name: "Chandigarh"
+    }, {
+        name: "Chhattisgarh"
+    }, {
+        name: "Dadra and Nagar Haveli"
+    }, {
+        name: "Daman and Diu"
+    }, {
+        name: "New Delhi"
+    }, {
+        name: "Goa"
+    }, {
+        name: "Gujarat"
+    }, {
+        name: "Haryana"
+    }, {
+        name: "Himachal Pradesh"
+    }, {
+        name: "Jammu and Kashmir"
+    }, {
+        name: "Jharkhand"
+    }, {
+        name: "Karnataka"
+    }, {
+        name: "Kerala"
+    }, {
+        name: "Lakshadweep"
+    }, {
+        name: "Madhya Pradesh"
+    }, {
+        name: "Maharashtra"
+    }, {
+        name: "Manipur"
+    }, {
+        name: "Meghalaya"
+    }, {
+        name: "Mizoram"
+    }, {
+        name: "Nagaland"
+    }, {
+        name: "Odisha"
+    }, {
+        name: "Puducherry"
+    }, {
+        name: "Punjab"
+    }, {
+        name: "Rajasthan"
+    }, {
+        name: "Sikkim"
+    }, {
+        name: "Tamil Nadu"
+    }, {
+        name: "Telangana"
+    }, {
+        name: "Tripura"
+    }, {
+        name: "Uttar Pradesh"
+    }, {
+        name: "Uttarakhand"
+    }, {
+        name: "West Bengal"
+    }]
+    $scope.getCustomers = function(){
+        // console.log("getCategories");
+        adminService.getCustomers().then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                });
+                var customerArray = response.data.data;
+                var initialParams = {
+                    count: 5 
+                  };
+                  var initialSettings = {
+                    counts: customerArray.length,
+                    paginationMaxBlocks: 13,
+                    paginationMinBlocks: 2,
+                    dataset: customerArray
+                  };
+                  $scope.tableParams =  new NgTableParams(initialParams, initialSettings);
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.addUser = function(user){
+        adminService.adminAddCustomer(user).then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                });
+                $location.path('/admin/customers')
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.getCustomer = function(){
+        var id = $routeParams.id;
+        adminService.getCustomer(id).then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                }); 
+                $scope.user = response.data.data;
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.updateUser = function(user){
+        adminService.adminUpdateCustomer(user).then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                });
+                $location.path('/admin/customers')
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.deleteUser = function(id) {
+        adminService.adminDeleteCustomer(id).then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                });
+                $route.reload();
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    
+
+}])
 

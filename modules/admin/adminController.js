@@ -1,7 +1,9 @@
 var db = require("../../db.js");
 var CategoryModel = db.CategoryModel();
+var UserModel = db.UserModel();
 var common = require("../../config/common.js");
 var async =require('async');
+var lodash = require('lodash');
 var fs = require('fs');
 
 exports.addCategory = function(req, res){
@@ -167,3 +169,255 @@ exports.getCategories = function(req, res) {
 		})
 }
 
+
+exports.getCustomers = function(req, res) {
+    UserModel.find({
+            isDeleted: false,
+            role: 'customer'
+        })
+        .select({
+            '_id': 1,
+            'firstName': 1,
+            'lastName': 1,
+            'status': 1,
+            'created_at' : 1,
+            'email' : 1,
+            'phoneNumber' : 1,
+            'streetAddress' : 1,
+            'city' : 1,
+            'state' : 1,
+            'pincode': 1,
+
+        })
+        .exec(function(err, data) {
+            if (err) {
+                res.json({
+                    code: 400,
+                    message: "Internal Server Error"
+                });
+            } else {
+                res.json({
+                    code: 200,
+                    message: "Users Fetched Successfuly",
+                    data: data
+                });
+            }
+        })
+}
+
+exports.adminAddCustomer = function(req, res) {
+    let userData = req.body;
+    if(!common.isValid(userData.firstName) || !common.isValid(userData.lastName) || !common.isValid(userData.phoneNumber)){
+        res.json({code: 400, message:"Parameters missing"});
+        return;
+    }
+    async.series([
+        function(callback){
+            UserModel.findOne({phoneNumber: userData.phoneNumber, isDeleted : false, role: "customer"}, function(err, data){
+                if(err){
+                    console.log("dberror adminAddCustomer", err);
+                    callback("Internal server error");
+                } else {
+                    if(common.isValid(data)){
+                        callback("Customer already exists with this Phone Number")
+                    } else {
+                        callback();
+                    }
+                }
+            })
+        },
+        function(callback){
+            let customer = {
+                firstName : userData.firstName,
+                lastName : userData.lastName,
+                phoneNumber : userData.phoneNumber,
+                status : "active",
+                role : "customer"
+            }
+            if(common.isValid(userData.email))
+                customer["email"] = userData.email;
+            if(common.isValid(userData.streetAddress)){
+                customer["streetAddress"] = userData.streetAddress;
+                customer["deliveryAddresses"] = [{
+                    address: userData.streetAddress + " " + (common.isValid(userData.city) ? userData.city : "") + " " + (common.isValid(userData.state) ? userData.state : "") + " " + (common.isValid(userData.country) ? userData.country : "") + " " + (common.isValid(userData.pincode) ? userData.pincode : "")
+                }]
+            }
+            if(common.isValid(userData.city))
+                customer["city"] = userData.city;
+            if(common.isValid(userData.state))
+                customer["state"] = userData.state.name;
+            if(common.isValid(userData.country))
+                customer["country"] = userData.country; 
+            if(common.isValid(userData.pincode))
+                customer["pincode"] = userData.pincode;
+            let pass = userData.phoneNumber + '@123'
+            let password = db.generateHash(pass);
+
+            customer["password"] = password;
+            let customerData = new UserModel(customer);
+            customerData.save(function(err, data){
+                if(err){
+                    console.log("dberror adminAddCustomer", err);
+                    callback("Internal server error");
+                    
+                } else {
+                    callback();
+                }
+            })
+        }
+        ], function(err){
+            if(err){
+                res.json({
+                    code: 400,
+                    message: err,
+                });
+            } else {
+                res.json({
+                    code: 200,
+                    message: "Customer Saved Successfuly",
+                    data: []
+                });
+            }
+        })
+
+}
+
+exports.getCustomer = function(req, res){
+    let id = req.params.id;
+    if(!common.isValid(id)){
+        res.json({code: 400, message:"Parameters missing"});
+        return;
+    }
+
+    UserModel.findOne({
+            _id: id
+        })
+        .select({
+            '_id': 1,
+            'firstName': 1,
+            'lastName': 1,
+            'status': 1,
+            'email': 1,
+            'phoneNumber': 1,
+            'streetAddress': 1,
+            'city': 1,
+            'state': 1,
+            'pincode': 1,
+            'deliveryAddresses' : 1,
+            'country': 1
+        })
+        .exec(function(err, data) {
+            if (err) {
+                res.json({
+                    code: 400,
+                    message: "Internal Server Error"
+                });
+            } else {
+                let state = {name: data.state};
+                let customerData = {
+                    '_id': data._id,
+                    'firstName': data.firstName,
+                    'lastName': data.lastName,
+                    'status': data.status,
+                    'email': data.email,
+                    'phoneNumber': data.phoneNumber,
+                    'streetAddress': data.streetAddress,
+                    'city': data.city,
+                    'state': state,
+                    'pincode': data.pincode,
+                    'deliveryAddresses' : data.deliveryAddresses,
+                    'country' : data.country
+                }
+                res.json({
+                    code: 200,
+                    message: "User Fetched Successfuly",
+                    data: customerData
+                });
+            }
+        })
+}
+
+exports.adminUpdateCustomer = function(req, res){
+    let userData = req.body;
+    if(!common.isValid(userData._id) || !common.isValid(userData.firstName) || !common.isValid(userData.lastName) || !common.isValid(userData.phoneNumber)){
+        res.json({code: 400, message:"Parameters missing"});
+        return;
+    }
+    let custData;
+    async.series([
+        function(callback){
+            UserModel.findOne({_id: userData._id, role: "customer"}, function(err, data){
+                if(err){
+                    console.log("dberror adminUpdateCustomer", err);
+                    callback("Internal server error");
+                } else {
+                    if(common.isValid(data)){
+                        custData = data;
+                        callback()
+                    } else {
+                        callback("User not exists");
+                    }
+                }
+            })
+        },
+        function(callback){
+            let customer = {
+                firstName : userData.firstName,
+                lastName : userData.lastName
+            }
+            if(common.isValid(userData.email))
+                customer["email"] = userData.email;
+            if(common.isValid(userData.streetAddress)){
+                customer["streetAddress"] = userData.streetAddress;
+            }
+            if(common.isValid(userData.city))
+                customer["city"] = userData.city;
+            if(common.isValid(userData.state))
+                customer["state"] = userData.state.name;
+            if(common.isValid(userData.country))
+                customer["country"] = userData.country; 
+            if(common.isValid(userData.pincode))
+                customer["pincode"] = userData.pincode;
+            if(common.isValid(userData.status) && lodash.includes(["active", "inRegistration", "suspended"], userData.status))
+                customer["status"] = userData.status;
+
+            UserModel.update({_id: userData._id}, { $set: customer}, function(err, data){
+                if(err){
+                    console.log("dberror adminUpdateCustomer", err);
+                    callback("Internal server error");
+                    
+                } else {
+                    callback();
+                }
+            })
+        }
+        ], function(err){
+            if(err){
+                res.json({
+                    code: 400,
+                    message: err,
+                });
+            } else {
+                res.json({
+                    code: 200,
+                    message: "Customer Updated Successfuly",
+                    data: []
+                });
+            }
+        })
+}
+
+exports.adminDeleteCustomer = function(req, res) {
+    let id = req.params.id;
+    if(!common.isValid(id)){
+        res.json({code: 400, message:"Parameters missing"});
+    }
+    UserModel.update({_id: id}, { $set: {'isDeleted': true}}, function(err, data){
+        if(err){
+            console.log("dberror adminDeleteCustomer", err);
+            res.json({code: 400, message:"Internal server error"});
+        } else {
+            res.json({code: 200, message:"Customer deleted Successfuly", data: []});
+        }
+    })
+}
