@@ -17,7 +17,8 @@
 	  role: { type: String, required: true }, //customer, farmer, admin
 	  status: { type: String }, // inRegistration, active, suspended
 	  isDeleted: { type: Boolean, default: false},
-	});
+	},
+	{ timestamps: { createdAt: 'created_at' } });
 	
 	const Users = mongoose.model('Users', UserSchema);
 	return Users;

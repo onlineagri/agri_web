@@ -46,7 +46,21 @@ app.config(function($routeProvider, $httpProvider) {
     .when("/admin/category/update/:id", {
         controller : "categoryController",
         templateUrl : "../modules/admin/views/updateCategory.html"
-    });
+    })
+    
+    .when("/admin/customers", {
+        controller : "customerController",
+        templateUrl : "../modules/admin/views/customers.html"
+    })
+
+    .when("/admin/customer/add", {
+        controller : "customerController",
+        templateUrl : "../modules/admin/views/addCustomer.html"
+    })
+    .when("/admin/customer/update/:id", {
+        controller : "customerController",
+        templateUrl : "../modules/admin/views/updateCustomer.html"
+    })
 });
 
 app.run(['$rootScope', '$location', '$http', '$localStorage', 
