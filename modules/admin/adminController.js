@@ -1,5 +1,6 @@
 var db = require("../../db.js");
 var CategoryModel = db.CategoryModel();
+var MenuModel = db.MenuModel();
 var common = require("../../config/common.js");
 var async =require('async');
 var fs = require('fs');
@@ -167,3 +168,170 @@ exports.getCategories = function(req, res) {
 		})
 }
 
+exports.getMenuList = function(req, res) {
+
+	MenuModel.find({isDeleted: false})
+		.select({'_id': 1, 'name': 1, 'description':1, 'status': 1, 'quantity': 1, 'remainingQuantity' : 1, 'priceEachItem': 1})
+		.exec(function(err, data){
+			if(err){
+				res.json({code : 400, message: "Internal Server Error"});
+			} else {
+				res.json({code : 200, message: "Menus Fetched Successfuly", data: data});
+			}
+		})
+}
+
+exports.addMenu = function(req, res){
+	let menuParams = req.body;
+	let saveParams = {}
+	async.series([
+        function(callback) {
+        	saveParams = {
+        		categoryName : menuParams.categoryName.name,
+        		name : common.capitalizeFirstLetter(menuParams.name),
+        		description : menuParams.description,
+        		status : menuParams.status,
+        		quantity : menuParams.quantity,
+        		farmerId : menuParams.farmerId,
+        		priceEachItem : menuParams.priceEachItem
+        	}
+        	callback();
+            
+        },
+        function(callback) {
+            //validation for unique
+	        if (!common.isValid(menuParams._id)) {
+	            MenuModel.findOne({
+	                name: menuParams.name,
+	                isDeleted: false
+	            }, function(err, category) {
+	                if (err) {
+	                    console.log("dberror addMenu", err);
+	                    callback("Internal server error");
+	                } else {
+	                    if (common.isValid(category)) {
+	                        callback("This menu is already available");
+	                    } else {
+	                        callback();
+	                    }
+	                }
+	            })
+	        } else {
+	        	callback();
+	        }
+        },
+        function(callback) {
+            var imageName = menuParams.image;
+            if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
+                var imageTypeRegularExpression = /\/(.*?)$/;
+                var file = {};
+                var fileName = common.slugify(menuParams.name) + "_" + new Date().getTime();
+                var imageBuffer = common.decodeBase64Image(menuParams.image);
+                if (imageBuffer == "err") {
+                    callback('Not a valid image type');
+                } else {
+                    var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
+                    if (common.isValidImageType(imageTypeDetected.input)) {
+                        var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
+                        imageName = fileName + "." + imageTypeDetected[1];
+                        file.path = userUploadedImagePath,
+                            file.name = fileName + '.' + imageTypeDetected[1],
+                            file.type = imageTypeDetected.input;
+
+                        fs.writeFileSync(file.path, imageBuffer.data);
+                        imageName = fileName + '.' + imageTypeDetected[1];
+                        // common.verifyBucket(common.S3Buckets.menu, function() {
+                        //     common.uploadFile(file, common.S3Buckets.menu, function(err) {
+                        //         if (err) {
+                        //             callback('Unable to upload file');
+                        //         } else {
+                        //             uploadFileName = file.name;
+                        //             callback();
+                        //         }
+                        //     });
+                        // });
+                        saveParams.imageName = file.name;
+                        callback();
+                    } else {
+                        callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
+                    }
+                }
+            } else {
+                callback();
+            }
+        },
+        function(callback){
+        	if(!common.isValid(menuParams._id)){
+        		let menuData = new MenuModel(saveParams);
+				menuData.save(function(err, data){
+					if(err){
+						console.log("dberror addCategory", err);
+	        			callback("Internal server error");
+					} else {
+						callback();
+					}
+				})
+        	} else {
+        		let id = menuParams._id;
+        		MenuModel.update({_id: id}, { $set: saveParams}, function(err, data){
+        			if(err){
+        				console.log("dberror addCategory", err);
+	        			callback("Internal server error");
+        			} else {
+        				callback();
+        			}
+        		})
+        	}
+        }
+    ], function(err) {
+    	if(err){
+    		res.json({code : 400, message: err});
+    	} else {
+    		res.json({code : 200, message: "Menu Added Successfuly", data: []});
+    	}  
+    });
+
+}
+
+exports.getMenuById = function(req, res) {
+	let id = req.params.id;
+	if(!common.isValid(id)){
+		res.json({code: 400, message:"Parameters missing"});
+	}
+	MenuModel.findOne({_id: id}, function(err, data){
+		if(err){
+			console.log("dberror getMenuById", err);
+			res.json({code: 400, message:"Internal server error"});
+		} else {
+			let resdata = {
+				_id: data._id,
+				categoryName: data.categoryName,
+				name: data.name,
+				status: data.status,
+				description: data.description,
+				quantity: data.quantity,
+				farmerId: data.farmerId,
+				priceEachItem: data.priceEachItem,
+				imageName: '/uploads/' +data.imageName
+			}
+			res.json({code: 200, message:"Menu Fetched Successfuly", data: resdata});
+		}
+	})
+	
+}
+
+exports.deleteMenu = function(req, res) {
+	let id = req.params.id;
+	if(!common.isValid(id)){
+		res.json({code: 400, message:"Parameters missing"});
+	}
+	MenuModel.update({_id: id}, { $set: {'isDeleted': true}}, function(err, data){
+		if(err){
+			console.log("dberror deleteMenu", err);
+			res.json({code: 400, message:"Internal server error"});
+		} else {
+			res.json({code: 200, message:"Menu deleted Successfuly", data: []});
+		}
+	})
+	
+}

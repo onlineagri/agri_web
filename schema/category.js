@@ -9,6 +9,7 @@
 	  imageName : {type: String}, 
 	  status: { type: Boolean, default: true }, 
 	  isDeleted: { type: Boolean, default: false},
+	  other: {type: String}
 	});
 	
 	const Category = mongoose.model('Categorys', CategorySchema);

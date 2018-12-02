@@ -9,6 +9,7 @@ const SALT_WORK_FACTOR = 8;
 Mongoose.connect(common.default_set.mongoConnectionString);
 const users = require('./schema/users')(Mongoose);
 const categories = require('./schema/category')(Mongoose);
+const menus = require('./schema/menu')(Mongoose);
 
 
 module.exports = {
@@ -24,4 +25,7 @@ module.exports = {
     CategoryModel: function(){
     	return categories;
     },
+    MenuModel: function(){
+        return menus;
+    }
 }

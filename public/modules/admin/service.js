@@ -63,5 +63,57 @@ app.factory('adminService',['$http', function ($http) {
       }).catch(function () {
       });
     },
+
+    addMenu: function (params) {
+      return $http({
+        method: 'POST',
+        data: params,
+        url: webservices.addMenu
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    getMenuList: function(){
+      return $http({
+        method: 'GET',
+        url: webservices.getMenuList
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    getMenuById: function(id){
+      return $http({
+        method: 'GET',
+        url: webservices.getMenuById + "/" + id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    updateMenu: function (params) {
+      return $http({
+        method: 'PUT',
+        data: params,
+        url: webservices.updateMenu
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    deleteMenu : function(id){
+      return $http({
+        method: 'DELETE',
+        url: webservices.deleteMenu + "/" + id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    }
   }
 }]);

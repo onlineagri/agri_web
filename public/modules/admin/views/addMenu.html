@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col-md-3">
+    <div ng-include="'../../../staticViews/adminAside.html'"></div>
+  </div>
+  
+  <div class="col-md-8 containeradmin" ng-init="getCategories();">
+    <h3 class="text-center" style="margin-top: 10px;">Add Menu</h3>
+    <form name="menuForm">
+      <div class="form-group">
+        <label for="categoryname" class="col-md-4 col-md-offset-2">Category:*</label>
+        <input type="text" class="col-md-4" id="categoryname" name="categoryname" ng-model="menu.categoryName" uib-typeahead="category as category.name for category in categoryList | filter:{name:$viewValue}" typeahead-template-url="customTemplate.html" typeahead-min-length="0" required>
+        <span class="error-messages" ng-show="menuForm.categoryname.$dirty && menuForm.categoryname.$invalid">
+          <span  ng-show="menuForm.categoryname.$error.required">please select category</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="name" class="col-md-4 col-md-offset-2">Name:*</label>
+        <input type="text" class="col-md-4 " id="name" name="name" ng-model="menu.name" capitalize-first required>
+        <span class="error-messages" ng-show="menuForm.name.$dirty && menuForm.name.$invalid">
+          <span  ng-show="menuForm.name.$error.required">please enter category name</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="description" class="col-md-4 col-md-offset-2">Description:</label>
+        <textarea name="description" class="col-md-4 " rows="5" cols="30" id="description" ng-model="menu.description"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="quantity" class="col-md-4 col-md-offset-2">Quantity:*</label>
+        <input name="quantity" class="col-md-4 " rows="5" cols="30" id="quantity" ng-model="menu.quantity" ng-pattern="/^[0-9]*$/" required />
+        <span class="error-messages" ng-show="menuForm.quantity.$dirty && menuForm.quantity.$invalid">
+          <span  ng-show="menuForm.quantity.$error.required">please enter quantity</span>
+          <span ng-show="menuForm.quantity.$error.pattern">Not a valid number</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="price" class="col-md-4 col-md-offset-2">Price (each item):*</label>
+        <input name="price" class="col-md-4 " rows="5" cols="30" id="price" ng-model="menu.priceEachItem" ng-pattern="/^[0-9]*$/" required />
+        <span class="error-messages" ng-show="menuForm.price.$dirty && menuForm.price.$invalid">
+          <span  ng-show="menuForm.price.$error.required">please enter price</span>
+          <span ng-show="menuForm.price.$error.pattern">Not a valid number</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="farmerId" class="col-md-4 col-md-offset-2">Farmers:*</label>
+        <input type="text" class="col-md-4" id="farmerId" name="farmerId" ng-model="menu.farmerId" uib-typeahead="state as state.name for state in statesWithFlags | filter:{name:$viewValue}" typeahead-template-url="customTemplate.html" typeahead-min-length="0" required>
+        <span class="error-messages" ng-show="menuForm.farmerId.$dirty && menuForm.farmerId.$invalid">
+          <span  ng-show="menuForm.farmerId.$error.required">please select farmer</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">Active:</label>
+        <label class="switch"><input type="checkbox" name="status" ng-model="menu.status">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="form-group">
+      <label class="col-md-4" for="image">Image:</label>
+      <span class="col-md-4">
+        <input type="file" name='image' id="image" accept="image/jpeg,image/png,image/jpg" ng-model="menu.image" onchange="angular.element(this).scope().uploadImage(this.files)">
+      </span>
+    </div>
+    <div class="form-group" style="margin-top: 50px;">
+      <label class="col-md-4"></label>
+      <input type="submit" class="btn btn-primary" ng-disabled="menuForm.$invalid" value="Submit" ng-click="addMenu(menu)">
+      <a class="btn btn-warning" href="#!/admin/menulist" role="button">Cancel</a>
+    </div>
+  </form>
+</div>
+</div>
+<script type="text/ng-template" id="customTemplate.html">
+  <a>
+      <img ng-src="http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}" width="16">
+      <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+  </a>
+</script>

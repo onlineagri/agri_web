@@ -6,7 +6,12 @@ var webservices = {
     "updateCategory" : baseUrl + "/admin/category",
     "getCategories" : baseUrl + "/admin/category",
     "getCategoryById" : baseUrl + "/admin/category",
-    "deleteCategory": baseUrl + "/admin/category"
+    "deleteCategory": baseUrl + "/admin/category",
+    "addMenu" : baseUrl + "/admin/menu",
+    "updateMenu" : baseUrl + "/admin/menu",
+    "getMenuList" : baseUrl + "/admin/menu",
+    "getMenuById" : baseUrl + "/admin/menu",
+    "deleteMenu": baseUrl + "/admin/menu"
 }
 
 var headerConstants = {
