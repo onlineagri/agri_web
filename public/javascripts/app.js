@@ -61,6 +61,25 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "customerController",
         templateUrl : "../modules/admin/views/updateCustomer.html"
     })
+
+    .when("/user/login", {
+        controller : "userLoginController",
+        templateUrl : "../modules/auth/views/login.html"
+    })
+
+    .when("/user/register", {
+        controller : "userLoginController",
+        templateUrl : "../modules/auth/views/register.html"
+    })
+
+    .when("/customer/dashboard", {
+        //controller : "authenticationController",
+        templateUrl : "../modules/customer/views/dashboard.html"
+    })
+
+    .otherwise("/404", {
+        template : "<h1>Page not found</h1>"
+    });
 });
 
 app.run(['$rootScope', '$location', '$http', '$localStorage', 

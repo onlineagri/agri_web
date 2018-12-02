@@ -9,4 +9,19 @@ app.controller('staticController', ['$scope','$localStorage','$location', functi
         localStorage.clear();
         $location.path("/admin/login");
     }
+
+    if($localStorage.isCustomerLogin){
+    	$scope.firstName = $localStorage.firstName;
+        $scope.logOut = "Logout";
+    } else {
+        $scope.logOut = "Login";
+    }
+
+    $scope.customerLogout = function(){
+    	console.log("customerLogout");
+    	localStorage.clear();
+        $location.path("/");
+    }
+
+    
 }]);

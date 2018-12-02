@@ -4,5 +4,6 @@ var authenticationController = require("../modules/userAuthentication/authentica
 
 /* GET users listing. */
 router.post('/login', authenticationController.login);
+router.post('/register', authenticationController.userRegister);
 
 module.exports = router;
