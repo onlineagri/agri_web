@@ -73,7 +73,7 @@ app.config(function($routeProvider, $httpProvider) {
     })
 
     .when("/customer/dashboard", {
-        //controller : "authenticationController",
+        controller : "customerController",
         templateUrl : "../modules/customer/views/dashboard.html"
     })
 

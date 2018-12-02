@@ -401,3 +401,13 @@ input:checked + .slider:before {
 .containercustomer {
   margin-top: 40px;
 }
+
+.product{
+    overflow: auto;
+    box-shadow: 3px 2px 3px 2px #ddd;
+    margin-bottom: 20px;
+}
+
+.pnamecolor {
+  color: #336600;
+}
