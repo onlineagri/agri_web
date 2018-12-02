@@ -714,4 +714,6 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
 
     
 
+}]).controller('orderManageController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route) {
+    
 }]);
