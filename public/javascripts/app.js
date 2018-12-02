@@ -1,4 +1,4 @@
-var app = angular.module("agriApp", ["ngRoute","toaster", "ngAnimate", 'ngStorage','ngTable']);
+var app = angular.module("agriApp", ["ngRoute","toaster", "ngAnimate", 'ngStorage','ngTable','ui.bootstrap']);
 
 app.factory('basicAuthenticationInterceptor',['$localStorage' , '$location', function($localStorage, $location) {
     var basicAuthenticationInterceptor = {
@@ -17,7 +17,7 @@ app.factory('basicAuthenticationInterceptor',['$localStorage' , '$location', fun
     };
 
     return basicAuthenticationInterceptor;
-}])
+}]);
 
 app.config(function($routeProvider, $httpProvider) {
     $httpProvider.interceptors.push('basicAuthenticationInterceptor');
@@ -46,8 +46,7 @@ app.config(function($routeProvider, $httpProvider) {
     .when("/admin/category/update/:id", {
         controller : "categoryController",
         templateUrl : "../modules/admin/views/updateCategory.html"
-    })
-    
+    })  
     .when("/admin/customers", {
         controller : "customerController",
         templateUrl : "../modules/admin/views/customers.html"
@@ -76,10 +75,21 @@ app.config(function($routeProvider, $httpProvider) {
         //controller : "authenticationController",
         templateUrl : "../modules/customer/views/dashboard.html"
     })
-
+    .when("/admin/menulist", {
+        controller : "menuController",
+        templateUrl : "../modules/admin/views/menulist.html"
+    })
+    .when("/admin/menu/add", {
+        controller : "menuController",
+        templateUrl : "../modules/admin/views/addMenu.html"
+    })
+    .when("/admin/menu/update/:id", {
+        controller : "menuController",
+        templateUrl : "../modules/admin/views/updateMenu.html"
+    })
     .otherwise("/404", {
         template : "<h1>Page not found</h1>"
-    });
+    })
 });
 
 app.run(['$rootScope', '$location', '$http', '$localStorage', 

@@ -12,7 +12,11 @@ var webservices = {
     "getCustomer" : baseUrl + "/admin/customer",
     "userLogin" : baseUrl + "/api/login",
     "customerRegister": baseUrl + "/api/register",
-
+    "addMenu" : baseUrl + "/admin/menu",
+    "updateMenu" : baseUrl + "/admin/menu",
+    "getMenuList" : baseUrl + "/admin/menu",
+    "getMenuById" : baseUrl + "/admin/menu",
+    "deleteMenu": baseUrl + "/admin/menu"
 }
 
 var headerConstants = {
