@@ -423,9 +423,25 @@ exports.adminDeleteCustomer = function(req, res) {
 }
 
 exports.getMenuList = function(req, res) {
+    /*MenuModel.aggregate([
+        { "$match": {isDeleted: false} },
+        {
+            $group: {
+                _id: '$categoryName',
+                menu: { $push: "$$ROOT" } 
+            }
+        }
+    ], function (err, result) {
+        if (err) {
+            console.log("dberror getMenuList", err);
+            res.json({code : 400, message: "Internal Server Error"});
+        } else {
+            res.json({code : 200, message: "Menus Fetched Successfuly", data: result});
+        }
+    });*/
 
 	MenuModel.find({isDeleted: false})
-		.select({'_id': 1, 'name': 1, 'description':1, 'status': 1, 'quantity': 1, 'remainingQuantity' : 1, 'priceEachItem': 1})
+		.select({'_id': 1, 'name': 1, 'description':1, 'status': 1, 'quantity': 1, 'remainingQuantity' : 1, 'priceEachItem': 1, 'categoryName': 1, 'farmerName':1})
 		.exec(function(err, data){
 			if(err){
 				res.json({code : 400, message: "Internal Server Error"});
@@ -441,14 +457,26 @@ exports.addMenu = function(req, res){
 	async.series([
         function(callback) {
         	saveParams = {
-        		categoryName : menuParams.categoryName.name,
+        		categoryName : menuParams.category.name,
+                categoryId : menuParams.category._id,
         		name : common.capitalizeFirstLetter(menuParams.name),
         		description : menuParams.description,
         		status : menuParams.status,
         		quantity : menuParams.quantity,
-        		farmerId : menuParams.farmerId,
-        		priceEachItem : menuParams.priceEachItem
+        		farmerId : menuParams.farmer._id,
+        		priceEachItem : menuParams.applicationPrice,
+                farmerPrice: menuParams.farmerPrice,
+                dealPrice : common.isValid(menuParams.dealPrice) ? menuParams.dealPrice: menuParams.applicationPrice,
+                farmerName : menuParams.farmer.name,
+                stockType: menuParams.stockType,
+                brand : common.isValid(menuParams.brand) ? menuParams.brand : menuParams.farmer.name 
+
         	}
+            if(common.isValid(menuParams.remainingQuantity)){
+                saveParams['remainingQuantity'] = menuParams.remainingQuantity;
+            } else {
+                saveParams['remainingQuantity'] = menuParams.quantity;
+            }
         	callback();
             
         },
@@ -559,14 +587,20 @@ exports.getMenuById = function(req, res) {
 		} else {
 			let resdata = {
 				_id: data._id,
-				categoryName: data.categoryName,
+				category: {name :data.categoryName, _id: data.categoryId},
 				name: data.name,
 				status: data.status,
 				description: data.description,
 				quantity: data.quantity,
 				farmerId: data.farmerId,
 				priceEachItem: data.priceEachItem,
-				imageName: '/uploads/' +data.imageName
+				imageName: '/uploads/' +data.imageName,
+                farmer : {_id: data.farmerId, name: data.farmerName},
+                stockType: data.stockType,
+                farmerPrice : data.farmerPrice,
+                dealPrice: data.dealPrice,
+                remainingQuantity: data.remainingQuantity,
+                applicationPrice: data.priceEachItem
 			}
 			res.json({code: 200, message:"Menu Fetched Successfuly", data: resdata});
 		}
@@ -588,4 +622,23 @@ exports.deleteMenu = function(req, res) {
 		}
 	})
 	
+}
+
+exports.getFarmerList = function(req, res) {
+    
+    UserModel.aggregate([
+        { "$match": {role: "farmer", isDeleted: false, status: "active"} },
+        {
+            $project: { name: { $concat: [ "$firstName", "  ", "$lastName" ] } }
+
+        }
+
+    ], function (err, result) {
+        if (err) {
+            console.log("dberror getFarmerList", err);
+            res.json({code : 400, message: "Internal Server Error"});
+        } else {
+            res.json({code: 200, message: "Fetched Successfuly", data: result});
+        }
+    });
 }
