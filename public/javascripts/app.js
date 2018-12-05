@@ -71,7 +71,7 @@ app.config(function($routeProvider, $httpProvider) {
     })
 
     .when("/customer/dashboard", {
-        //controller : "authenticationController",
+        controller : "customerController",
         templateUrl : "../modules/customer/views/dashboard.html"
     })
     .when("/admin/menulist", {
@@ -86,10 +86,17 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "menuController",
         templateUrl : "../modules/admin/views/updateMenu.html"
     })
+
     .when("/admin/orders", {
         controller : "customerController",
         templateUrl : "../modules/admin/views/orders-dashboard.html"
     })
+    
+    .when("/product/:id", {
+        // controller : "productController",
+        templateUrl : "../modules/customer/views/productDetail.html"
+    })
+    
     .otherwise("/404", {
         template : "<h1>Page not found</h1>"
     })

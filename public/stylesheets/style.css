@@ -402,6 +402,17 @@ input:checked + .slider:before {
   margin-top: 40px;
 }
 
+
+.product{
+    overflow: auto;
+    box-shadow: 3px 2px 3px 2px #ddd;
+    margin-bottom: 20px;
+}
+
+.pnamecolor {
+  color: #336600;
+}
+
 .dropdown.dropdown-scroll .dropdown-menu {
     max-height: 200px;
     width: 60px;

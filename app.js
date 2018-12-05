@@ -14,6 +14,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var auth = require('./routes/auth');
 var admin = require('./routes/admin');
+var product = require('./routes/product');
 
 
 
@@ -47,12 +48,17 @@ passport.deserializeUser(function(user, done) {
 app.use('/admin', passport.authenticate('authentication', {
     session: false
 }))
+app.use('/product', passport.authenticate('authentication', {
+    session: false
+}))
 
 
 app.use('/', index);
 app.use('/users', users);
 app.use('/api', auth);
 app.use('/admin', admin);
+app.use('/product', product);
+
 
 
 // catch 404 and forward to error handler

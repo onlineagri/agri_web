@@ -10,13 +10,18 @@
 	  imageName : {type: String}, 
 	  status: { type: Boolean, default: true }, 
 	  isDeleted: { type: Boolean, default: false},
-	  actualPrice: {type: Number},
+	  applicationPrice: {type: Number},
 	  dealPrice: {type: Number},
 	  quantity: {type: Number},
 	  remainingQuantity: {type: Number},
 	  farmerId : {type: String},
-	  priceEachItem: {type: Number}
-	});
+	  farmerName : {type: String},
+	  priceEachItem: {type: Number},
+	  stockType : {type: String, default: 'kg'},
+	  farmerPrice : {type: Number}
+
+	},
+	{ timestamps: { createdAt: 'created_at' } });
 	
 	const Menu = mongoose.model('Menus', MenuSchema);
 	return Menu;
