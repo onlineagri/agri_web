@@ -14,6 +14,9 @@
         <label class="col-sm-2" for="nonorganic">
           <input type="radio" name="type" id="nonorganic" ng-model="category.type" value="nonorganic" required> Non-organic
         </label>
+        <label class="col-sm-2" for="other">
+          <input type="radio" name="type" id="other" ng-model="category.type" value="other" required> Other
+        </label>
         <span class="error-messages" ng-show="categoryForm.type.$dirty && categoryForm.type.$invalid">
           <span  ng-show="categoryForm.type.$error.required">please select type</span>
         </span>
