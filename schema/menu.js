@@ -18,7 +18,8 @@
 	  farmerName : {type: String},
 	  priceEachItem: {type: Number},
 	  stockType : {type: String, default: 'kg'},
-	  farmerPrice : {type: Number}
+	  farmerPrice : {type: Number},
+	  brand: {type: String}
 
 	},
 	{ timestamps: { createdAt: 'created_at' } });
