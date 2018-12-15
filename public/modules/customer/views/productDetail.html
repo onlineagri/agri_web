@@ -1,8 +1,65 @@
-<div class="card" style="width: 18rem;">
-  <img class="card-img-top" src=".../100px180/" alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+<div ng-include="'/staticViews/customerHeader.html'"></div>
+
+<div class="row">
+  <div class="col-md-12 containercustomer" ng-init="getProduct()">
+    <div class="row justify-content-md-center">
+      <div class="col-md-10 card">
+        <div class="card-header">
+          Product Details
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{product.name}} ({{product.brand | capitalize}})</h5>
+          <div class="row">
+            <div class="col-md-3">
+              <img class="col-md-12 col-sm-12" style="width: 100%, height: 300px;" src="{{product.imageName}}" alt="{{product.name}}"/>
+            </div>
+            <div class="col-md-8">
+              <span class="productdeatilheading">Name: </span><span class="productdeatil">{{product.name | capitalize}}</span><br/>
+              <span class="productdeatilheading">Price: </span><span class="productdeatil">&#x20b9;{{product.priceEachItem}}/{{product.stockType}}</span><br/>
+              <span class="productdeatilheading">Offer Price: </span><span class="productdeatil" ng-if="product.priceEachItem < product.dealPrice">&#x20b9;{{product.priceEachItem}}/{{product.stockType}}</span> <span class="productdeatil" ng-if="product.priceEachItem == product.dealPrice"> ------ </span><br/>
+              <span class="productdeatilheading">Organic: </span><span class="productdeatil" ng-if="product.product_docs[0].type == 'organic'">100% Organic (Assured)<br/>
+              
+              </span> <span class="productdeatil" ng-if="product.product_docs[0].type != 'organic'"> Non-organic </span>
+            </div>
+          </div>
+          <div class="col-md-12 col-sm-12 divider"></div>
+          <div class="row">
+            <div class="col-md-4">
+              <span class="productdeatilheading">Product Specifications </span>
+            </div>
+            <div class="col-md-8">
+              <span> {{product.description}}</span>
+            </div>
+            <div class="col-md-4">
+              <span class="productdeatilheading">About Producer</span>
+            </div>
+            <div class="col-md-8">
+              <span> {{product.brand | capitalize}}</span><br/>
+              <span> {{product.user_docs[0].streetAddress}} {{product.user_docs[0].city}} {{product.user_docs[0].pincode}}</span><br/>
+              <p> {{product.user_docs[0].about}}</p>
+            </div>
+            <div class="col-md-4">
+              <span class="productdeatilheading">Category Specifications </span>
+            </div>
+            <div class="col-md-8">
+              <span> {{product.product_docs[0].description}}</span>
+            </div>
+            <div class="col-md-4">
+              <span class="productdeatilheading">Quantity Available </span>
+            </div>
+            <div class="col-md-8">
+              <span> {{product.remainingQuantity}} {{product.stockType}}</span>
+            </div>
+            <div class="col-md-12 col-sm-12 divider"></div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-8">
+              <a class="btn btn-warning" href="#!/customer/dashboard">Back</a>
+              <button type="button" class="btn btn-success" ng-click="addToCart(product)">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>s
+</div>

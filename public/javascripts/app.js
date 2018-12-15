@@ -1,4 +1,4 @@
-var app = angular.module("agriApp", ["ngRoute","toaster", "ngAnimate", 'ngStorage','ngTable','ui.bootstrap']);
+var app = angular.module("agriApp", ["ngRoute","toaster", "ngAnimate", 'ngStorage','ngTable','ui.bootstrap','oitozero.ngSweetAlert']);
 
 app.factory('basicAuthenticationInterceptor',['$localStorage' , '$location', function($localStorage, $location) {
     var basicAuthenticationInterceptor = {
@@ -24,6 +24,7 @@ app.config(function($routeProvider, $httpProvider) {
     $routeProvider
     
     .when("/", {
+        controller : "staticController",
         templateUrl : "../staticViews/homepage.html"
     })
 
@@ -88,10 +89,30 @@ app.config(function($routeProvider, $httpProvider) {
         templateUrl : "../modules/admin/views/updateMenu.html"
     })
     .when("/product/:id", {
-        // controller : "productController",
+        controller : "customerController",
         templateUrl : "../modules/customer/views/productDetail.html"
     })
+
+    .when("/customer/cart/:id", {
+        controller : "cartController",
+        templateUrl : "../modules/cart/views/cartDetail.html"
+    })
     
+    .when("/customer/order/:id", {
+        controller : "orderController",
+        templateUrl : "../modules/order/views/orderDetails.html"
+    })
+
+    .when("/customer/orders", {
+        controller : "orderController",
+        templateUrl : "../modules/order/views/orderList.html"
+    })
+
+    .when("/category/products/:id", {
+        controller : "customerController",
+        templateUrl : "../modules/customer/views/categoryproducts.html"
+    })
+
     .otherwise("/404", {
         template : "<h1>Page not found</h1>"
     })
