@@ -1,0 +1,63 @@
+<div ng-include="'/staticViews/customerHeader.html'"></div>
+<div class="container" ng-init="getCart()">
+  <div class="row justify-content-center" style="margin-top: 100px;">
+    <div class="col-md-12">
+      <h4 class="text-center">Shopping Cart</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Items</th>
+            <th>Quantity</th>
+            <th></th>
+            <th>Stock Available</th>
+            <th>Price/Item</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in cart.products">
+            <td>{{item.name}}</td>
+            <td>{{item.quantity}}</td>
+            <td><input type="number" name="quantity" id="quantity" ng-model="item.quantity" placeholder="Enter qunatity" ng-blur="updateCart(item,'quantityUpdate')" min="1" max="1000"></td>
+            <td>{{item.remainingQuantity}}{{item.stockType}}</td>
+            <td>&#x20b9;{{item.dealPrice}}/{{item.stockType}}</td>
+            <td>&#x20b9;{{item.quantity * item.dealPrice}}/{{item.stockType}}</td>
+            <td><i class="fa fa-times" aria-hidden="true" ng-click="updateCart(item,'delete')"></i></td>
+          </tr>
+          <tr>
+            <td>Delivery Charge</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>&#x20b9;<span ng-bind="getDeliveryCharge()"> </span></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>GST</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>&#x20b9;<span ng-bind="getGst()"></span></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Total</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>&#x20b9;<span ng-bind="getAllTotal()"></span></td>
+            <td></td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <a class="col-md-4 cartButtons  btn btn-primary" href="#!/customer/dashboard">More Shopping</a>
+      <button type="button" class="col-md-4 cartButtons  btn btn-secondary" ng-click="clearCart()">Clear Cart</button>
+      <button type="button" class="col-md-4 cartButtons  btn btn-success" ng-click="placeOrder(cart)">Place Order</button>
+    </div>
+  </div>
+</div>

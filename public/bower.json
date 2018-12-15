@@ -17,6 +17,7 @@
   "dependencies": {
     "angular": "^1.7.5",
     "AngularJS-Toaster": "angularjs-toaster#^2.2.0",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "ngSweetAlert": "angular-sweetalert#^1.1.3"
   }
 }

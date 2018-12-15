@@ -14,12 +14,14 @@
         <div class="form-group">
           <div class="radio">
             <label><input type="radio" name="roleType" id="roleTypeCustomer" checked ng-model="user.role" value="customer"> Customer</label> &nbsp; &nbsp;
-            <label><input type="radio" name="roleType" id="roleTypeFarmer" ng-model="user.role" value="farmer"> Farmer</label>
+            <!-- <label><input type="radio" name="roleType" id="roleTypeFarmer" ng-model="user.role" value="farmer"> Farmer</label> -->
           </div>
         </div>
         <button type="submit" class="btn btn-success" ng-disabled="userLoginForm.$invalid" ng-click="userLogin(user)">Login</button>
-        <a href="#!/user/register">New User Register here</a>
+        <a href="#!/user/register">New User Register here</a>&nbsp;
+        <a href="#!/user/register">Forgot password</a>
       </form>
+
     </div>
   </div>
 </div>

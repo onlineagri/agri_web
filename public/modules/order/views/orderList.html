@@ -1,0 +1,18 @@
+<div ng-include="'/staticViews/customerHeader.html'"></div>
+<div class="col-md-12 containeradmin" ng-init="getOrders()">
+    <h3 class="text-center" style="margin-top: 10px;">My Orders</h3>
+    
+    <table ng-table="tableParams" class="table table-bordered table-hover" show-filter="true" style="margin-top: 55px;">
+      <tr class="text-center" ng-repeat="order in $data">
+        <td title="'Order No.'" filter="{ orderId: 'text'}"  ng-bind="order.orderId"></td>
+        <td title="'Amount Paid'"   ng-bind="order.amountPaid"></td>
+        <td title="'Status'" filter="{ status: 'text'}"  ng-bind="order.status"></td>
+        
+        <td title="'Ordered On'">{{order.created_at | date:'medium'}}</td>
+        <td title="'Actions'">
+          <a href="#!/customer/order/{{order._id}}" alt="Click to View" title="Click to View"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;
+        </td>
+      </tr>
+    </table>
+    <div ng-if="orders.length ==0" class="text-center">No orders found</div>
+  </div>
