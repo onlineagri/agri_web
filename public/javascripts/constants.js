@@ -19,6 +19,16 @@ var webservices = {
     "deleteMenu": baseUrl + "/admin/menu",
     "getNewProducts" : baseUrl + "/product/getnewproducts",
     "getFamrmerList" : baseUrl + "/admin/farmer/list",
+    "getProduct" : baseUrl + "/product/getproduct",
+    "addToCart" : baseUrl + "/product/addtocart",
+    "getCustomerCart": baseUrl + "/product/cart",
+    "getCart" : baseUrl + "/product/cart",
+    "updateCart" : baseUrl + "/product/cart",
+    "placeOrder" : baseUrl + "/order/placeorder",
+    "getOrder" : baseUrl + "/order/getorder",
+    "getOrders" : baseUrl + "/order/getorders",
+    "getProductCategories" : baseUrl + "/product/getproductcategories",
+    "getCategoryProducts" : baseUrl + "/product/getcategoryproducts",
 }
 
 var headerConstants = {

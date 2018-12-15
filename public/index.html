@@ -1,62 +1,54 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Online Kisan</title>
-	<link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-
-
-	<link rel="stylesheet" href="/bower_components/AngularJS-Toaster/toaster.min.css">
-	<link rel="stylesheet" href="/stylesheets/ng-table.min.css">
-	
-	<link rel="stylesheet" href="/stylesheets/style.css">
-</head>
-<body ng-app="agriApp">
-	<toaster-container></toaster-container>
-
-	<div ng-if="isAdmin">
-		<div ng-include="'/staticViews/adminHeader.html'"></div>
-
-	</div>
-	<div ng-if="isCustomer">
-		<div ng-include="'/staticViews/customerHeader.html'"></div>
-
-	</div>
-	<div ng-if="isFront">
-		<div ng-include="'/staticViews/frontHeader.html'"></div>
-
-	</div>
-	<ng-view></ng-view>
-	<div ng-include="'/staticViews/footer.html'"></div>
-	
-	
-</body>
-
-<script type="text/javascript" src="/javascripts/jquery-3.3.1.slim.min.js"></script>
-<!-- <script src="/bower_components/jquery/jquery.js"></script> -->
-<script type="text/javascript" src="/javascripts/popper.min.js"></script>
-<script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
-<script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
-
-<script type="text/javascript" src="/bower_components/AngularJS-Toaster/toaster.min.js"></script>
-<script type="text/javascript" src="/javascripts/angular-animate.min.js"></script>
-<script type="text/javascript" src="/javascripts/angular-storage.min.js"></script>
-<script type="text/javascript" src="/javascripts/ng-table.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
-<script type="text/javascript" src="/javascripts/ui-bootstrap.min.js"></script>
-
-
-
-<script type="text/javascript" src="/javascripts/angular-route.js"></script>
-<script type="text/javascript" src="/javascripts/constants.js"></script>
-<script type="text/javascript" src="/javascripts/app.js"></script>
-<script type="text/javascript" src="/staticViews/controller.js"></script>
-<script type="text/javascript" src="/modules/admin/controller.js"></script>
-<script type="text/javascript" src="/modules/admin/service.js"></script>
-<script type="text/javascript" src="/modules/auth/controller.js"></script>
-<script type="text/javascript" src="/modules/auth/service.js"></script>
-<script type="text/javascript" src="/modules/customer/controller.js"></script>
-<script type="text/javascript" src="/modules/customer/service.js"></script>
-
-
+	<head>
+		<title>Online Kisan</title>
+		<link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<link rel="stylesheet" href="/bower_components/AngularJS-Toaster/toaster.min.css">
+		<link rel="stylesheet" href="/bower_components/sweetalert/dist/sweetalert.css">
+		<link rel="stylesheet" href="/stylesheets/ng-table.min.css">
+		
+		<link rel="stylesheet" href="/stylesheets/style.css">
+	</head>
+	<body ng-app="agriApp">
+		<toaster-container toaster-options="{
+		'position-class': 'toast-bottom-right','close-button':true} "></toaster-container>
+		<div  ng-if="isAdmin">
+			<div ng-include="'/staticViews/adminHeader.html'"></div>
+		</div>
+		<div ng-if="isFront && !userLogin" >
+			<div ng-include="'/staticViews/frontHeader.html'"></div>
+		</div>
+		<ng-view></ng-view>
+		<div ng-include="'/staticViews/footer.html'"></div>
+		
+		
+	</body>
+	<script type="text/javascript" src="/javascripts/jquery-3.3.1.slim.min.js"></script>
+	<!-- <script src="/bower_components/jquery/jquery.js"></script> -->
+	<script type="text/javascript" src="/javascripts/popper.min.js"></script>
+	<script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
+	<script type="text/javascript" src="/bower_components/AngularJS-Toaster/toaster.min.js"></script>
+	<script type="text/javascript" src="/bower_components/ngSweetAlert/SweetAlert.min.js"></script>
+	<script type="text/javascript" src="/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+	<script type="text/javascript" src="/javascripts/angular-animate.min.js"></script>
+	<script type="text/javascript" src="/javascripts/angular-storage.min.js"></script>
+	<script type="text/javascript" src="/javascripts/ng-table.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
+	<script type="text/javascript" src="/javascripts/ui-bootstrap.min.js"></script>
+	<script type="text/javascript" src="/javascripts/angular-route.js"></script>
+	<script type="text/javascript" src="/javascripts/constants.js"></script>
+	<script type="text/javascript" src="/javascripts/app.js"></script>
+	<script type="text/javascript" src="/staticViews/controller.js"></script>
+	<script type="text/javascript" src="/modules/admin/controller.js"></script>
+	<script type="text/javascript" src="/modules/admin/service.js"></script>
+	<script type="text/javascript" src="/modules/auth/controller.js"></script>
+	<script type="text/javascript" src="/modules/auth/service.js"></script>
+	<script type="text/javascript" src="/modules/customer/controller.js"></script>
+	<script type="text/javascript" src="/modules/customer/service.js"></script>
+	<script type="text/javascript" src="/modules/cart/controller.js"></script>
+	<script type="text/javascript" src="/modules/cart/service.js"></script>
+	<script type="text/javascript" src="/modules/order/controller.js"></script>
+	<script type="text/javascript" src="/modules/order/service.js"></script>
 </html>

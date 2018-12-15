@@ -3,6 +3,7 @@ const BearerStrategy = require('passport-http-bearer').Strategy,
     jwt = require('jsonwebtoken');
 const common = require("../config/common.js");
 const db = require("../db.js");
+const CustomStrategy = require('passport-custom').Strategy;
 const UserModel = db.UserModel();
 
 module.exports = function(passport) {
@@ -45,6 +46,7 @@ module.exports = function(passport) {
                             } else {
                                 //reset details from db
                                 user['roleId'] = userData.role;
+                                user['email'] = userData.email;
                                 user['firstName'] = userData.firstName;
                                 user['lastName'] = userData.lastName;
                                 user['fullName'] = (userData.firstName) + ' ' + (userData.lastName ? userData.lastName : '');
@@ -62,4 +64,65 @@ module.exports = function(passport) {
             }
         });
     }));
+
+    passport.use('authenticationOptional', new CustomStrategy(function(token, done) {
+        var bearertoken = null;
+        var userdummy = {};
+        if (token.headers.authorization)
+            bearertoken = token.headers.authorization.split(' ')[1];
+        if (bearertoken && common.isValid(bearertoken) && bearertoken != "undefined") {
+            jwt.verify(bearertoken, common.default_set.PRIVATE_KEY, function(err, user) {
+                if (err) {
+                    console.log('passport jwt err', err);
+                    return done(null, userdummy);
+                } else {
+                    if (user) {
+                        UserModel.findById(user.id)
+                            .select({ "role": 1, "firstName": 1, "lastName": 1, "status": 1, "isDeleted" : 1, "phoneNumber": 1})
+                            .exec(function(err, userData) {
+                                if (err) {
+                                    console.log("dberror passport authentication", err);
+                                    return done({
+                                        status: 401,
+                                        message: 'Internal server error, unable to authenticate'
+                                    })
+                                } else {
+                                    if (!common.isValid(userData)) {
+                                        return done({
+                                            status: 401,
+                                            message: 'Unable to authenticate'
+                                        })
+                                    } else if (userData.isDeleted == true) {
+                                        return done({
+                                            status: 401,
+                                            message: 'You are not authenticated'
+                                        })
+                                    } else if (userData.status != 'active') {
+                                        return done({
+                                            status: 401,
+                                            message: 'Your account is inactive'
+                                        })
+                                    } else {
+                                        //reset details from db
+                                        user['roleId'] = userData.role;
+                                        user['email'] = userData.email;
+                                        user['firstName'] = userData.firstName;
+                                        user['lastName'] = userData.lastName;
+                                        user['fullName'] = (userData.firstName) + ' ' + (userData.lastName ? userData.lastName : '');
+                                        user['phoneNumber'] = userData.phoneNumber;
+                                        return done(null, user);
+                                    }
+                                }
+                            })
+                    } else {
+                        return done(null, userdummy);
+                    }
+                }
+            });
+        } else {
+            return done(null, userdummy);
+        }
+    }));
 }
+
+

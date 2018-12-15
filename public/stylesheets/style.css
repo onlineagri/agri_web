@@ -421,3 +421,34 @@ input:checked + .slider:before {
 .search-control {
     padding: 5px 10px;
 }
+
+.productdeatil {
+    text-decoration-color: blueviolet;
+    color: green;
+    font-size: 20px;
+    font-weight: bold;
+}
+.productdeatilheading {
+    margin-left: 30px;
+    text-decoration-color: blueviolet;
+    color: orange;
+    font-size: 20px;
+}
+
+.divider {
+  flex-grow: 1;
+  border-bottom: 1px solid black;
+  margin: 5px
+}
+
+.cartButtons {
+    
+    max-width: 32.50%;
+}
+
+.cartImage {
+  padding: 3px;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}

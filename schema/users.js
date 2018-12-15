@@ -13,10 +13,11 @@
 	  state: { type: String},
 	  country: { type: String},
 	  pincode: { type: String},
-	  deliveryAddresses: {type: Array},
 	  role: { type: String, required: true }, //customer, farmer, admin
 	  status: { type: String }, // inRegistration, active, suspended
 	  isDeleted: { type: Boolean, default: false},
+	  about: {type: String},
+	  address : {type: String}
 	},
 	{ timestamps: { createdAt: 'created_at' } });
 	

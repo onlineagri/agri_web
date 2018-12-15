@@ -1,3 +1,4 @@
+var mongoose = require('mongoose');
 var db = require("../../db.js");
 var CategoryModel = db.CategoryModel();
 var UserModel = db.UserModel();
@@ -458,12 +459,12 @@ exports.addMenu = function(req, res){
         function(callback) {
         	saveParams = {
         		categoryName : menuParams.category.name,
-                categoryId : menuParams.category._id,
+                categoryId : mongoose.Types.ObjectId(menuParams.category._id),
         		name : common.capitalizeFirstLetter(menuParams.name),
         		description : menuParams.description,
         		status : menuParams.status,
         		quantity : menuParams.quantity,
-        		farmerId : menuParams.farmer._id,
+        		farmerId : mongoose.Types.ObjectId(menuParams.farmer._id),
         		priceEachItem : menuParams.applicationPrice,
                 farmerPrice: menuParams.farmerPrice,
                 dealPrice : common.isValid(menuParams.dealPrice) ? menuParams.dealPrice: menuParams.applicationPrice,

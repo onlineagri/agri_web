@@ -1,44 +1,29 @@
-<div class="row">
-  <div class="col-md-12 containercustomer">
-    <div class="row justify-content-md-center">
-      <div class="col-md-10 card">
-        <div class="card-header">
-          Track Order
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <button type="button" class="btn btn-success">Placed</button>&nbsp;&nbsp;&nbsp;
-          <button type="button" class="btn btn-warning">In-process</button>&nbsp;&nbsp;&nbsp;
-          <button type="button" class="btn btn-secondary">Dispatched</button>&nbsp;&nbsp;&nbsp;
-          <button type="button" class="btn btn-secondary">Completed</button><br/>
-          <br/>
-          <a href="#" class="btn btn-primary">Order Details</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
+<div ng-include="'/staticViews/customerHeader.html'"></div>
 <section class="bg-light" id="portfolio" style="margin-top: 50px;" ng-init="getNewProducts()">
   <div class="container">
     <div class="row">
       <div class="col-md-10 text-center">
-        <h2 class="section-heading text-uppercase">Newly Arrived</h2>
+        <h2 class="section-heading">Newly Arrived</h2>
       </div>
     </div>
     <div class="row">
       <div ng-repeat="product in newProducts" class="col-md-3 col-sm-4 portfolio-item">
-        <a class="portfolio-link" data-toggle="modal" href="#!/product/{{product._id}}">
+        <a class="portfolio-link text-center" data-toggle="modal" href="#!/product/{{product._id}}">
           <div class="portfolio-hover">
             <div class="portfolio-hover-content">
               <i class="fas fa-plus fa-3x"></i>
             </div>
           </div>
-          <img class="img-fluid" src="/images/img1.jpg" alt="">
+          <img class="img-fluid" style="height: 100px;" src="/uploads/{{product.imageName}}" alt="{{product.name}}">
+           <img style="width: 50px; height: 50px;" ng-if="product.product_docs[0].type == 'organic'" src="/images/organiclogo.png">
         </a>
         <div class="portfolio-caption">
+
           <h6 style="word-break: break-all" class="pnamecolor">{{product.name}}</h6>
-          
-          <p class="text-muted">&#x20b9;{{product.priceEachItem}}</p>
+         
+          <p class="text-muted">&#x20b9;{{product.priceEachItem}}/{{product.stockType}} </p>
+          <p>Brand: <span>{{product.farmerName| capitalize}}</span></p>
         </div>
       </div>
       </div>
@@ -49,22 +34,22 @@
   <div class="container">
     <div class="row">
       <div class="col-md-10 text-center">
-        <h2 class="section-heading text-uppercase">Featured Products</h2>
+        <h2 class="section-heading text-uppercase" ng-init="getCategories()">Available Categories</h2>
       </div>
     </div>
     <div class="row">
-      <div ng-repeat="product in newProducts" class="col-md-3 col-sm-4 portfolio-item">
-        <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
+      <div ng-repeat="category in productCategories" class="col-md-3 col-sm-4 portfolio-item">
+        <a class="portfolio-link text-center" data-toggle="modal" href="#!/category/products/{{category._id}}">
           <div class="portfolio-hover">
             <div class="portfolio-hover-content">
               <i class="fas fa-plus fa-3x"></i>
             </div>
           </div>
-          <img class="img-fluid" src="/images/img1.jpg" alt="">
+          <img ng-if="category.imageName" class="img-fluid" style="height: 100px;" src="/uploads/{{category.imageName}}" alt="{{category.name}}">
+          <img ng-if="!category.imageName" class="img-fluid" style="height: 100px;" src="/images/img1.jpg" alt="{{category.name}}">
         </a>
         <div class="portfolio-caption">
-          <h4>{{product.name}}</h4>
-          <p class="text-muted">{{product.price}}</p>
+          <h4>{{category.name}}</h4>
         </div>
       </div>
       </div>
