@@ -52,7 +52,6 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "customerController",
         templateUrl : "../modules/admin/views/customers.html"
     })
-
     .when("/admin/customer/add", {
         controller : "customerController",
         templateUrl : "../modules/admin/views/addCustomer.html"
@@ -111,6 +110,10 @@ app.config(function($routeProvider, $httpProvider) {
     .when("/category/products/:id", {
         controller : "customerController",
         templateUrl : "../modules/customer/views/categoryproducts.html"
+    })
+    .when("/admin/orders", {
+        controller : "customerController",
+        templateUrl : "../modules/admin/views/orders-dashboard.html"
     })
 
     .otherwise("/404", {
