@@ -168,6 +168,16 @@ app.factory('adminService',['$http', function ($http) {
       });
     },
 
+    getOrders: function(){
+      return $http({
+        method: 'GET',
+        url: webservices.getOrders
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
     getFamrmerList: function(){
       return $http({
         method: 'GET',

@@ -29,6 +29,7 @@ var webservices = {
     "getOrders" : baseUrl + "/order/getorders",
     "getProductCategories" : baseUrl + "/product/getproductcategories",
     "getCategoryProducts" : baseUrl + "/product/getcategoryproducts",
+    "getOrders": baseUrl + "/admin/order"
 }
 
 var headerConstants = {

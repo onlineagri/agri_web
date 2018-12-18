@@ -112,7 +112,7 @@ app.config(function($routeProvider, $httpProvider) {
         templateUrl : "../modules/customer/views/categoryproducts.html"
     })
     .when("/admin/orders", {
-        controller : "customerController",
+        controller : "orderManageController",
         templateUrl : "../modules/admin/views/orders-dashboard.html"
     })
 

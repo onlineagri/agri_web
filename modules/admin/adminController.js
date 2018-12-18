@@ -3,6 +3,7 @@ var db = require("../../db.js");
 var CategoryModel = db.CategoryModel();
 var UserModel = db.UserModel();
 var MenuModel = db.MenuModel();
+var OrderModel = db.OrderModel();
 var common = require("../../config/common.js");
 var async =require('async');
 var lodash = require('lodash');
@@ -642,4 +643,46 @@ exports.getFarmerList = function(req, res) {
             res.json({code: 200, message: "Fetched Successfuly", data: result});
         }
     });
+}
+
+exports.getOrder = function(req, res){
+    let orderId = req.params.id;
+    if(!common.isValid(orderId)){
+        res.json({code:400, message:"Parameters missing"});
+        return;
+    }
+
+    OrderModel.findOne({_id: mongoose.Types.ObjectId(orderId)}, function(err, orderData){
+        if(err){
+            console.log("dberror getOrder", err);
+            res.json({code:400, message:"Internal server error"});
+        } else {
+            if(common.isValid(orderData) && lodash.isEmpty(orderData) == false){
+                res.json({code:200, message:"Order fetched successfully", data:orderData});
+            } else {
+                res.json({code:400, message:"Invalid order"});
+            }
+        }
+    })
+}
+
+
+exports.getOrders = function(req, res) {
+    if(!common.isValid(req.user) || !common.isValid(req.user.id)){
+        res.json({code: 400, message:"You are not authorised to perform this action"});
+        return;
+    }
+
+    OrderModel.find({customerId: req.user.id}, function(err, data){
+        if(err){
+            console.log("dberror getOrders", err);
+            res.json({code:400, message:"Internal server error"});
+        } else {
+            if(common.isValid(data) && data.length > 0){
+                res.json({code:200, message:"Orders fetched successfully", data:data});
+            } else {
+                res.json({code:200, message:"No orders found", data:[]});
+            }
+        }
+    })
 }

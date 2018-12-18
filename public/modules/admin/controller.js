@@ -726,6 +726,74 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
 
     
 
-}]).controller('orderManageController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route) {
-    
+}]).controller('orderManageController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage) {
+    if($localStorage.isCustomerLogin){
+        $rootScope.userLogin = true;
+    }
+    $scope.getOrder = function(){
+        var orderId = $routeParams.id;
+        adminService.getOrder(orderId).then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                });
+                $scope.order = response.data.data;
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.printOrder = function(){
+        window.print();
+    }
+
+    $scope.getOrders = function(){
+        console.log('getOrders');
+        adminService.getOrders().then(function(response){
+            if(response.data.code == 200){
+                $scope.orders = response.data.data;
+                $scope.filter = {
+                    orderId: '',
+                    status:''
+                };
+                $scope.tableParams = new NgTableParams({
+                    page: 1,
+                    count: 20,
+                    sorting: {
+                        createdAt: "desc"
+                    },
+                    filter: $scope.filter
+                }, {
+                    total: $scope.orders.length,
+                    counts: [],
+                    dataset: $scope.orders
+                });
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
 }]);
