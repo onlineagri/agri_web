@@ -115,6 +115,10 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "orderManageController",
         templateUrl : "../modules/admin/views/orders-dashboard.html"
     })
+    .when("/admin/order/update/:id", {
+        controller : "orderManageController",
+        templateUrl : "../modules/admin/views/order-details.html"
+    })
 
     .otherwise("/404", {
         template : "<h1>Page not found</h1>"
