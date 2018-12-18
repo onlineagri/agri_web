@@ -19,6 +19,7 @@ router.post('/menu', adminController.addMenu);
 router.get('/menu/:id', adminController.getMenuById);
 router.put('/menu', adminController.addMenu);
 router.delete('/menu/:id', adminController.deleteMenu);
+router.get('/order', adminController.getOrders);
 
 
 module.exports = router;

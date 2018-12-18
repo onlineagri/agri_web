@@ -6,16 +6,16 @@
 	<div class="col-md-8 containeradmin" ng-init="getMenuList()">
 		<h3 class="text-center" style="margin-top: 10px;">Manage Orders</h3>
 		<table ng-table="tableParams" class="table table-bordered table-hover" show-filter="true" style="margin-top: 55px;">
-			<tr class="text-center" ng-repeat="menu in $data">
-				<td title="'Order Number'" filter="{ name: 'text'}" sortable="'orderNumber'" ng-bind="order.orderNumber"></td>
-				<td title="'User Name'" ng-bind="order.userName">
+			<tr class="text-center" ng-repeat="order in $data">
+				<td title="'Order Number'" filter="{ name: 'text'}" sortable="'orderNumber'" ng-bind="order.orderId"></td>
+				<td title="'User Name'" ng-bind="order.customerName">
 				</td>
-				<td title="'Price'" ng-bind="order.price">
+				<td title="'Price'" ng-bind="order.amountPaid">
 				</td>
-				<td title="'Farmer'" ng-bind="order.farmer">
+				<td title="'Ordered On'" ng-bind="order.created_at | date">
 				</td>
 				<td title="'Actions'">
-					<a href="#!/admin/menu/update/{{menu._id}}" alt="Click to edit" title="Click to delete"><i class="fa fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
+					<a href="#!/admin/menu/update/{{order._id}}" alt="Click to edit" title="Click to delete"><i class="fa fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
 					<a href="javascript:void(0)" alt="Click to delete" title="Click to delete"><i class="fa fa-trash" aria-hidden="true" ng-click="deleteMenu(order._id)"></i></a>
 				</td>
 			</tr>

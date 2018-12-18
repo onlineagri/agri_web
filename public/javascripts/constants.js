@@ -16,7 +16,8 @@ var webservices = {
     "updateMenu" : baseUrl + "/admin/menu",
     "getMenuList" : baseUrl + "/admin/menu",
     "getMenuById" : baseUrl + "/admin/menu",
-    "deleteMenu": baseUrl + "/admin/menu"
+    "deleteMenu": baseUrl + "/admin/menu",
+    "getOrders": baseUrl + "/admin/order"
 }
 
 var headerConstants = {

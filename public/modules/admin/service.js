@@ -166,6 +166,16 @@ app.factory('adminService',['$http', function ($http) {
           return response;
       }).catch(function () {
       });
+    },
+
+    getOrders: function(){
+      return $http({
+        method: 'GET',
+        url: webservices.getOrders
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
     }
   }
 }]);
