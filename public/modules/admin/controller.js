@@ -732,6 +732,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
     }
     $scope.getOrder = function(){
         var orderId = $routeParams.id;
+        
         adminService.getOrder(orderId).then(function(response){
             if(response.data.code == 200){
                 toaster.pop({

@@ -15,7 +15,7 @@
 				<td title="'Ordered On'" ng-bind="order.created_at | date">
 				</td>
 				<td title="'Actions'">
-					<a href="#!/admin/menu/update/{{order._id}}" alt="Click to edit" title="Click to delete"><i class="fa fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
+					<a href="#!/admin/order/update/{{order.orderId}}" alt="Click to edit" title="Click to delete"><i class="fa fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
 					<a href="javascript:void(0)" alt="Click to delete" title="Click to delete"><i class="fa fa-trash" aria-hidden="true" ng-click="deleteMenu(order._id)"></i></a>
 				</td>
 			</tr>

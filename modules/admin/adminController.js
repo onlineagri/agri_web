@@ -652,7 +652,7 @@ exports.getOrder = function(req, res){
         return;
     }
 
-    OrderModel.findOne({_id: mongoose.Types.ObjectId(orderId)}, function(err, orderData){
+    OrderModel.findOne({orderId: orderId}, function(err, orderData){
         if(err){
             console.log("dberror getOrder", err);
             res.json({code:400, message:"Internal server error"});
@@ -673,7 +673,7 @@ exports.getOrders = function(req, res) {
         return;
     }
 
-    OrderModel.find({customerId: req.user.id}, function(err, data){
+    OrderModel.find({}, function(err, data){
         if(err){
             console.log("dberror getOrders", err);
             res.json({code:400, message:"Internal server error"});

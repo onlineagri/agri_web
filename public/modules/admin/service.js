@@ -187,5 +187,15 @@ app.factory('adminService',['$http', function ($http) {
       }).catch(function () {
       });
     },
+
+    getOrder: function(id){
+      return $http({
+        method: 'GET',
+        url: webservices.getOrderById + "/" + id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
   }
 }]);
