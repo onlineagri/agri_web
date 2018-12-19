@@ -197,5 +197,16 @@ app.factory('adminService',['$http', function ($http) {
       }).catch(function () {
       });
     },
+
+    updateOrderStatus: function(params){
+      return $http({
+        method: 'PUT',
+        url: webservices.updateOrderStatus,
+        data: params
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    }
   }
 }]);

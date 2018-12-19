@@ -726,7 +726,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
 
     
 
-}]).controller('orderManageController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage) {
+}]).controller('orderManageController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage, SweetAlert) {
     if($localStorage.isCustomerLogin){
         $rootScope.userLogin = true;
     }
@@ -797,4 +797,20 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
             });
         });
     }
+
+    $scope.orderStatus = function(orderId, status){
+        console.log('orderStatus', status);
+        var params = {orderId: orderId, status: status};
+        adminService.updateOrderStatus(params).then(function(response){
+            if (response.data.code == 200) {
+                var orderStatus = response.data.data;
+                if (orderStatus == 'Placed') {
+                    $scope.order.status = 'In Process';
+                }
+            }
+        }).catch(function(response){
+
+        });
+    }
+
 }]);
