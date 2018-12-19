@@ -17,7 +17,8 @@
 	  status: { type: String }, // inRegistration, active, suspended
 	  isDeleted: { type: Boolean, default: false},
 	  about: {type: String},
-	  address : {type: String}
+	  address : {type: String},
+	  passwordToken : {type: String}
 	},
 	{ timestamps: { createdAt: 'created_at' } });
 	

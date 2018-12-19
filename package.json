@@ -17,6 +17,7 @@
     "lodash": "^4.17.11",
     "mongoose": "^5.3.9",
     "morgan": "~1.8.1",
+    "nodemailer": "^4.7.0",
     "passport": "^0.4.0",
     "passport-custom": "^1.0.5",
     "passport-http-bearer": "^1.0.1",
