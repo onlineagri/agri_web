@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="row justify-content-center" style="margin-top: 100px;">
+    <div class="col-md-6 ">
+      <h4 class="text-center">Forgot Pasword</h4>
+      <form name="userForgotPassForm">
+        <div class="form-group">
+          <label class="col-md-12" for="email">Email:
+            <input type="email" class="form-control" id="email" ng-model="email" name="email" pattern="([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$" required>
+            <span class="error-messages" ng-show="userForgotPassForm.email.$touched || userForgotPassForm.email.$dirty && userForgotPassForm.email.$invalid">
+              <span  ng-show="userForgotPassForm.email.$error.required">Please enter Email</span>
+              <span  ng-show="userForgotPassForm.email.$error.pattern">Enter valid email</span>
+            </span>
+          </label>
+
+        </div>
+        <div class="form-group">
+          <div class="radio">
+            <label  class="col-md-12"><input type="radio" name="roleType" id="roleTypeCustomer" checked ng-model="role" value="customer" required> Customer</label> &nbsp; &nbsp;
+             <span  class="error-messages" ng-show="userForgotPassForm.roleType.$touched && userForgotPassForm.roleType.$error.required">Please Select Role</span>
+            <!-- <label><input type="radio" name="roleType" id="roleTypeFarmer" ng-model="user.role" value="farmer"> Farmer</label> -->
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success" ng-disabled="userForgotPassForm.$invalid" ng-click="userForgotPass(email, role)">Submit</button>
+        <a href="#!/user/register">New User Register here</a>&nbsp;
+        <a href="#!/user/login">Back to Login</a>
+      </form>
+
+    </div>
+  </div>
+</div>

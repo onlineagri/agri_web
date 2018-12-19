@@ -29,6 +29,9 @@ var webservices = {
     "getOrders" : baseUrl + "/order/getorders",
     "getProductCategories" : baseUrl + "/product/getproductcategories",
     "getCategoryProducts" : baseUrl + "/product/getcategoryproducts",
+    "userForgotPass" : baseUrl + "/api/forgotpass",
+    "checktoken" : baseUrl + "/api/checktoken",
+    "changePassword" : baseUrl + "/api/changepassword",
 }
 
 var headerConstants = {
