@@ -19,6 +19,9 @@
 		<div ng-if="isFront && !userLogin" >
 			<div ng-include="'/staticViews/frontHeader.html'"></div>
 		</div>
+		<div ng-if="isFront && userLogin" >
+			<div ng-include="'/staticViews/customerHeader.html'"></div>
+		</div>
 		<ng-view></ng-view>
 		<div ng-include="'/staticViews/footer.html'"></div>
 		

@@ -71,6 +71,12 @@ app.config(function($routeProvider, $httpProvider) {
         templateUrl : "../modules/auth/views/register.html"
     })
 
+    .when("/user/forgotpassword", {
+        controller : "userLoginController",
+        templateUrl : "../modules/auth/views/forgotPass.html"
+    })
+    
+
     .when("/customer/dashboard", {
         controller : "customerController",
         templateUrl : "../modules/customer/views/dashboard.html"
@@ -118,6 +124,11 @@ app.config(function($routeProvider, $httpProvider) {
     .when("/admin/order/update/:id", {
         controller : "orderManageController",
         templateUrl : "../modules/admin/views/order-details.html"
+    })
+
+    .when("/verifyUser/:token", {
+        controller : "userLoginController",
+        templateUrl : "../modules/auth/views/changePassword.html"
     })
 
     .otherwise("/404", {
