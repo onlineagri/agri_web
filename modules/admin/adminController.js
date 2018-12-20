@@ -689,7 +689,6 @@ exports.getOrders = function(req, res) {
 
 exports.updateOrderStatus = function(req, res){
     var record = req.body;
-    console.log('record@@@@', record);
     if(!common.isValid(req.user) || !common.isValid(req.user.id)){
         res.json({code: 400, message:"You are not authorised to perform this action"});
         return;
@@ -699,7 +698,6 @@ exports.updateOrderStatus = function(req, res){
       if (err) {
         console.log("dberror updateOrderStatus", err);
       } else{
-        console.log('data@@@@', data);
         if (common.isValid(data)) {
             res.json({
                 code: 200,

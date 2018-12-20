@@ -30,11 +30,11 @@
             <div class="col-md-12">Address: {{order.delivery_address}}</div>
           </div>
           <div class="col-md-6">
-            <div class="col-md-6">Order Status: {{order.status}}</div>
-            <div class="col-md-6">
-              <a href="javascript:void(0);" ng-click="orderStatus(order.orderId, order.status)" ng-disabled="order.status == 'In Process'"><i class="fa fa-box-open" aria-hidden="true"></i></a> 
-              <a href="javascript:void(0);"><i class="fa fa-truck" aria-hidden="true"></i></a> 
-              <a href="javascript:void(0);"><i class="fa fa-copyright" aria-hidden="true"></i></a>
+            <div class="col-md-12">Order Status: {{order.status}}</div>
+            <div class="col-md-12">
+              <a href="javascript:void(0);" ng-click="orderStatus(order.orderId, order.status)" ng-class="{disabled: process}"><i class="fa fa-box-open" aria-hidden="true"></i></a> 
+              <a href="javascript:void(0);" ng-click="orderStatus(order.orderId, order.status)" ng-class="{disabled: delivery}"><i class="fa fa-truck" aria-hidden="true"></i></a> 
+              <a href="javascript:void(0);" ng-click="orderStatus(order.orderId, order.status)" ng-class="{disabled: complete}"><i class="fa fa-copyright" aria-hidden="true"></i></a>
             </div>
           </div>
         </div>
