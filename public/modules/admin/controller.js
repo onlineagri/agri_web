@@ -726,7 +726,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
 
     
 
-}]).controller('orderManageController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage) {
+}]).controller('orderManageController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage, SweetAlert) {
     if($localStorage.isCustomerLogin){
         $rootScope.userLogin = true;
     }
@@ -741,6 +741,9 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
                     body: response.data.message
                 });
                 $scope.order = response.data.data;
+                $scope.process = 0;
+                $scope.delivery = 1;
+                $scope.complete = 1;
             } else {
                 toaster.pop({
                     type: 'error',
@@ -797,4 +800,40 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
             });
         });
     }
+
+    $scope.orderStatus = function(orderId, status){
+        var status = status;
+        var params = {orderId: orderId, status: status};
+
+        if (status == 'Placed') {
+            params = {orderId: orderId, status: 'In Process'};
+            $scope.order.status = 'In Process';
+            $scope.process = 1;
+            $scope.delivery = 0;
+            $scope.complete = 1;
+        }
+
+        if (status == 'In Process') {
+            params = {orderId: orderId, status: 'Out for delivery'};
+            $scope.order.status = 'Out for delivery';
+            $scope.process = 1;
+            $scope.delivery = 1;
+            $scope.complete = 0;
+        }
+
+        if (status == 'Out for delivery') {
+            params = {orderId: orderId, status: 'Completed'};
+            $scope.order.status = 'Completed';
+            $scope.process = 1;
+            $scope.delivery = 1;
+            $scope.complete = 1;
+        }
+
+        adminService.updateOrderStatus(params).then(function(response){
+        }).catch(function(response){
+            console.log(response);
+        });
+
+    }
+
 }]);

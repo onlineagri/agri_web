@@ -22,6 +22,7 @@ router.delete('/menu/:id', adminController.deleteMenu);
 router.get('/farmer/list', adminController.getFarmerList);
 router.get('/order', adminController.getOrders);
 router.get('/order/:id', adminController.getOrder);
+router.put('/order', adminController.updateOrderStatus);
 
 
 module.exports = router;

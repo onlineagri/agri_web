@@ -686,3 +686,30 @@ exports.getOrders = function(req, res) {
         }
     })
 }
+
+exports.updateOrderStatus = function(req, res){
+    var record = req.body;
+    if(!common.isValid(req.user) || !common.isValid(req.user.id)){
+        res.json({code: 400, message:"You are not authorised to perform this action"});
+        return;
+    }
+
+    OrderModel.findOneAndUpdate({orderId: record.orderId}, { $set: { status: record.status }}, {new: true}, function (err, data) {
+      if (err) {
+        console.log("dberror updateOrderStatus", err);
+      } else{
+        if (common.isValid(data)) {
+            res.json({
+                code: 200,
+                message: 'Order update successfully',
+                data: data.status
+            });
+        } else{
+            res.json({
+                code: 400,
+                message: 'Order not updated'
+            });
+        }
+      }
+    });
+}

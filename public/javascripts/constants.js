@@ -34,6 +34,7 @@ var webservices = {
     "userForgotPass" : baseUrl + "/api/forgotpass",
     "checktoken" : baseUrl + "/api/checktoken",
     "changePassword" : baseUrl + "/api/changepassword",
+    "updateOrderStatus": baseUrl + "/admin/order"
 }
 
 var headerConstants = {
