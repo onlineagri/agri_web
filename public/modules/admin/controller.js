@@ -741,9 +741,23 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
                     body: response.data.message
                 });
                 $scope.order = response.data.data;
-                $scope.process = 0;
-                $scope.delivery = 1;
-                $scope.complete = 1;
+                if ($scope.order.status == 'Completed') {
+                    $scope.process = 1;
+                    $scope.delivery = 1;
+                    $scope.complete = 1;
+                } else if ($scope.order.status == 'Out for delivery') {
+                    $scope.process = 1;
+                    $scope.delivery = 1;
+                    $scope.complete = 0;
+                } else if ($scope.order.status == 'In Process') {
+                    $scope.process = 1;
+                    $scope.delivery = 0;
+                    $scope.complete = 1;
+                } else{
+                   $scope.process = 0;
+                   $scope.delivery = 1;
+                   $scope.complete = 1; 
+                }
             } else {
                 toaster.pop({
                     type: 'error',
