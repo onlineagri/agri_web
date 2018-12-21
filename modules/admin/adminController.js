@@ -15,7 +15,6 @@ exports.addCategory = function(req, res){
 	async.series([
         function(callback) {
         	saveParams = {
-        		type : categoryParams.type,
         		name : common.capitalizeFirstLetter(categoryParams.name),
         		description : categoryParams.description,
         		status : categoryParams.status,
@@ -147,7 +146,6 @@ exports.getCategoryById = function(req, res) {
 		} else {
 			let resdata = {
 				_id: data._id,
-				type: data.type,
 				name: data.name,
 				status: data.status,
 				description: data.description,
@@ -471,7 +469,9 @@ exports.addMenu = function(req, res){
                 dealPrice : common.isValid(menuParams.dealPrice) ? menuParams.dealPrice: menuParams.applicationPrice,
                 farmerName : menuParams.farmer.name,
                 stockType: menuParams.stockType,
-                brand : common.isValid(menuParams.brand) ? menuParams.brand : menuParams.farmer.name 
+                brand : common.isValid(menuParams.brand) ? menuParams.brand : menuParams.farmer.name,
+                type: common.capitalizeFirstLetter(menuParams.type),
+                isOrganic : menuParams.isOrganic
 
         	}
             if(common.isValid(menuParams.remainingQuantity)){

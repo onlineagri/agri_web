@@ -260,7 +260,6 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
 }]).controller('menuController', ['$scope', 'adminService', 'toaster', '$localStorage', '$location', 'NgTableParams', '$routeParams', '$route', function($scope, adminService, toaster, $localStorage, $location, NgTableParams, $routeParams, $route) {
 
     $scope.menu = {};
-
     var _selected;
 
     $scope.selected = undefined;

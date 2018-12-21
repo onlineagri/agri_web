@@ -5,14 +5,19 @@
   
   <div class="col-md-8 containeradmin" ng-init="getCategories();">
     <h3 class="text-center" style="margin-top: 10px;">Add Menu</h3>
-    <form name="menuForm">
-      <div class="form-group">
+    <div class="form-group">
         <label for="categoryname" class="col-md-4 col-md-offset-2">Category:*</label>
-        <input type="text" class="col-md-4" id="categoryname" name="categoryname" ng-model="menu.category" uib-typeahead="category as category.name for category in categoryList | filter:{name:$viewValue}" typeahead-template-url="customTemplate.html" typeahead-min-length="0" required>
+        <input type="text" class="col-md-4" id="categoryname" name="categoryname" ng-model="menu.category" uib-typeahead="category as category.name for category in categoryList | filter:{name:$viewValue}" typeahead-template-url="customTemplate.html" typeahead-min-length="0">
+      </div>
+    <form name="menuForm" ng-if="menu.category.name == 'Agriculture'">
+      <div class="form-group">
+        <label for="categoryname" class="col-md-4 col-md-offset-2">Product Category:*</label>
+        <input type="text" class="col-md-4" id="categoryname" name="categoryname" ng-model="menu.category" uib-typeahead="category as category.name for category in categoryList | filter:{name:$viewValue}" typeahead-template-url="customTemplate.html" typeahead-min-length="0" required readonly>
         <span class="error-messages" ng-show="menuForm.categoryname.$dirty && menuForm.categoryname.$invalid">
           <span  ng-show="menuForm.categoryname.$error.required">please select category</span>
         </span>
       </div>
+      <div>
       <div class="form-group">
         <label for="name" class="col-md-4 col-md-offset-2">Name:*</label>
         <input type="text" class="col-md-4 " id="name" name="name" ng-model="menu.name" capitalize-first required>
@@ -20,6 +25,24 @@
           <span  ng-show="menuForm.name.$error.required">please enter category name</span>
         </span>
       </div>
+      <div class="form-group">
+        <label for="type" class="col-md-4 col-md-offset-2">Type:*</label>
+        <input type="text" class="col-md-4 " id="type" name="type" ng-model="menu.type" capitalize-first required>
+        <span class="error-messages" ng-show="menuForm.type.$dirty && menuForm.type.$invalid">
+          <span  ng-show="menuForm.type.$error.required">please enter Product type</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="type" class="col-md-4 col-md-offset-2">This product is:*</label>
+        <label class="col-md-2"><input type="radio"  id="organic" name="organic" ng-model="menu.isOrganic" > Organic</label>
+        <label class="col-md-2"><input type="radio"  id="inorganic" name="organic" ng-model="menu.isOrganic" > Inorganic</label>
+        <span class="error-messages" ng-show="menuForm.organic.$dirty && menuForm.organic.$invalid">
+          <span  ng-show="menuForm.organic.$error.required">please select product feature</span>
+        </span>
+      </div>
+
+
       <div class="form-group">
         <label for="description" class="col-md-4 col-md-offset-2">Description:</label>
         <textarea name="description" class="col-md-4 " rows="5" cols="30" id="description" ng-model="menu.description"></textarea>
@@ -89,7 +112,11 @@
       <input type="submit" class="btn btn-primary" ng-disabled="menuForm.$invalid" value="Submit" ng-click="addMenu(menu)">
       <a class="btn btn-warning" href="#!/admin/menulist" role="button">Cancel</a>
     </div>
+  </div>
   </form>
+  <div  ng-if="menu.category.name == 'Clothing and Fashion'">
+      <div ng-include="'modules/admin/views/addclothingMenu.html'"></div>
+  </div>
 </div>
 </div>
 <script type="text/ng-template" id="customTemplate.html">
