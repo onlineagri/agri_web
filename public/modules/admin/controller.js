@@ -726,7 +726,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
 
     
 
-}]).controller('orderManageController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage, SweetAlert) {
+}]).controller('orderManageController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage','SweetAlert','$rootScope', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage, SweetAlert, $rootScope) {
     if($localStorage.isCustomerLogin){
         $rootScope.userLogin = true;
     }
