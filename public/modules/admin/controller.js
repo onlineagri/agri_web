@@ -779,7 +779,6 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
     }
 
     $scope.getOrders = function(){
-        console.log('getOrders');
         adminService.getOrders().then(function(response){
             if(response.data.code == 200){
                 $scope.orders = response.data.data;
@@ -789,7 +788,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
                 };
                 $scope.tableParams = new NgTableParams({
                     page: 1,
-                    count: 20,
+                    count: 10,
                     sorting: {
                         createdAt: "desc"
                     },
@@ -844,6 +843,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
         }
 
         adminService.updateOrderStatus(params).then(function(response){
+            SweetAlert.swal("", response.data.message, "success");
         }).catch(function(response){
             console.log(response);
         });

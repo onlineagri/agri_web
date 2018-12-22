@@ -673,7 +673,7 @@ exports.getOrders = function(req, res) {
         return;
     }
 
-    OrderModel.find({}, function(err, data){
+    OrderModel.find({}).sort('-created_at').exec(function(err, data){
         if(err){
             console.log("dberror getOrders", err);
             res.json({code:400, message:"Internal server error"});
@@ -701,7 +701,7 @@ exports.updateOrderStatus = function(req, res){
         if (common.isValid(data)) {
             res.json({
                 code: 200,
-                message: 'Order update successfully',
+                message: 'Order status changed to ' + data.status,
                 data: data.status
             });
         } else{
