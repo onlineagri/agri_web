@@ -1,0 +1,28 @@
+<div class="row">
+	<div class="col-md-3">
+		<div ng-include="'../../../staticViews/adminAside.html'"></div>
+	</div>
+	
+	<div class="col-md-8 containeradmin" ng-init="getContents()">
+		<h3 class="text-center" style="margin-top: 10px;">Content List</h3>
+		<span class="float-right"><a href="#!/admin/content/add" class="btn btn-success">ADD</a></span>
+		<table ng-table="tableParams" class="table table-condensed table-bordered table-hover">
+        <tr ng-hide="group.$hideRows" class="text-center" ng-repeat="content in contents" ng-repeat-end>
+          <td sortable="'heading'" data-title="'Heading'"  >
+            {{content.heading}}
+          </td>
+          <td data-title="'status'">
+            <span ng-if="content.status"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
+			<span ng-if="!content.status"><i class="fa fa-times" aria-hidden="true"></i></span>
+          </td>
+          <td sortable="'createdAt'" data-title="'Date'" ">
+            {{content.created_at | date:'medium'}}
+          </td>
+          <td title="'Actions'">
+			<a href="#!/admin/content/update/{{content._id}}" alt="Click to edit" title="Click to edit"><i class="fa fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
+			<a href="javascript:void(0)" alt="Click to delete" title="Click to delete"><i class="fa fa-trash" aria-hidden="true" ng-click="deleteContent(content._id)"></i></a>
+		</td>
+        </tr>
+      </table>
+	</div>
+</div>

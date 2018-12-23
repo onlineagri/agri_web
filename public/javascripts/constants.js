@@ -34,7 +34,12 @@ var webservices = {
     "userForgotPass" : baseUrl + "/api/forgotpass",
     "checktoken" : baseUrl + "/api/checktoken",
     "changePassword" : baseUrl + "/api/changepassword",
-    "updateOrderStatus": baseUrl + "/admin/order"
+    "updateOrderStatus": baseUrl + "/admin/order",
+    "addContent": baseUrl + "/admin/cms",
+    "getContents": baseUrl + "/admin/cms",
+    "getCmsContent": baseUrl + "/admin/cms",
+    "deleteContent": baseUrl + "/admin/cms"
+
 }
 
 var headerConstants = {
