@@ -9,7 +9,7 @@ module.exports = {
     certificate: ''
   },
   port: process.env.PORT || 3002,
-  mongoConnectionString :'mongodb://127.0.0.1/agriData',
+  mongoConnectionString :'***********************',
   PRIVATE_KEY : "Axxxxxxx",
   EMAIL_FROM: "xxxxxx",
   EMAIL_FROM_PASS : "xxxxxxxxxx",
