@@ -6,21 +6,6 @@
   <div class="col-md-8 containeradmin">
     <h3 class="text-center" style="margin-top: 10px;">Add Category</h3>
     <form name="categoryForm">
-      <div class="form-group" style="margin-top: 15px;">
-        <label for="type" class="col-md-4 col-md-offset-2">Type:*</label>
-        <label class="col-sm-2 control-label" for="organic">
-          <input type="radio" name="type" id="organic" ng-model="category.type" value="organic" required> Organic
-        </label>
-        <label class="col-sm-2" for="nonorganic">
-          <input type="radio" name="type" id="nonorganic" ng-model="category.type" value="nonorganic" required> Non-organic
-        </label>
-        <label class="col-sm-2" for="other">
-          <input type="radio" name="type" id="other" ng-model="category.type" value="other" required> Other
-        </label>
-        <span class="error-messages" ng-show="categoryForm.type.$dirty && categoryForm.type.$invalid">
-          <span  ng-show="categoryForm.type.$error.required">please select type</span>
-        </span>
-      </div>
       <div class="form-group">
         <label for="name" class="col-md-4 col-md-offset-2">Name:*</label>
         <input type="text" class="col-md-4 " id="name" name="name" ng-model="category.name" capitalize-first required>

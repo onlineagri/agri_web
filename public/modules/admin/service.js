@@ -203,6 +203,17 @@ app.factory('adminService',['$http', function ($http) {
         method: 'PUT',
         url: webservices.updateOrderStatus,
         data: params
+        }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+    
+    addClothingMenu: function(data) {
+      return $http({
+        method: 'POST',
+        data : data,
+        url: webservices.addClothingMenu
       }).then(function (response) {
           return response;
       }).catch(function () {

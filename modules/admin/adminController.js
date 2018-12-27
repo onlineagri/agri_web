@@ -15,7 +15,6 @@ exports.addCategory = function(req, res){
 	async.series([
         function(callback) {
         	saveParams = {
-        		type : categoryParams.type,
         		name : common.capitalizeFirstLetter(categoryParams.name),
         		description : categoryParams.description,
         		status : categoryParams.status,
@@ -147,7 +146,6 @@ exports.getCategoryById = function(req, res) {
 		} else {
 			let resdata = {
 				_id: data._id,
-				type: data.type,
 				name: data.name,
 				status: data.status,
 				description: data.description,
@@ -471,7 +469,9 @@ exports.addMenu = function(req, res){
                 dealPrice : common.isValid(menuParams.dealPrice) ? menuParams.dealPrice: menuParams.applicationPrice,
                 farmerName : menuParams.farmer.name,
                 stockType: menuParams.stockType,
-                brand : common.isValid(menuParams.brand) ? menuParams.brand : menuParams.farmer.name 
+                brand : common.isValid(menuParams.brand) ? menuParams.brand : menuParams.farmer.name,
+                type: common.capitalizeFirstLetter(menuParams.type),
+                isOrganic : menuParams.isOrganic
 
         	}
             if(common.isValid(menuParams.remainingQuantity)){
@@ -687,6 +687,7 @@ exports.getOrders = function(req, res) {
     })
 }
 
+
 exports.updateOrderStatus = function(req, res){
     var record = req.body;
     if(!common.isValid(req.user) || !common.isValid(req.user.id)){
@@ -712,4 +713,210 @@ exports.updateOrderStatus = function(req, res){
         }
       }
     });
+}
+
+exports.addClothingMenu = function(req, res){
+    let menuParams = req.body;
+    let saveParams = {}
+    async.series([
+        function(callback) {
+            saveParams = {
+                categoryName : menuParams.category.name,
+                categoryId : mongoose.Types.ObjectId(menuParams.category._id),
+                name : common.capitalizeFirstLetter(menuParams.name),
+                description : menuParams.description,
+                status : menuParams.status,
+                quantity : menuParams.quantity,
+                sellerId : mongoose.Types.ObjectId(menuParams.farmer._id),
+                priceEachItem : menuParams.applicationPrice,
+                sellerPrice: menuParams.farmerPrice,
+                dealPrice : common.isValid(menuParams.dealPrice) ? menuParams.dealPrice: menuParams.applicationPrice,
+                sellerName : menuParams.farmer.name,
+                stockType: menuParams.stockType,
+                brand : common.isValid(menuParams.brand) ? menuParams.brand : menuParams.farmer.name,
+                type: common.capitalizeFirstLetter(menuParams.type)
+            }
+            if(common.isValid(menuParams.size)){
+                saveParams['size'] = menuParams.size;
+            }
+            if(common.isValid(menuParams.colour)){
+                saveParams['colour'] = menuParams.colour;
+            }
+            if(common.isValid(menuParams.packOf)){
+                saveParams['packOf'] = menuParams.packOf;
+            }
+            if(common.isValid(menuParams.fabric)){
+                saveParams['fabric'] = menuParams.fabric;
+            }
+            if(common.isValid(menuParams.sleeve)){
+                saveParams['sleeve'] = menuParams.sleeve;
+            }
+            if(common.isValid(menuParams.pattern)){
+                saveParams['pattern'] = menuParams.pattern;
+            }
+            if(common.isValid(menuParams.styleCode)){
+                saveParams['styleCode'] = menuParams.styleCode;
+            }
+            if(common.isValid(menuParams.closure)){
+                saveParams['closure'] = menuParams.closure;
+            }
+            if(common.isValid(menuParams.fit)){
+                saveParams['fit'] = menuParams.fit;
+            }
+            if(common.isValid(menuParams.collor)){
+                saveParams['collor'] = menuParams.collor;
+            }
+            if(common.isValid(menuParams.fabricCare)){
+                saveParams['fabricCare'] = menuParams.fabricCare;
+            }
+            if(common.isValid(menuParams.suitableFor)){
+                saveParams['suitableFor'] = menuParams.suitableFor;
+            }
+            if(common.isValid(menuParams.pockets)){
+                saveParams['pockets'] = menuParams.pockets;
+            }
+            if(common.isValid(menuParams.outerMaterial)){
+                saveParams['outerMaterial'] = menuParams.outerMaterial;
+            }
+            if(common.isValid(menuParams.soleMaterial)){
+                saveParams['soleMaterial'] = menuParams.soleMaterial;
+            }
+            if(common.isValid(menuParams.weight)){
+                saveParams['weight'] = menuParams.weight;
+            }
+            if(common.isValid(menuParams.remainingQuantity)){
+                saveParams['remainingQuantity'] = menuParams.remainingQuantity;
+            } else {
+                saveParams['remainingQuantity'] = menuParams.quantity;
+            }
+            callback();
+            
+        },
+        function(callback) {
+            //validation for unique
+            if (!common.isValid(menuParams._id)) {
+                MenuModel.findOne({
+                    name: menuParams.name,
+                    isDeleted: false
+                }, function(err, category) {
+                    if (err) {
+                        console.log("dberror addMenu", err);
+                        callback("Internal server error");
+                    } else {
+                        if (common.isValid(category)) {
+                            callback("This menu is already available");
+                        } else {
+                            callback();
+                        }
+                    }
+                })
+            } else {
+                callback();
+            }
+        },
+        function(callback) {
+            var imageName = menuParams.image;
+            var imageTypeRegularExpression = /\/(.*?)$/;
+            if (common.isValid(imageName) && imageName.length > 0) {
+                lodash.each(imageName, function(image, cb){
+                    var file = {};
+                    var fileName = new Date().getTime() + "_" + common.slugify(menuParams.name) ;
+                    var imageBuffer = common.decodeBase64Image(image);
+                    if(imageBuffer == "err"){
+                        cb("Not a valid image");
+                    } else {
+                        var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
+                        if (common.isValidImageType(imageTypeDetected.input)) {
+                            var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
+                            imageName = fileName + "." + imageTypeDetected[1];
+                            file.path = userUploadedImagePath,
+                            file.name = fileName + '.' + imageTypeDetected[1],
+                            file.type = imageTypeDetected.input;
+
+                            fs.writeFileSync(file.path, imageBuffer.data);
+                            imageName = fileName + '.' + imageTypeDetected[1];
+                            // common.verifyBucket(common.S3Buckets.menu, function() {
+                            //     common.uploadFile(file, common.S3Buckets.menu, function(err) {
+                            //         if (err) {
+                            //             callback('Unable to upload file');
+                            //         } else {
+                            //             uploadFileName = file.name;
+                            //             callback();
+                            //         }
+                            //     });
+                            // });
+                            saveParams.imageName = file.name;
+                            cb();
+                        }
+                    }
+                })
+            }
+                /*var imageTypeRegularExpression = /\/(.*?)$/;
+                var file = {};
+                var fileName = new Date().getTime() + "_" + common.slugify(menuParams.name) ;
+                var imageBuffer = common.decodeBase64Image(menuParams.image);
+                if (imageBuffer == "err") {
+                    callback('Not a valid image type');
+                } else {
+                    var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
+                    if (common.isValidImageType(imageTypeDetected.input)) {
+                        var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
+                        imageName = fileName + "." + imageTypeDetected[1];
+                        file.path = userUploadedImagePath,
+                            file.name = fileName + '.' + imageTypeDetected[1],
+                            file.type = imageTypeDetected.input;
+
+                        fs.writeFileSync(file.path, imageBuffer.data);
+                        imageName = fileName + '.' + imageTypeDetected[1];
+                        // common.verifyBucket(common.S3Buckets.menu, function() {
+                        //     common.uploadFile(file, common.S3Buckets.menu, function(err) {
+                        //         if (err) {
+                        //             callback('Unable to upload file');
+                        //         } else {
+                        //             uploadFileName = file.name;
+                        //             callback();
+                        //         }
+                        //     });
+                        // });
+                        saveParams.imageName = file.name;
+                        callback();
+                    } else {
+                        callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
+                    }
+                }
+            } else {
+                callback();
+            }*/
+        },
+        function(callback){
+            if(!common.isValid(menuParams._id)){
+                let menuData = new MenuModel(saveParams);
+                menuData.save(function(err, data){
+                    if(err){
+                        console.log("dberror addCategory", err);
+                        callback("Internal server error");
+                    } else {
+                        callback();
+                    }
+                })
+            } else {
+                let id = menuParams._id;
+                MenuModel.update({_id: id}, { $set: saveParams}, function(err, data){
+                    if(err){
+                        console.log("dberror addCategory", err);
+                        callback("Internal server error");
+                    } else {
+                        callback();
+                    }
+                })
+            }
+        }
+    ], function(err) {
+        if(err){
+            res.json({code : 400, message: err});
+        } else {
+            res.json({code : 200, message: "Menu Added Successfuly", data: []});
+        }  
+    });
+
 }

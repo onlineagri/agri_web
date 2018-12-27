@@ -2,11 +2,13 @@
 
  module.exports = function(mongoose){
 	const Schema = mongoose.Schema;
-	const MenuSchema = new Schema({
+	const MenuAgriSchema = new Schema({
 	  name: { type: String, required: true},
 	  description: { type: String},
 	  categoryId: mongoose.Schema.Types.ObjectId,
 	  categoryName : {type: String},
+	  type : {type: String},
+	  isOrganic : {type: Boolean, default: false},
 	  imageName : {type: String}, 
 	  status: { type: Boolean, default: true }, 
 	  isDeleted: { type: Boolean, default: false},
@@ -20,12 +22,11 @@
 	  stockType : {type: String, default: 'kg'},
 	  farmerPrice : {type: Number},
 	  brand: {type: String}
-
 	},
 	{ timestamps: { createdAt: 'created_at' } });
 	
-	const Menu = mongoose.model('Menus', MenuSchema);
-	return Menu;
+	const Agrimenus = mongoose.model('Agrimenus', MenuAgriSchema);
+	return Agrimenus;
 }
 
 
