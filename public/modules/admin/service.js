@@ -203,12 +203,34 @@ app.factory('adminService',['$http', function ($http) {
         method: 'PUT',
         url: webservices.updateOrderStatus,
         data: params
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    addContent: function(params){
+      return $http({
+        method: 'POST',
+        url: webservices.addContent,
+        data: params
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    getContents: function(params){
+      return $http({
+        method: 'GET',
+        url: webservices.getContents,
+        data: params
         }).then(function (response) {
           return response;
       }).catch(function () {
       });
     },
-    
+
     addClothingMenu: function(data) {
       return $http({
         method: 'POST',
@@ -219,5 +241,26 @@ app.factory('adminService',['$http', function ($http) {
       }).catch(function () {
       });
     }
+
+    getCmsContent: function(id){
+      return $http({
+        method: 'GET',
+        url: webservices.getCmsContent + '/' + id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    deleteContent : function(id){
+      return $http({
+        method: 'DELETE',
+        url: webservices.deleteContent + "/" + id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+    
   }
 }]);

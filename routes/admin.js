@@ -23,6 +23,10 @@ router.get('/farmer/list', adminController.getFarmerList);
 router.get('/order', adminController.getOrders);
 router.get('/order/:id', adminController.getOrder);
 router.put('/order', adminController.updateOrderStatus);
+router.post('/cms', adminController.addContent);
+router.get('/cms', adminController.getContents);
+router.get('/cms/:id', adminController.getCmsContent);
+router.delete('/cms/:id', adminController.deleteContent);
 router.post('/clothingmenu', adminController.addClothingMenu);
 
 

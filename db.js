@@ -13,6 +13,7 @@ const menus = require('./schema/menu')(Mongoose);
 const carts = require('./schema/cart')(Mongoose);
 const systemparams = require('./schema/systemparams')(Mongoose);
 const orders = require('./schema/orders')(Mongoose);
+const cms = require('./schema/cms')(Mongoose);
 
 module.exports = {
     generateHash: function(password) {
@@ -38,6 +39,9 @@ module.exports = {
     },
     OrderModel : function(){
         return orders;
+    },
+    CmsModel : function(){
+        return cms;
     } 
 
 }

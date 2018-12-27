@@ -1,4 +1,4 @@
-var app = angular.module("agriApp", ["ngRoute","toaster", "ngAnimate", 'ngStorage','ngTable','ui.bootstrap','oitozero.ngSweetAlert']);
+var app = angular.module("agriApp", ["ngRoute","toaster", "ngAnimate", 'ngStorage','ngTable','ui.bootstrap','oitozero.ngSweetAlert','ckeditor']);
 
 app.factory('basicAuthenticationInterceptor',['$localStorage' , '$location', function($localStorage, $location) {
     var basicAuthenticationInterceptor = {
@@ -130,6 +130,18 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "userLoginController",
         templateUrl : "../modules/auth/views/changePassword.html"
     })
+    .when("/admin/contents/", {
+        controller : "contentManagementController",
+        templateUrl : "../modules/admin/views/content-list.html"
+    })
+    .when("/admin/content/add", {
+        controller : "contentManagementController",
+        templateUrl : "../modules/admin/views/create-content.html"
+    })
+    .when("/admin/content/update/:id", {
+        controller : "contentManagementController",
+        templateUrl : "../modules/admin/views/update-content.html"
+    })
 
     .otherwise("/404", {
         template : "<h1>Page not found</h1>"
@@ -199,3 +211,24 @@ app.directive('capitalizeFirst', function($parse) {
      }
    };
 });
+
+// app.directive('ckEditor', function() {
+//   return {
+//     require: '?ngModel',
+//     link: function(scope, elm, attr, ngModel) {
+//       var ck = CKEDITOR.replace(elm[0]);
+
+//       if (!ngModel) return;
+
+//       ck.on('pasteState', function() {
+//         scope.$apply(function() {
+//           ngModel.$setViewValue(ck.getData());
+//         });
+//       });
+
+//       ngModel.$render = function(value) {
+//         ck.setData(ngModel.$viewValue);
+//       };
+//     }
+//   };
+// });

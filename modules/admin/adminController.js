@@ -4,6 +4,7 @@ var CategoryModel = db.CategoryModel();
 var UserModel = db.UserModel();
 var MenuModel = db.MenuModel();
 var OrderModel = db.OrderModel();
+var CmsModel = db.CmsModel();
 var common = require("../../config/common.js");
 var async =require('async');
 var lodash = require('lodash');
@@ -673,7 +674,7 @@ exports.getOrders = function(req, res) {
         return;
     }
 
-    OrderModel.find({}, function(err, data){
+    OrderModel.find({}).sort('-created_at').exec(function(err, data){
         if(err){
             console.log("dberror getOrders", err);
             res.json({code:400, message:"Internal server error"});
@@ -686,7 +687,6 @@ exports.getOrders = function(req, res) {
         }
     })
 }
-
 
 exports.updateOrderStatus = function(req, res){
     var record = req.body;
@@ -702,7 +702,7 @@ exports.updateOrderStatus = function(req, res){
         if (common.isValid(data)) {
             res.json({
                 code: 200,
-                message: 'Order update successfully',
+                message: 'Order status changed to ' + data.status,
                 data: data.status
             });
         } else{
@@ -865,7 +865,6 @@ exports.addClothingMenu = function(req, res){
                         file.path = userUploadedImagePath,
                             file.name = fileName + '.' + imageTypeDetected[1],
                             file.type = imageTypeDetected.input;
-
                         fs.writeFileSync(file.path, imageBuffer.data);
                         imageName = fileName + '.' + imageTypeDetected[1];
                         // common.verifyBucket(common.S3Buckets.menu, function() {
@@ -919,4 +918,126 @@ exports.addClothingMenu = function(req, res){
         }  
     });
 
+}
+
+exports.addContent = function(req, res){
+    let contentParams = req.body;
+    let saveParams = {};
+    let message = '';
+    async.series([
+        function(callback) {
+            saveParams = { 
+                contentfor: common.isValid(contentParams.contentfor) ? contentParams.contentfor : '',
+                heading: common.isValid(contentParams.heading) ? contentParams.heading : '',
+                description: common.isValid(contentParams.description) ? contentParams.description : '',
+                status: common.isValid(contentParams.status) ? contentParams.status : false
+            }
+            callback(); 
+        },
+        function(callback) {
+            //validation for unique
+            if (!common.isValid(contentParams._id)) {
+                CmsModel.findOne({
+                    name: contentParams.contentfor,
+                    isDeleted: false
+                }, function(err, category) {
+                    if (err) {
+                        console.log("dberror addContent", err);
+                        callback("Internal server error");
+                    } else {
+                        if (common.isValid(category)) {
+                            callback("This content is already available");
+                        } else {
+                            callback();
+                        }
+                    }
+                })
+            } else {
+                callback();
+            }
+        },
+        function(callback){
+            if(!common.isValid(contentParams._id)){
+                let contentData = new CmsModel(saveParams);
+                contentData.save(function(err, data){
+                    if(err){
+                        console.log("dberror addContent", err);
+                        callback("Internal server error");
+                    } else {
+                        message = "Content Added Successfuly";
+                        callback();
+                    }
+                })
+            } else {
+                let id = contentParams._id;
+                CmsModel.update({_id: id}, { $set: saveParams}, function(err, data){
+                    if(err){
+                        console.log("dberror addContent", err);
+                        callback("Internal server error");
+                    } else {
+                        message = "Content Updated Successfuly";
+                        callback();
+                    }
+                })
+            }
+        }
+    ], function(err) {
+        if(err){
+            res.json({code : 400, message: err});
+        } else {
+            res.json({code : 200, message: message, data: []});
+        }  
+    });
+
+}
+
+exports.getContents = function(req, res){
+    CmsModel.find({}).sort('-created_at').exec(function(err, data){
+        if(err){
+            console.log("dberror getContents", err);
+            res.json({code:400, message:"Internal server error"});
+        } else {
+            if(common.isValid(data) && data.length > 0){
+                res.json({code:200, message:"Contents fetched successfully", data:data});
+            } else {
+                res.json({code:200, message:"No orders found", data:[]});
+            }
+        }
+    })
+}
+
+exports.getCmsContent = function(req, res){
+    var contentId = req.params.id;
+    if(!common.isValid(contentId)){
+        res.json({code:400, message:"Parameters missing"});
+        return;
+    }
+
+    CmsModel.findOne({_id: contentId}, function(err, data){
+        if(err){
+            console.log("dberror getCmsContent", err);
+            res.json({code:400, message:"Internal server error"});
+        } else {
+            if(common.isValid(data) && lodash.isEmpty(data) == false){
+                res.json({code:200, message:"Content fetched successfully", data:data});
+            } else {
+                res.json({code:400, message:"No content"});
+            }
+        }
+    })
+}
+
+exports.deleteContent = function(req, res){
+    let id = req.params.id;
+    if(!common.isValid(id)){
+        res.json({code: 400, message:"Parameters missing"});
+    }
+    CmsModel.findOneAndRemove({_id: id}, function(err, data){
+        if(err){
+            console.log("dberror deleteContent", err);
+            res.json({code: 400, message:"Internal server error"});
+        } else {
+            res.json({code: 200, message:"Content deleted Successfuly", data: []});
+        }
+    })
 }

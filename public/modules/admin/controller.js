@@ -821,7 +821,6 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
     }
 
     $scope.getOrders = function(){
-        console.log('getOrders');
         adminService.getOrders().then(function(response){
             if(response.data.code == 200){
                 $scope.orders = response.data.data;
@@ -831,7 +830,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
                 };
                 $scope.tableParams = new NgTableParams({
                     page: 1,
-                    count: 20,
+                    count: 10,
                     sorting: {
                         createdAt: "desc"
                     },
@@ -886,10 +885,91 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
         }
 
         adminService.updateOrderStatus(params).then(function(response){
+            SweetAlert.swal("", response.data.message, "success");
         }).catch(function(response){
             console.log(response);
         });
 
     }
+
+}]).controller('contentManagementController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage, SweetAlert) {
+    // Editor options.
+      $scope.options = {
+        language: 'en',
+        allowedContent: true,
+        entities: false
+      };
+
+      $scope.getContents = function(){
+        adminService.getContents().then(function(response){
+            if (response.data.code == 200) {
+                $scope.contents = response.data.data;
+            }
+        }).catch(function(response){
+        })
+      }
+
+      $scope.createContent = function(data){
+        adminService.addContent(data).then(function(response){
+            if (response.data.code == 200) {
+                SweetAlert.swal("", response.data.message, "success");
+                $location.path('/admin/contents');
+            } else{
+                SweetAlert.swal("", response.data.message, "warning");
+            }
+        }).catch(function(response){
+
+        });
+      }
+
+      $scope.updateContent = function(data){
+        adminService.addContent(data).then(function(response){
+            if (response.data.code == 200) {
+                SweetAlert.swal("", response.data.message, "success");
+                $location.path('/admin/contents');
+            } else{
+                SweetAlert.swal("", response.data.message, "warning");
+            }
+        }).catch(function(response){
+
+        });
+      }
+
+      $scope.getCmsContent = function(){
+        var id = $routeParams.id;
+        adminService.getCmsContent(id).then(function(response){
+            $scope.cms = response.data.data;
+        }).catch(function(response){
+
+        })
+      }
+
+      $scope.deleteContent = function(id){
+        SweetAlert.swal({
+                title: "Are you sure?",
+                text: "You are deleting this content?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete content",
+                closeOnConfirm: false
+            },
+            function(isConfirm) {
+                adminService.deleteContent(id).then(function(response){
+                    if(response.data.code == 200){
+                        SweetAlert.swal("", response.data.message, "success");
+                        $route.reload('/admin/contents');
+                    } else {
+                        toaster.pop({
+                            type: 'error',
+                            title: '',
+                            body: response.data.message
+                        });
+                    }
+                }).catch(function(response){
+
+                })
+            });
+      }
 
 }]);
