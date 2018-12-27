@@ -154,7 +154,7 @@
     <div class="form-group">
       <label class="col-md-4" for="image">Image:</label>
       <span class="col-md-4">
-        <input type="file" name='image' id="image" accept="image/jpeg,image/png,image/jpg" ng-model="menu.image" onchange="angular.element(this).scope().uploadImage(this.files)">
+        <input type="file" name='image' id="image" accept="image/jpeg,image/png,image/jpg" ng-model="menu.images" onchange="angular.element(this).scope().uploadImage(this.files)" multiple="5">
       </span>
     </div>
     <div class="form-group" style="margin-top: 50px;">

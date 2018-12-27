@@ -27,7 +27,7 @@ coverage
 build/Release
 
 # Dependency directories
-agri_web/node_modules/
+# agri_web/node_modules/
 jspm_packages/
 node_modules/
 agri_web/public/bower_components/

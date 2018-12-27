@@ -197,5 +197,17 @@ app.factory('adminService',['$http', function ($http) {
       }).catch(function () {
       });
     },
+
+    addClothingMenu: function(data) {
+      return $http({
+        method: 'POST',
+        data : data,
+        url: webservices.addClothingMenu
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    }
+
   }
 }]);

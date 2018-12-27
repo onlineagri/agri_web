@@ -292,7 +292,7 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
 
     $scope.uploadImage = function(files) {
         $scope.showMsg = false;
-        if (files.length == 1) {
+        if (files.length > 0) {
             $scope.selectedImg = true;
         } else {
             $scope.selectedImg = false;
@@ -512,6 +512,49 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
                 });
             });
         }
+    }
+
+    $scope.addClothingMenu = function(menu){
+        $scope.menu.image = [];
+        if (document.getElementById("image").files && $scope.selectedImg) {
+            var imgElem = document.getElementById("image").files;
+            
+            for(var i =0; i < imgElem.length; i++){
+                var reader = new FileReader();
+                reader.readAsDataURL(imgElem[i]);
+                reader.onload = function(onLoadEvent) {
+                    if (onLoadEvent.target.result) {
+                        var image = new Image();
+                        image.src = onLoadEvent.target.result;
+                        image.onload = function() {
+                            $scope.menu.image.push(onLoadEvent.target.result);
+                        }
+                    }
+                }
+            }
+        }
+        adminService.addClothingMenu($scope.menu).then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                });
+                $location.path('/admin/menulist');
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });        
     }
 
 }]).controller('customerController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route) {
