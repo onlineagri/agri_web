@@ -27,6 +27,7 @@ router.post('/cms', adminController.addContent);
 router.get('/cms', adminController.getContents);
 router.get('/cms/:id', adminController.getCmsContent);
 router.delete('/cms/:id', adminController.deleteContent);
+router.post('/clothingmenu', adminController.addClothingMenu);
 
 
 module.exports = router;
