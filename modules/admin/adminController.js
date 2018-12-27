@@ -65,18 +65,19 @@ exports.addCategory = function(req, res){
 
                         fs.writeFileSync(file.path, imageBuffer.data);
                         imageName = fileName + '.' + imageTypeDetected[1];
-                        // common.verifyBucket(common.S3Buckets.menu, function() {
-                        //     common.uploadFile(file, common.S3Buckets.menu, function(err) {
-                        //         if (err) {
-                        //             callback('Unable to upload file');
-                        //         } else {
-                        //             uploadFileName = file.name;
-                        //             callback();
-                        //         }
-                        //     });
-                        // });
-                        saveParams.imageName = file.name;
-                        callback();
+                        common.verifyBucket(common.default_set.DEALSTICK_CATEGORY_BUCKET, function() {
+                            common.uploadFile(file, common.default_set.DEALSTICK_CATEGORY_BUCKET, function(err) {
+                                if (err) {
+                                    callback('Unable to upload file');
+                                } else {
+                                    uploadFileName = file.name;
+                                    saveParams.imageName = uploadFileName;
+                                    callback();
+                                }
+                            });
+                        });
+                        
+                        //scallback();
                     } else {
                         callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
                     }

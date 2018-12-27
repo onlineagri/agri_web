@@ -240,7 +240,7 @@ app.factory('adminService',['$http', function ($http) {
           return response;
       }).catch(function () {
       });
-    }
+    },
 
     getCmsContent: function(id){
       return $http({

@@ -3,7 +3,17 @@ var jwt = require("jsonwebtoken");
 const slug = require('slug');
 const lodash = require('lodash');
 const validImageTypes = ['image/gif', 'image/png', 'image/jpeg'];
+var AWS = require('aws-sdk');
+var fs = require('fs');
+var accessKeyId =  default_set.AWS.ACCESS_KEY_ID;
+var secretAccessKey = default_set.AWS.SECRET_ACCESS_KEY;
 
+AWS.config.update({
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey
+});
+
+var S3 = new AWS.S3();
 
 const isValid = exports.isValid = function(data) {
     if (data !== null && data !== undefined) {
@@ -144,6 +154,40 @@ exports.getEmailFooter = function() {
         '</html>';
 }
 
+exports.verifyBucket = function(name, callback) {
+    S3.createBucket({
+        Bucket: name
+    }, function(err) {
+        if (err) {
+            callback(err);
+        } else {
+            callback(null, true);
+        }
+    })
+}
+
+exports.uploadFile = function(file, BUCKET_NAME, callback) {
+    // console.log("uploadFile");
+    var fileBuffer = fs.readFileSync(file.path);
+    let cacheControlHeader = 'max-age=31536000';
+    // Create upload file object
+    S3.putObject({
+        ACL: 'public-read',
+        Bucket: BUCKET_NAME,
+        Key: file.name,
+        Body: fileBuffer,
+        ContentType: file.type,
+        CacheControl : cacheControlHeader
+    }, function(err, data) {
+        if (err) {
+            console.log('s3',err);
+            callback('Unable to save uploaded file');
+        } else {
+            console.log(data);
+            callback(null, data);
+        }
+    });
+}
 
 
 exports.default_set = default_set;
