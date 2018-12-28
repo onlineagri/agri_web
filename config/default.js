@@ -13,8 +13,14 @@ module.exports = {
   PRIVATE_KEY : "Agri@321",
   EMAIL_FROM: "oapporg@gmail.com",
   EMAIL_FROM_PASS : "dealstick@123",
-  HOST: process.env.HOST || 'http://localhost:3000'
+  HOST: process.env.HOST || 'http://localhost:3000',
 
-
+  AWS: {
+     'REGION': '***************',
+     'ACCESS_KEY_ID': '***************',
+     'SECRET_ACCESS_KEY': '****************'
+ },
+ AGRI_PROD_BUCKET : '*****************',
+ DEALSTICK_CATEGORY_BUCKET : '***************'
   
 };
