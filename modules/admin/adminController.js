@@ -9,10 +9,12 @@ var common = require("../../config/common.js");
 var async =require('async');
 var lodash = require('lodash');
 var fs = require('fs');
+const sharp = require('sharp');
 
 exports.addCategory = function(req, res){
 	let categoryParams = req.body;
-	let saveParams = {}
+	let saveParams = {};
+    var uploadFileName;
 	async.series([
         function(callback) {
         	saveParams = {
@@ -46,45 +48,54 @@ exports.addCategory = function(req, res){
 	        }
         },
         function(callback) {
-            var imageName = categoryParams.image;
-            if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
-                var imageTypeRegularExpression = /\/(.*?)$/;
-                var file = {};
-                var fileName = common.slugify(categoryParams.name) + "_" + new Date().getTime();
-                var imageBuffer = common.decodeBase64Image(categoryParams.image);
-                if (imageBuffer == "err") {
-                    callback('Not a valid image type');
-                } else {
-                    var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
-                    if (common.isValidImageType(imageTypeDetected.input)) {
-                        var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
-                        imageName = fileName + "." + imageTypeDetected[1];
-                        file.path = userUploadedImagePath,
-                            file.name = fileName + '.' + imageTypeDetected[1],
-                            file.type = imageTypeDetected.input;
+           var imageName = categoryParams.image;
+           if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
+               var imageTypeRegularExpression = /\/(.*?)$/;
+               var file = {};
+               var fileName = common.slugify(categoryParams.name) + "_" + new Date().getTime();
+               var imageBuffer = common.decodeBase64Image(categoryParams.image);
+               if (imageBuffer == "err") {
+                   callback('Not a valid image type');
+               } else {
+                   var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
+                   if (common.isValidImageType(imageTypeDetected.input)) {
+                       var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
+                       sharp(imageBuffer.data)
+                            .resize(512)
+                            .toFile(userUploadedImagePath, (err, info) => {
+                                if (err) {
+                                    console.log('error sharp', err);
+                                    callback('Unable to upload image')
+                                } else {
+                                    // console.log('image info', info);
+                                    file.path = userUploadedImagePath,
+                                    file.name = fileName + '.' + imageTypeDetected[1],
+                                    file.type = imageTypeDetected.input
 
-                        fs.writeFileSync(file.path, imageBuffer.data);
-                        imageName = fileName + '.' + imageTypeDetected[1];
-                        // common.verifyBucket(common.S3Buckets.menu, function() {
-                        //     common.uploadFile(file, common.S3Buckets.menu, function(err) {
-                        //         if (err) {
-                        //             callback('Unable to upload file');
-                        //         } else {
-                        //             uploadFileName = file.name;
-                        //             callback();
-                        //         }
-                        //     });
-                        // });
-                        saveParams.imageName = file.name;
-                        callback();
-                    } else {
-                        callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
-                    }
-                }
-            } else {
-                callback();
-            }
-        },
+                                    var categoryBucket = common.default_set.DEALSTICK_CATEGORY_BUCKET;
+                                    common.verifyBucket(categoryBucket, function() {
+                                        common.uploadFile(file, categoryBucket, function(err) {
+                                            if (err) {
+                                                fs.unlink(userUploadedImagePath);
+                                                return callback(err);
+                                            } else {
+                                                uploadFileName = file.name;
+                                                saveParams.imageName = uploadFileName;
+                                                fs.unlink(userUploadedImagePath);
+                                                callback();
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                   } else {
+                       callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
+                   }
+               }
+           } else {
+               callback();
+           }
+       },
         function(callback){
         	if(!common.isValid(categoryParams._id)){
         		let categoryData = new CategoryModel(saveParams);
@@ -454,7 +465,8 @@ exports.getMenuList = function(req, res) {
 
 exports.addMenu = function(req, res){
 	let menuParams = req.body;
-	let saveParams = {}
+	let saveParams = {};
+    var uploadFileName;
 	async.series([
         function(callback) {
         	saveParams = {
@@ -506,45 +518,54 @@ exports.addMenu = function(req, res){
 	        }
         },
         function(callback) {
-            var imageName = menuParams.image;
-            if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
-                var imageTypeRegularExpression = /\/(.*?)$/;
-                var file = {};
-                var fileName = common.slugify(menuParams.name) + "_" + new Date().getTime();
-                var imageBuffer = common.decodeBase64Image(menuParams.image);
-                if (imageBuffer == "err") {
-                    callback('Not a valid image type');
-                } else {
-                    var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
-                    if (common.isValidImageType(imageTypeDetected.input)) {
-                        var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
-                        imageName = fileName + "." + imageTypeDetected[1];
-                        file.path = userUploadedImagePath,
-                            file.name = fileName + '.' + imageTypeDetected[1],
-                            file.type = imageTypeDetected.input;
+           var imageName = menuParams.image;
+           if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
+               var imageTypeRegularExpression = /\/(.*?)$/;
+               var file = {};
+               var fileName = common.slugify(menuParams.name) + "_" + new Date().getTime();
+               var imageBuffer = common.decodeBase64Image(menuParams.image);
+               if (imageBuffer == "err") {
+                   callback('Not a valid image type');
+               } else {
+                   var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
+                   if (common.isValidImageType(imageTypeDetected.input)) {
+                       var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
+                       sharp(imageBuffer.data)
+                            .resize(512)
+                            .toFile(userUploadedImagePath, (err, info) => {
+                                if (err) {
+                                    console.log('error sharp', err);
+                                    callback('Unable to upload image')
+                                } else {
+                                    // console.log('image info', info);
+                                    file.path = userUploadedImagePath,
+                                    file.name = fileName + '.' + imageTypeDetected[1],
+                                    file.type = imageTypeDetected.input
 
-                        fs.writeFileSync(file.path, imageBuffer.data);
-                        imageName = fileName + '.' + imageTypeDetected[1];
-                        // common.verifyBucket(common.S3Buckets.menu, function() {
-                        //     common.uploadFile(file, common.S3Buckets.menu, function(err) {
-                        //         if (err) {
-                        //             callback('Unable to upload file');
-                        //         } else {
-                        //             uploadFileName = file.name;
-                        //             callback();
-                        //         }
-                        //     });
-                        // });
-                        saveParams.imageName = file.name;
-                        callback();
-                    } else {
-                        callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
-                    }
-                }
-            } else {
-                callback();
-            }
-        },
+                                    var productBucket = common.default_set.AGRI_PROD_BUCKET;
+                                    common.verifyBucket(productBucket, function() {
+                                        common.uploadFile(file, productBucket, function(err) {
+                                            if (err) {
+                                                fs.unlink(userUploadedImagePath);
+                                                return callback(err);
+                                            } else {
+                                                uploadFileName = file.name;
+                                                saveParams.imageName = uploadFileName;
+                                                fs.unlink(userUploadedImagePath);
+                                                callback();
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                   } else {
+                       callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
+                   }
+               }
+           } else {
+               callback();
+           }
+       },
         function(callback){
         	if(!common.isValid(menuParams._id)){
         		let menuData = new MenuModel(saveParams);
