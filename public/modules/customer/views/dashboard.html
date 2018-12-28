@@ -3,7 +3,7 @@
 <section class="bg-light" id="portfolio" style="margin-top: 50px;" ng-init="getNewProducts()">
   <div class="container">
     <div class="row">
-      <div class="col-md-10 text-center">
+      <div class="col-md-12 text-center">
         <h2 class="section-heading">Newly Arrived</h2>
       </div>
     </div>
@@ -19,11 +19,83 @@
            <img style="width: 50px; height: 50px;" ng-if="product.product_docs[0].type == 'organic'" src="/images/organiclogo.png">
         </a>
         <div class="portfolio-caption">
-
+          <p>Brand: <span>{{product.farmerName| capitalize}}</span></p>
           <h6 style="word-break: break-all" class="pnamecolor">{{product.name}}</h6>
          
           <p class="text-muted">&#x20b9;{{product.priceEachItem}}/{{product.stockType}} </p>
+          
+        </div>
+      </div>
+      <div ng-repeat="product in newProducts" class="col-md-3 col-sm-4 portfolio-item">
+        <a class="portfolio-link text-center" data-toggle="modal" href="#!/product/{{product._id}}">
+          <div class="portfolio-hover">
+            <div class="portfolio-hover-content">
+              <i class="fas fa-plus fa-3x"></i>
+            </div>
+          </div>
+          <img class="img-fluid" style="height: 100px;" src="/uploads/{{product.imageName}}" alt="{{product.name}}">
+           <img style="width: 50px; height: 50px;" ng-if="product.product_docs[0].type == 'organic'" src="/images/organiclogo.png">
+        </a>
+        <div class="portfolio-caption">
           <p>Brand: <span>{{product.farmerName| capitalize}}</span></p>
+          <h6 style="word-break: break-all" class="pnamecolor">{{product.name}}</h6>
+         
+          <p class="text-muted">&#x20b9;{{product.priceEachItem}}/{{product.stockType}} </p>
+          
+        </div>
+      </div>
+      <div ng-repeat="product in newProducts" class="col-md-3 col-sm-4 portfolio-item">
+        <a class="portfolio-link text-center" data-toggle="modal" href="#!/product/{{product._id}}">
+          <div class="portfolio-hover">
+            <div class="portfolio-hover-content">
+              <i class="fas fa-plus fa-3x"></i>
+            </div>
+          </div>
+          <img class="img-fluid" style="height: 100px;" src="/uploads/{{product.imageName}}" alt="{{product.name}}">
+           <img style="width: 50px; height: 50px;" ng-if="product.product_docs[0].type == 'organic'" src="/images/organiclogo.png">
+        </a>
+        <div class="portfolio-caption">
+          <p>Brand: <span>{{product.farmerName| capitalize}}</span></p>
+          <h6 style="word-break: break-all" class="pnamecolor">{{product.name}}</h6>
+         
+          <p class="text-muted">&#x20b9;{{product.priceEachItem}}/{{product.stockType}} </p>
+          
+        </div>
+      </div>
+      <div ng-repeat="product in newProducts" class="col-md-3 col-sm-4 portfolio-item">
+        <a class="portfolio-link text-center" data-toggle="modal" href="#!/product/{{product._id}}">
+          <div class="portfolio-hover">
+            <div class="portfolio-hover-content">
+              <i class="fas fa-plus fa-3x"></i>
+            </div>
+          </div>
+          <img class="img-fluid" style="height: 100px;" src="/uploads/{{product.imageName}}" alt="{{product.name}}">
+           <img style="width: 50px; height: 50px;" ng-if="product.product_docs[0].type == 'organic'" src="/images/organiclogo.png">
+        </a>
+        <div class="portfolio-caption">
+          <p>Brand: <span>{{product.farmerName| capitalize}}</span></p>
+          <h6 style="word-break: break-all" class="pnamecolor">{{product.name}}</h6>
+         
+          <p class="text-muted">&#x20b9;{{product.priceEachItem}}/{{product.stockType}} </p>
+          
+        </div>
+      </div>
+      <div ng-repeat="product in newProducts" class="col-md-3 col-sm-4 portfolio-item">
+        <a class="portfolio-link text-center" data-toggle="modal" href="#!/product/{{product._id}}">
+          <div class="portfolio-hover">
+            <div class="portfolio-hover-content">
+              <i class="fas fa-plus fa-3x"></i>
+            </div>
+          </div>
+          <img class="img-fluid" style="height: 100px;" src="/uploads/{{product.imageName}}" alt="{{product.name}}">
+           <img style="width: 50px; height: 50px;" ng-if="product.product_docs[0].type == 'organic'" src="/images/organiclogo.png">
+        </a>
+        <div class="portfolio-caption">
+          <p>Brand: <span>{{product.farmerName| capitalize}}</span></p>
+          <h6 style="word-break: break-all" class="pnamecolor">{{product.name}}</h6>
+         
+          <p class="text-muted">&#x20b9;{{product.priceEachItem}}/{{product.stockType}} </p>
+          
         </div>
       </div>
       </div>
@@ -33,8 +105,8 @@
 <section class="bg-light" id="portfolio" style="margin-top: 50px;">
   <div class="container">
     <div class="row">
-      <div class="col-md-10 text-center">
-        <h2 class="section-heading text-uppercase" ng-init="getCategories()">Available Categories</h2>
+      <div class="col-md-12 text-center">
+        <h2 class="section-heading" ng-init="getCategories()">Available Categories</h2>
       </div>
     </div>
     <div class="row">

@@ -458,3 +458,6 @@ input:checked + .slider:before {
   pointer-events: none;
   color: grey;
 }
+.section-heading {
+  text-decoration: underline;
+}
