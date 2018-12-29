@@ -12,7 +12,7 @@
 				<td title="'LastName'" filter="{ lastName: 'text'}"  ng-bind="customer.lastName"></td>
 				<td title="'Email'" filter="{ email: 'text'}"  ng-bind="customer.email"></td>
 				<td title="'Phone Number'" filter="{ phoneNumber: 'text'}"  ng-bind="customer.phoneNumber"></td>
-				<td title="'Address'"> {{customer.streetAddress + " "+customer.city + customer.state + " " + customer.pincode}}
+				<td title="'Address'"> {{customer.streetAddress + " "+customer.city + " "+ customer.state + " " + customer.pincode}}
 				</td>
 				<td title="'Status'">{{customer.status}}</td>
 				<td title="'CreatedAt'">{{customer.created_at | date:'medium'}}</td>

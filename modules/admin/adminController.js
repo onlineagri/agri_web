@@ -1073,6 +1073,7 @@ exports.getUsers = function(req, res){
     async.series([
         function(callback){
             UserModel.count({
+                isDeleted: false,
                 role: 'customer'
             }, function (err, result) {
                 if (err) {
@@ -1089,6 +1090,7 @@ exports.getUsers = function(req, res){
         },
         function(callback){
             UserModel.count({
+                isDeleted: false,
                 role: 'farmer'
             }, function (err, result) {
                 if (err) {
@@ -1125,6 +1127,8 @@ exports.getBusinessPersons = function(req, res) {
                 role: {
                     $ne: "customer"
                 }
+            }, {
+                isDeleted: false
             }]
         }
     }]).exec(function(err, data) {
@@ -1342,7 +1346,7 @@ exports.adminDeleteBusinessPerson = function(req, res){
     if(!common.isValid(id)){
         res.json({code: 400, message:"Parameters missing"});
     }
-    UserModel.findOneAndRemove({_id: id}, function(err, data){
+    UserModel.update({_id: id},{ $set: {'isDeleted': true}}, function(err, data){
         if(err){
             console.log("dberror adminDeleteBusinessPerson", err);
             res.json({code: 400, message:"Internal server error"});
