@@ -40,7 +40,13 @@ var webservices = {
     "getCmsContent": baseUrl + "/admin/cms",
     "deleteContent": baseUrl + "/admin/cms",
     "addClothingMenu" : baseUrl + "/admin/clothingmenu",
-    "getUsers" : baseUrl + "/admin/users"
+    "getUsers" : baseUrl + "/admin/users",
+    "getBusinessPersons" : baseUrl + "/admin/businessperson",
+    "adminAddBusinessPerson" : baseUrl + "/admin/businessperson",
+    "getBusinessPerson" : baseUrl + "/admin/businessperson",
+    "adminUpdateBusinessPerson" : baseUrl + "/admin/businessperson",
+    "adminDeleteBusinessPerson" : baseUrl + "/admin/businessperson"
+
 }
 
 var headerConstants = {

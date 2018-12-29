@@ -270,6 +270,59 @@ app.factory('adminService',['$http', function ($http) {
           return response;
       }).catch(function () {
       });
-    }
+    },
+
+    getBusinessPersons : function(){
+      return $http({
+        method: 'GET',
+        url: webservices.getBusinessPersons
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    adminAddBusinessPerson: function(user){
+      return $http({
+        method: 'POST',
+        url: webservices.adminAddBusinessPerson,
+        data : user
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    getBusinessPerson: function(id) {
+      return $http({
+        method: 'GET',
+        url: webservices.getBusinessPerson + "/" + id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    adminUpdateBusinessPerson: function(user){
+      return $http({
+        method: 'PUT',
+        url: webservices.adminUpdateBusinessPerson,
+        data : user
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    }, 
+
+    adminDeleteBusinessPerson: function(id) {
+      return $http({
+        method: 'DELETE',
+        url: webservices.adminDeleteBusinessPerson + "/" + id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
   }
 }]);

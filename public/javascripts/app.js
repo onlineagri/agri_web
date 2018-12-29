@@ -143,6 +143,18 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "contentManagementController",
         templateUrl : "../modules/admin/views/update-content.html"
     })
+    .when("/admin/business", {
+        controller : "adminBusinessPersonController",
+        templateUrl : "../modules/admin/views/business.html"
+    })
+    .when("/admin/business/add", {
+        controller : "adminBusinessPersonController",
+        templateUrl : "../modules/admin/views/addBusiness.html"
+    })
+    .when("/admin/business/update/:id", {
+        controller : "adminBusinessPersonController",
+        templateUrl : "../modules/admin/views/updateBusiness.html"
+    })
 
     .otherwise("/404", {
         template : "<h1>Page not found</h1>"

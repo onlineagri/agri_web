@@ -988,4 +988,205 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
             });
       }
 
-}]);
+}]).controller('adminBusinessPersonController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, SweetAlert) {
+    $scope.states = [{
+        name: "Andhra Pradesh"
+    }, {
+        name: "Arunachal Pradesh"
+    }, {
+        name: "Assam"
+    }, {
+        name: "Bihar"
+    }, {
+        name: "Chandigarh"
+    }, {
+        name: "Chhattisgarh"
+    }, {
+        name: "Dadra and Nagar Haveli"
+    }, {
+        name: "Daman and Diu"
+    }, {
+        name: "New Delhi"
+    }, {
+        name: "Goa"
+    }, {
+        name: "Gujarat"
+    }, {
+        name: "Haryana"
+    }, {
+        name: "Himachal Pradesh"
+    }, {
+        name: "Jammu and Kashmir"
+    }, {
+        name: "Jharkhand"
+    }, {
+        name: "Karnataka"
+    }, {
+        name: "Kerala"
+    }, {
+        name: "Lakshadweep"
+    }, {
+        name: "Madhya Pradesh"
+    }, {
+        name: "Maharashtra"
+    }, {
+        name: "Manipur"
+    }, {
+        name: "Meghalaya"
+    }, {
+        name: "Mizoram"
+    }, {
+        name: "Nagaland"
+    }, {
+        name: "Odisha"
+    }, {
+        name: "Puducherry"
+    }, {
+        name: "Punjab"
+    }, {
+        name: "Rajasthan"
+    }, {
+        name: "Sikkim"
+    }, {
+        name: "Tamil Nadu"
+    }, {
+        name: "Telangana"
+    }, {
+        name: "Tripura"
+    }, {
+        name: "Uttar Pradesh"
+    }, {
+        name: "Uttarakhand"
+    }, {
+        name: "West Bengal"
+    }];
+
+    $scope.names = ["farmer", "seller"];
+
+    $scope.getBusinessPersons = function(){
+        adminService.getBusinessPersons().then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                });
+                var businessPersonsArray = response.data.data;
+                var initialParams = {
+                    count: 5 
+                  };
+                  var initialSettings = {
+                    counts: businessPersonsArray.length,
+                    paginationMaxBlocks: 13,
+                    paginationMinBlocks: 2,
+                    dataset: businessPersonsArray
+                  };
+                  $scope.tableParams =  new NgTableParams(initialParams, initialSettings);
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.addBusinessPerson = function(user){
+        adminService.adminAddBusinessPerson(user).then(function(response){
+            if(response.data.code == 200){
+                SweetAlert.swal("", response.data.message, "success");
+                $location.path('/admin/customers')
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.getBusinessPerson = function(){
+        var id = $routeParams.id;
+        adminService.getBusinessPerson(id).then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                }); 
+                $scope.user = response.data.data;
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.updateBusinessPerson = function(user){
+        adminService.adminUpdateBusinessPerson(user).then(function(response){
+            if(response.data.code == 200){
+                SweetAlert.swal("", response.data.message, "success");
+                $location.path('/admin/business');
+            } else {
+                SweetAlert.swal("", response.data.message, "warning");
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.deleteBusinessPerson = function(id) {
+        SweetAlert.swal({
+                title: "Are you sure?",
+                text: "You are deleting this business person?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete business person",
+                closeOnConfirm: false
+            },
+            function(isConfirm) {
+                adminService.adminDeleteBusinessPerson(id).then(function(response){
+                    if(response.data.code == 200){
+                        SweetAlert.swal("", response.data.message, "success");
+                        $route.reload();
+                    } else{
+                        SweetAlert.swal("", response.data.message, "warning");
+                    }
+                }).catch(function(response) {
+                });
+            });
+    }
+
+    $scope.cancel = function(){
+        $location.path('/admin/business');
+    }
+
+}])
