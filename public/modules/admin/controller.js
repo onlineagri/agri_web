@@ -1,28 +1,56 @@
 
-app.controller('adminLoginController', ['$scope', 'adminService','toaster','$localStorage','$location', function($scope, adminService, toaster, $localStorage, $location) {
+app.controller('DashboardController', ['$scope', 'adminService','toaster','$localStorage','$location', function($scope, adminService, toaster, $localStorage, $location) {
+    var total = 0;
+    var totalCustomers = [];
+    var totalFarmers = [];
+    adminService.getOrders().then(function(response){
+        if (response.data.code == 200) {
+            var data = response.data.data;
+            $scope.orderCounts = data.length;
+            angular.forEach(data, function(value, key){
+                if (value.status == 'Completed') {
+                    total += value.amountPaid;
+                }
+            });
+            $scope.totalTransactions = total.toFixed(2);
+        }
+    }).catch(function(response){
+
+    });
+
+    adminService.getUsers().then(function(response){
+        if (response.data.code == 200) {
+            var data = response.data.data;
+            $scope.customerCounts = data[0].customers;
+            $scope.farmerCounts = data[1].farmers;
+        }
+    }).catch(function(response){
+
+    });
+}]).controller('adminLoginController', ['$scope', 'adminService','toaster','$localStorage','$location', function($scope, adminService, toaster, $localStorage, $location) {
     $scope.login = function(admin){
-    	admin["role"] = "admin";
-    	adminService.login(admin).then(function(response){
-    		if(response.data.code == 200){
-    			toaster.pop({
-	                type: 'success',
-	                title: '',
-	                body: response.data.message
-	            });
-    			$localStorage.token = response.data.token;
-    			$localStorage.isAdminLogin = true;
-    			$localStorage.firstName = response.data.data.firstName;
-    			$localStorage.phoneNumber = response.data.data.phoneNumber;
-    			$location.path("/admin/dashboard");
-    		} else {
-    			toaster.pop({
-	                type: 'error',
-	                title: '',
-	                body: response.data.message
-	            });
-    		}
-    	}).catch(function(response) {
-    		toaster.pop({
+        admin["role"] = "admin";
+        adminService.login(admin).then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                });
+                $localStorage.token = response.data.token;
+                $localStorage.isAdminLogin = true;
+                $localStorage.firstName = response.data.data.firstName;
+                $localStorage.phoneNumber = response.data.data.phoneNumber;
+                $location.path("/admin/dashboard");
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
                 type: 'error',
                 title: '',
                 body: "Something went wrong"

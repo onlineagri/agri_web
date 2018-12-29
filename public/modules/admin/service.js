@@ -261,5 +261,15 @@ app.factory('adminService',['$http', function ($http) {
       }).catch(function () {
       });
     },
+
+    getUsers: function(){
+      return $http({
+        method: 'GET',
+        url: webservices.getUsers
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    }
   }
 }]);

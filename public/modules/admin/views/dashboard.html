@@ -9,11 +9,11 @@
             <h4 class="my-0 font-weight-normal">Transactions</h4>
           </div>
           <div class="card-body">
-            <h1 class="card-title pricing-card-title">&#x20b9; 0 </h1>
+            <h1 class="card-title pricing-card-title">&#x20b9; {{totalTransactions}} </h1>
             <ul class="list-unstyled mt-3 mb-4">
-              <li>{{totalOrders}} Orders</li>
+              <li>{{orderCounts}} Orders</li>
             </ul>
-            <button type="button" class="btn btn-lg btn-block btn-primary">Manage</button>
+            <a href="#!/admin/orders" type="button" class="btn btn-lg btn-block btn-primary">Manage</a>
           </div>
         </div>
         <div class="card mb-4 shadow-sm">
@@ -21,11 +21,11 @@
             <h4 class="my-0 font-weight-normal">Customers</h4>
           </div>
           <div class="card-body">
-            <h1 class="card-title pricing-card-title">{{totalCustomers ? totalCustomers : 0}}</h1>
+            <h1 class="card-title pricing-card-title">{{customerCounts}}</h1>
             <ul class="list-unstyled mt-3 mb-4">
               <li> Customers</li>
             </ul>
-            <button type="button" class="btn btn-lg btn-block btn-primary">Manage</button>
+            <a href="javascript:void();" type="button" class="btn btn-lg btn-block btn-primary">Manage</a>
           </div>
         </div>
         <div class="card mb-4 shadow-sm">
@@ -33,11 +33,11 @@
             <h4 class="my-0 font-weight-normal">Farmers</h4>
           </div>
           <div class="card-body">
-            <h1 class="card-title pricing-card-title">{{totalFarmers ? totalFarmers : 0}}</h1>
+            <h1 class="card-title pricing-card-title">{{farmerCounts}}</h1>
             <ul class="list-unstyled mt-3 mb-4">
               <li>Farmers</li>
             </ul>
-            <button type="button" class="btn btn-lg btn-block btn-primary">Manage</button>
+            <a href="javascript:void();" type="button" class="btn btn-lg btn-block btn-primary">Manage</a>
           </div>
         </div>
       </div>
