@@ -1114,19 +1114,240 @@ exports.getUsers = function(req, res){
 
 }
 
-// exports.addAddBusinessPerson = function(req, res){
-//     if(!common.isValid(req.user) || !common.isValid(req.user.id)){
-//         res.json({code: 400, message:"You are not authorised to perform this action"});
-//         return;
-//     }
-//     let customer = new UserModel(customer);
-//     customerData.save(function(err, data){
-//         if(err){
-//             console.log("dberror adminAddCustomer", err);
-//             callback("Internal server error");
-            
-//         } else {
-//             callback();
-//         }
-//     })    
-// }
+exports.getBusinessPersons = function(req, res) {
+    UserModel.aggregate([{
+        $match: {
+            $and: [{
+                role: {
+                    $ne: "admin"
+                }
+            }, {
+                role: {
+                    $ne: "customer"
+                }
+            }]
+        }
+    }]).exec(function(err, data) {
+        if (err) {
+            console.log('dberror getBusinessPersons', err);
+            res.json({
+                code: 400,
+                message: "Internal Server Error"
+            });
+        } else {
+            res.json({
+                code: 200,
+                message: "Users Fetched Successfuly",
+                data: data
+            });
+        }
+    });
+}
+
+exports.adminAddBusinessPerson = function(req, res){
+    let userData = req.body;
+    if(!common.isValid(userData.firstName) || !common.isValid(userData.lastName) || !common.isValid(userData.phoneNumber)){
+        res.json({code: 400, message:"Parameters missing"});
+        return;
+    }
+    async.series([
+        function(callback){
+            UserModel.findOne({phoneNumber: userData.phoneNumber, isDeleted : false, role: userData.role}, function(err, data){
+                if(err){
+                    console.log("dberror adminAddCustomer", err);
+                    callback("Internal server error");
+                } else {
+                    if(common.isValid(data)){
+                        callback("Business Person already exists with this Phone Number")
+                    } else {
+                        callback();
+                    }
+                }
+            })
+        },
+        function(callback){
+            let businessPerson = {
+                firstName : userData.firstName,
+                lastName : userData.lastName,
+                phoneNumber : userData.phoneNumber,
+                status : "active",
+                role : userData.role,
+                about: userData.about
+            }
+            if(common.isValid(userData.email))
+                businessPerson["email"] = userData.email;
+            if(common.isValid(userData.streetAddress)){
+                businessPerson["streetAddress"] = userData.streetAddress;
+                businessPerson["deliveryAddresses"] = [{
+                    address: userData.streetAddress + " " + (common.isValid(userData.city) ? userData.city : "") + " " + (common.isValid(userData.state) ? userData.state : "") + " " + (common.isValid(userData.country) ? userData.country : "") + " " + (common.isValid(userData.pincode) ? userData.pincode : "")
+                }]
+            }
+            if(common.isValid(userData.city))
+                businessPerson["city"] = userData.city;
+            if(common.isValid(userData.state))
+                businessPerson["state"] = userData.state.name;
+            if(common.isValid(userData.country))
+                businessPerson["country"] = userData.country; 
+            if(common.isValid(userData.pincode))
+                businessPerson["pincode"] = userData.pincode;
+            let pass = userData.phoneNumber + '@123'
+            let password = db.generateHash(pass);
+
+            businessPerson["password"] = password;
+            let businessPersonData = new UserModel(businessPerson);
+            businessPersonData.save(function(err, data){
+                if(err){
+                    console.log("dberror adminAddBusinessPerson", err);
+                    callback("Internal server error");
+                    
+                } else {
+                    callback();
+                }
+            })
+        }
+        ], function(err){
+            if(err){
+                res.json({
+                    code: 400,
+                    message: err,
+                });
+            } else {
+                res.json({
+                    code: 200,
+                    message: "Business Person Saved Successfuly",
+                    data: []
+                });
+            }
+        }) 
+}
+
+exports.getBusinessPerson = function(req, res){
+    let id = req.params.id;
+    if(!common.isValid(id)){
+        res.json({code: 400, message:"Parameters missing"});
+        return;
+    }
+
+    UserModel.findOne({
+            _id: id
+        }).exec(function(err, data) {
+            if (err) {
+                res.json({
+                    code: 400,
+                    message: "Internal Server Error"
+                });
+            } else {
+                let state = {name: data.state};
+                let businessPersonData = {
+                    '_id': data._id,
+                    'firstName': data.firstName,
+                    'lastName': data.lastName,
+                    'status': data.status,
+                    'email': data.email,
+                    'phoneNumber': data.phoneNumber,
+                    'streetAddress': data.streetAddress,
+                    'city': data.city,
+                    'state': state,
+                    'pincode': data.pincode,
+                    'deliveryAddresses' : data.deliveryAddresses,
+                    'country' : data.country,
+                    'role' : data.role,
+                    'about' : data.about
+                }
+                res.json({
+                    code: 200,
+                    message: "User Fetched Successfuly",
+                    data: businessPersonData
+                });
+            }
+        })  
+}
+
+exports.adminUpdateBusinessPerson = function(req, res){
+    let userData = req.body;
+    if(!common.isValid(userData._id) || !common.isValid(userData.firstName) || !common.isValid(userData.lastName) || !common.isValid(userData.phoneNumber)){
+        res.json({code: 400, message:"Parameters missing"});
+        return;
+    }
+    let custData;
+    async.series([
+        function(callback){
+            UserModel.findOne({_id: userData._id, role: userData.role}, function(err, data){
+                if(err){
+                    console.log("dberror adminUpdateBusinessPerson", err);
+                    callback("Internal server error");
+                } else {
+                    if(common.isValid(data)){
+                        custData = data;
+                        callback()
+                    } else {
+                        callback("User not exists");
+                    }
+                }
+            })
+        },
+        function(callback){
+            let businessPerson = {
+                firstName : userData.firstName,
+                lastName : userData.lastName
+            }
+            if(common.isValid(userData.email))
+                businessPerson["email"] = userData.email;
+            if(common.isValid(userData.streetAddress)){
+                businessPerson["streetAddress"] = userData.streetAddress;
+            }
+            if(common.isValid(userData.city))
+                businessPerson["city"] = userData.city;
+            if(common.isValid(userData.state))
+                businessPerson["state"] = userData.state.name;
+            if(common.isValid(userData.country))
+                businessPerson["country"] = userData.country; 
+            if(common.isValid(userData.pincode))
+                businessPerson["pincode"] = userData.pincode;
+            if(common.isValid(userData.status) && lodash.includes(["active", "inRegistration", "suspended"], userData.status))
+                businessPerson["status"] = userData.status;
+            if (common.isValid(userData.role))
+                businessPerson["role"] = userData.role;
+            if (common.isValid(userData.about))
+                businessPerson["about"] = userData.about;
+
+            UserModel.update({_id: userData._id}, { $set: businessPerson}, function(err, data){
+                if(err){
+                    console.log("dberror adminUpdateBusinessPerson", err);
+                    callback("Internal server error");
+                    
+                } else {
+                    callback();
+                }
+            })
+        }
+        ], function(err){
+            if(err){
+                res.json({
+                    code: 400,
+                    message: err,
+                });
+            } else {
+                res.json({
+                    code: 200,
+                    message: "Business Person Updated Successfuly",
+                    data: []
+                });
+            }
+        })
+}
+
+exports.adminDeleteBusinessPerson = function(req, res){
+    let id = req.params.id;
+    if(!common.isValid(id)){
+        res.json({code: 400, message:"Parameters missing"});
+    }
+    UserModel.findOneAndRemove({_id: id}, function(err, data){
+        if(err){
+            console.log("dberror adminDeleteBusinessPerson", err);
+            res.json({code: 400, message:"Internal server error"});
+        } else {
+            res.json({code: 200, message:"Business person deleted Successfuly", data: []});
+        }
+    })
+}

@@ -29,5 +29,10 @@ router.get('/cms/:id', adminController.getCmsContent);
 router.delete('/cms/:id', adminController.deleteContent);
 router.post('/clothingmenu', adminController.addClothingMenu);
 router.get('/users', adminController.getUsers);
+router.get('/businessperson', adminController.getBusinessPersons);
+router.post('/businessperson', adminController.adminAddBusinessPerson);
+router.get('/businessperson/:id', adminController.getBusinessPerson);
+router.put('/businessperson', adminController.adminUpdateBusinessPerson);
+router.delete('/businessperson/:id', adminController.adminDeleteBusinessPerson);
 
 module.exports = router;
