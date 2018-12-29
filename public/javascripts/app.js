@@ -34,6 +34,7 @@ app.config(function($routeProvider, $httpProvider) {
     })
 
     .when("/admin/dashboard", {
+        controller : 'DashboardController',
         templateUrl : "../modules/admin/views/dashboard.html"
     })
     .when("/admin/categories", {

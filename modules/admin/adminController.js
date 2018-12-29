@@ -1062,3 +1062,54 @@ exports.deleteContent = function(req, res){
         }
     })
 }
+
+exports.getUsers = function(req, res){
+    var data = [];
+    if(!common.isValid(req.user) || !common.isValid(req.user.id)){
+        res.json({code: 400, message:"You are not authorised to perform this action"});
+        return;
+    }
+
+    async.series([
+        function(callback){
+            UserModel.count({
+                role: 'customer'
+            }, function (err, result) {
+                if (err) {
+                    console.log('dberror getUsers', err);
+                    callback('Internal server error');
+                } else {
+                    var obj = {
+                        customers : result
+                    };
+                    data.push(obj);
+                    callback();
+                }
+            });
+        },
+        function(callback){
+            UserModel.count({
+                role: 'farmer'
+            }, function (err, result) {
+                if (err) {
+                    console.log('dberror getUsers', err);
+                    callback('Internal server error');
+                } else {
+                    var obj = {
+                        farmers : result
+                    };
+                    data.push(obj);
+                    callback();
+                }
+            });
+        }
+        ], function(err){
+            if (err) {
+                console.log('err', err);
+                res.json({code: 400, message:"Internal server error"});
+            } else{
+                res.json({code: 200, message:"Users fetched Successfuly", data: data});
+            }
+        });
+
+}

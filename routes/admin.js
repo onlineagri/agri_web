@@ -28,6 +28,6 @@ router.get('/cms', adminController.getContents);
 router.get('/cms/:id', adminController.getCmsContent);
 router.delete('/cms/:id', adminController.deleteContent);
 router.post('/clothingmenu', adminController.addClothingMenu);
-
+router.get('/users', adminController.getUsers);
 
 module.exports = router;
