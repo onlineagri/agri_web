@@ -1113,3 +1113,20 @@ exports.getUsers = function(req, res){
         });
 
 }
+
+// exports.addAddBusinessPerson = function(req, res){
+//     if(!common.isValid(req.user) || !common.isValid(req.user.id)){
+//         res.json({code: 400, message:"You are not authorised to perform this action"});
+//         return;
+//     }
+//     let customer = new UserModel(customer);
+//     customerData.save(function(err, data){
+//         if(err){
+//             console.log("dberror adminAddCustomer", err);
+//             callback("Internal server error");
+            
+//         } else {
+//             callback();
+//         }
+//     })    
+// }

@@ -50,15 +50,15 @@ app.config(function($routeProvider, $httpProvider) {
         templateUrl : "../modules/admin/views/updateCategory.html"
     })  
     .when("/admin/customers", {
-        controller : "customerController",
+        controller : "adminCustomerController",
         templateUrl : "../modules/admin/views/customers.html"
     })
     .when("/admin/customer/add", {
-        controller : "customerController",
+        controller : "adminCustomerController",
         templateUrl : "../modules/admin/views/addCustomer.html"
     })
     .when("/admin/customer/update/:id", {
-        controller : "customerController",
+        controller : "adminCustomerController",
         templateUrl : "../modules/admin/views/updateCustomer.html"
     })
 

@@ -585,7 +585,7 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
         });        
     }
 
-}]).controller('customerController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route) {
+}]).controller('adminCustomerController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, SweetAlert) {
     $scope.states = [{
         name: "Andhra Pradesh"
     }, {
@@ -656,9 +656,9 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
         name: "Uttarakhand"
     }, {
         name: "West Bengal"
-    }]
+    }];
+
     $scope.getCustomers = function(){
-        // console.log("getCategories");
         adminService.getCustomers().then(function(response){
             if(response.data.code == 200){
                 toaster.pop({
@@ -696,11 +696,7 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
     $scope.addUser = function(user){
         adminService.adminAddCustomer(user).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
+                SweetAlert.swal("", response.data.message, "success");
                 $location.path('/admin/customers')
             } else {
                 toaster.pop({
@@ -747,11 +743,7 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
     $scope.updateUser = function(user){
         adminService.adminUpdateCustomer(user).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
+                SweetAlert.swal("", response.data.message, "success");
                 $location.path('/admin/customers')
             } else {
                 toaster.pop({
@@ -770,31 +762,27 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
     }
 
     $scope.deleteUser = function(id) {
-        adminService.adminDeleteCustomer(id).then(function(response){
-            if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
+        SweetAlert.swal({
+                title: "Are you sure?",
+                text: "You are deleting this customer?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete customer",
+                closeOnConfirm: false
+            },
+            function(isConfirm) {
+                adminService.adminDeleteCustomer(id).then(function(response){
+                    if(response.data.code == 200){
+                        SweetAlert.swal("", response.data.message, "success");
+                        $route.reload();
+                    } else{
+                        SweetAlert.swal("", response.data.message, "warning");
+                    }
+                }).catch(function(response) {
                 });
-                $route.reload();
-            } else {
-                toaster.pop({
-                    type: 'error',
-                    title: '',
-                    body: response.data.message
-                });
-            }
-        }).catch(function(response) {
-            toaster.pop({
-                type: 'error',
-                title: '',
-                body: "Something went wrong"
             });
-        });
     }
-
-    
 
 }]).controller('orderManageController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage, SweetAlert) {
     if($localStorage.isCustomerLogin){
