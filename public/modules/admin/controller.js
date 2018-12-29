@@ -1,18 +1,20 @@
 
 app.controller('DashboardController', ['$scope', 'adminService','toaster','$localStorage','$location', function($scope, adminService, toaster, $localStorage, $location) {
     var total = 0;
+    var counter = 0;
     var totalCustomers = [];
     var totalFarmers = [];
     adminService.getOrders().then(function(response){
         if (response.data.code == 200) {
             var data = response.data.data;
-            $scope.orderCounts = data.length;
             angular.forEach(data, function(value, key){
                 if (value.status == 'Completed') {
                     total += value.amountPaid;
+                    counter++;
                 }
             });
             $scope.totalTransactions = total.toFixed(2);
+            $scope.orderCounts = counter;
         }
     }).catch(function(response){
 
@@ -772,15 +774,17 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
                 closeOnConfirm: false
             },
             function(isConfirm) {
-                adminService.adminDeleteCustomer(id).then(function(response){
-                    if(response.data.code == 200){
-                        SweetAlert.swal("", response.data.message, "success");
-                        $route.reload();
-                    } else{
-                        SweetAlert.swal("", response.data.message, "warning");
-                    }
-                }).catch(function(response) {
-                });
+                if (isConfirm) {
+                    adminService.adminDeleteCustomer(id).then(function(response){
+                        if(response.data.code == 200){
+                            SweetAlert.swal("", response.data.message, "success");
+                            $route.reload();
+                        } else{
+                            SweetAlert.swal("", response.data.message, "warning");
+                        }
+                    }).catch(function(response) {
+                    });
+                }
             });
     }
 
@@ -971,20 +975,22 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
                 closeOnConfirm: false
             },
             function(isConfirm) {
-                adminService.deleteContent(id).then(function(response){
-                    if(response.data.code == 200){
-                        SweetAlert.swal("", response.data.message, "success");
-                        $route.reload('/admin/contents');
-                    } else {
-                        toaster.pop({
-                            type: 'error',
-                            title: '',
-                            body: response.data.message
-                        });
-                    }
-                }).catch(function(response){
+                if (isConfirm) {
+                    adminService.deleteContent(id).then(function(response){
+                        if(response.data.code == 200){
+                            SweetAlert.swal("", response.data.message, "success");
+                            $route.reload('/admin/contents');
+                        } else {
+                            toaster.pop({
+                                type: 'error',
+                                title: '',
+                                body: response.data.message
+                            });
+                        }
+                    }).catch(function(response){
 
-                })
+                    });
+                }
             });
       }
 
@@ -1102,7 +1108,7 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
         adminService.adminAddBusinessPerson(user).then(function(response){
             if(response.data.code == 200){
                 SweetAlert.swal("", response.data.message, "success");
-                $location.path('/admin/customers')
+                $location.path('/admin/business');
             } else {
                 toaster.pop({
                     type: 'error',
@@ -1173,15 +1179,17 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
                 closeOnConfirm: false
             },
             function(isConfirm) {
-                adminService.adminDeleteBusinessPerson(id).then(function(response){
-                    if(response.data.code == 200){
-                        SweetAlert.swal("", response.data.message, "success");
-                        $route.reload();
-                    } else{
-                        SweetAlert.swal("", response.data.message, "warning");
-                    }
-                }).catch(function(response) {
-                });
+                if (isConfirm) {
+                    adminService.adminDeleteBusinessPerson(id).then(function(response){
+                        if(response.data.code == 200){
+                            SweetAlert.swal("", response.data.message, "success");
+                            $route.reload();
+                        } else{
+                            SweetAlert.swal("", response.data.message, "warning");
+                        }
+                    }).catch(function(response) {
+                    });
+                }
             });
     }
 
