@@ -27,7 +27,7 @@
       </div>
       <div class="form-group">
         <label for="quantity" class="col-md-4 col-md-offset-2">Quantity:*</label>
-        <input name="quantity" class="col-md-4 " rows="5" cols="30" id="quantity" ng-model="menu.quantity" ng-pattern="/^[0-9]*$/" required />
+        <input name="quantity" type="number" class="col-md-4 " ng-model="menu.quantity" ng-pattern="/^[0-9]*$/" required />
         <span class="error-messages" ng-show="menuForm.quantity.$dirty && menuForm.quantity.$invalid">
           <span  ng-show="menuForm.quantity.$error.required">please enter quantity</span>
           <span ng-show="menuForm.quantity.$error.pattern">Not a valid number</span>
@@ -35,7 +35,7 @@
       </div>
       <div class="form-group">
         <label for="leftquantity" class="col-md-4 col-md-offset-2">Remainig Quantity:</label>
-        <input name="leftquantity" class="col-md-4 " rows="5" cols="30" id="leftquantity" ng-model="menu.remainingQuantity" ng-pattern="/^[0-9]*$/" readonly />
+        <input name="leftquantity" class="col-md-4 " type="number" id="leftquantity" ng-model="menu.remainingQuantity" ng-pattern="/^[0-9]*$/" readonly />
       </div>
       <div class="form-group">
         <label for="appPrice" class="col-md-4 col-md-offset-2">Application Price (each item):*</label>

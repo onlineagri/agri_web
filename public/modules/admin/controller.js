@@ -287,7 +287,7 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
         }
     }
 
-}]).controller('menuController', ['$scope', 'adminService', 'toaster', '$localStorage', '$location', 'NgTableParams', '$routeParams', '$route', function($scope, adminService, toaster, $localStorage, $location, NgTableParams, $routeParams, $route) {
+}]).controller('menuController', ['$scope', 'adminService', 'toaster', '$localStorage', '$location', 'NgTableParams', '$routeParams', '$route','SweetAlert', function($scope, adminService, toaster, $localStorage, $location, NgTableParams, $routeParams, $route, SweetAlert) {
 
     $scope.menu = {};
     var _selected;
@@ -384,18 +384,10 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
                         // console.log('category', category);
                         adminService.addMenu($scope.menu).then(function(response){
                             if(response.data.code == 200){
-                                toaster.pop({
-                                    type: 'success',
-                                    title: '',
-                                    body: response.data.message
-                                });
+                                SweetAlert.swal("", response.data.message, "success");
                                 $location.path('/admin/menulist');
                             } else {
-                                toaster.pop({
-                                    type: 'error',
-                                    title: '',
-                                    body: response.data.message
-                                });
+                                SweetAlert.swal("", response.data.message, "warning");
                             }
                         }).catch(function(response) {
                             toaster.pop({
@@ -410,18 +402,10 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
         }else{
             adminService.addMenu($scope.menu).then(function(response){
                 if(response.data.code == 200){
-                    toaster.pop({
-                        type: 'success',
-                        title: '',
-                        body: response.data.message
-                    });
+                    SweetAlert.swal("", response.data.message, "success");
                     $location.path('/admin/menulist');
                 } else {
-                    toaster.pop({
-                        type: 'error',
-                        title: '',
-                        body: response.data.message
-                    });
+                    SweetAlert.swal("", response.data.message, "warning");
                 }
             }).catch(function(response) {
                 toaster.pop({
@@ -456,27 +440,32 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
 
 
     $scope.deleteMenu = function(id){
-        adminService.deleteMenu(id).then(function(response){
-                if(response.data.code == 200){
-                    toaster.pop({
-                        type: 'success',
-                        title: '',
-                        body: response.data.message
-                    });
-                    $route.reload('/admin/menulist');
-                } else {
-                    toaster.pop({
-                        type: 'error',
-                        title: '',
-                        body: response.data.message
+        SweetAlert.swal({
+                title: "Are you sure?",
+                text: "You are deleting this customer?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete customer",
+                closeOnConfirm: false
+            },
+            function(isConfirm) {
+                if (isConfirm) {
+                    adminService.deleteMenu(id).then(function(response) {
+                        if (response.data.code == 200) {
+                            SweetAlert.swal("", response.data.message, "success");
+                            $route.reload('/admin/menulist');
+                        } else {
+                            SweetAlert.swal("", response.data.message, "warning");
+                        }
+                    }).catch(function(response) {
+                        toaster.pop({
+                            type: 'error',
+                            title: '',
+                            body: "Something went wrong"
+                        });
                     });
                 }
-            }).catch(function(response) {
-                toaster.pop({
-                    type: 'error',
-                    title: '',
-                    body: "Something went wrong"
-                });
             });
     }
 
@@ -494,18 +483,10 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
                         // console.log('category', category);
                         adminService.updateMenu($scope.menu).then(function(response){
                             if(response.data.code == 200){
-                                toaster.pop({
-                                    type: 'success',
-                                    title: '',
-                                    body: response.data.message
-                                });
+                                SweetAlert.swal("", response.data.message, "success");
                                 $location.path('/admin/menulist');
                             } else {
-                                toaster.pop({
-                                    type: 'error',
-                                    title: '',
-                                    body: response.data.message
-                                });
+                                SweetAlert.swal("", response.data.message, "warning");
                             }
                         }).catch(function(response) {
                             toaster.pop({
@@ -520,19 +501,10 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
         }else{
             adminService.updateMenu($scope.menu).then(function(response){
                 if(response.data.code == 200){
-
-                    toaster.pop({
-                        type: 'success',
-                        title: '',
-                        body: response.data.message
-                    });
+                    SweetAlert.swal("", response.data.message, "success");
                     $location.path('/admin/menulist');
                 } else {
-                    toaster.pop({
-                        type: 'error',
-                        title: '',
-                        body: response.data.message
-                    });
+                    SweetAlert.swal("", response.data.message, "warning");
                 }
             }).catch(function(response) {
                 toaster.pop({
