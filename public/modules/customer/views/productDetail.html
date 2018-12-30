@@ -1,25 +1,47 @@
 <div ng-include="'/staticViews/customerHeader.html'"></div>
-
 <div class="row">
   <div class="col-md-12 containercustomer" ng-init="getProduct()">
-    <div class="row justify-content-md-center">
+     <div class="row justify-content-md-center">
       <div class="col-md-10 card">
-        <div class="card-header">
+        <!-- <div class="card-header">
           Product Details
-        </div>
+        </div> -->
         <div class="card-body">
-          <h5 class="card-title">{{product.name}} ({{product.brand | capitalize}})</h5>
+          <h5 class="card-title text-center section-heading">{{product.name}} </h5>
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
               <img class="col-md-12 col-sm-12" style="width: 100%, height: 300px;" src="{{product.imageName}}" alt="{{product.name}}"/>
+              <div class="col-md-12 text-center" style="margin-top: 10px;">
+              <a class="col-md-5 btn btn-warning" href="#!/customer/dashboard">Notify Me</a>
+              <button type="button" class="col-md-5 btn btn-success" ng-click="addToCart(product)">Add to Cart</button>
+            </div>
             </div>
             <div class="col-md-8">
               <span class="productdeatilheading">Name: </span><span class="productdeatil">{{product.name | capitalize}}</span><br/>
-              <span class="productdeatilheading">Price: </span><span class="productdeatil">&#x20b9;{{product.priceEachItem}}/{{product.stockType}}</span><br/>
+              <span class="productdeatilheading">Price: </span><span class="productdeatil">&#x20b9;{{product.dealPrice}}/{{product.stockType}}</span><br/>
               <span class="productdeatilheading">Offer Price: </span><span class="productdeatil" ng-if="product.priceEachItem < product.dealPrice">&#x20b9;{{product.priceEachItem}}/{{product.stockType}}</span> <span class="productdeatil" ng-if="product.priceEachItem == product.dealPrice"> ------ </span><br/>
-              <span class="productdeatilheading">Organic: </span><span class="productdeatil" ng-if="product.product_docs[0].type == 'organic'">100% Organic (Assured)<br/>
+              <span class="productdeatilheading">Organic: </span><span class="productdeatil" ng-if="product.isOrganic">100% Organic (Assured)<br/>
               
-              </span> <span class="productdeatil" ng-if="product.product_docs[0].type != 'organic'"> Non-organic </span>
+              </span> <span class="productdeatil" ng-if="!product.isOrganic"> Non-organic </span>
+            </div>
+          </div>
+          <!-- <div class="col-md-12 col-sm-12 divider"></div> -->
+          <hr>
+          <div class="row">
+            <div class="col-md-4">
+              <span class="productdeatilheading">Ratings</span>
+            </div>
+            <div class="col-md-8">
+              <span> <div ng-stars="product.rating" ng-stars-max="5" ng-stars-readonly></div></span>
+            </div>
+            <div class="col-md-4">
+              <span class="productdeatilheading">Rate your purchase</span>
+            </div>
+            <div class="col-md-8">
+              <span><div class="stars" ng-stars="rating" ></div>
+                <textarea rows="4" cols="50" placeholder="Write Review" ng-model="review" name="review"/></br>
+                <button class="btn btn-info" ng-click="submitReview(rating, review)">Submit</button>
+              </span>
             </div>
           </div>
           <div class="col-md-12 col-sm-12 divider"></div>
@@ -35,7 +57,7 @@
             </div>
             <div class="col-md-8">
               <span> {{product.brand | capitalize}}</span><br/>
-              <span> {{product.user_docs[0].streetAddress}} {{product.user_docs[0].city}} {{product.user_docs[0].pincode}}</span><br/>
+              <span>  {{product.user_docs[0].city}} {{product.user_docs[0].pincode}}</span><br/>
               <p> {{product.user_docs[0].about}}</p>
             </div>
             <div class="col-md-4">
@@ -54,7 +76,7 @@
             <div class="col-md-4">
             </div>
             <div class="col-md-8">
-              <a class="btn btn-warning" href="#!/customer/dashboard">Back</a>
+              <a class="btn btn-warning" href="#!/category/{{product.categoryName}}/{{product.type}}/products">Back</a>
               <button type="button" class="btn btn-success" ng-click="addToCart(product)">Add to Cart</button>
             </div>
           </div>
@@ -63,3 +85,43 @@
     </div>
   </div>
 </div>
+<div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h3 class="section-heading">Recommend Products</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-sm-6" ng-repeat="product in recommondedProducts">
+        <div class="product-grid">
+          <div class="product-image">
+            <a href="#!/product/{{product._id}}">
+              <img class="pic-1" src="/uploads/{{product.imageName}}">
+              <!-- <img class="pic-2" src="http://bestjquery.com/tutorial/product-grid/demo9/images/img-2.jpg"> -->
+            </a>
+            <ul class="social">
+              <li><a href="" data-tip="Add to Wishlist"><i class="fa fa-shopping-bag"></i></a></li>
+              <li><a data-tip="Add to Cart" ><i class="fa fa-shopping-cart" ng-click="addToCart(product)"></i></a></li>
+            </ul>
+            <span ng-if="product.isOrganic" class="product-new-label">Organic</span>
+            <span ng-if="product.priceEachItem > product.dealPrice" class="product-discount-label">Offer Price: <i class="fas fa-rupee-sign"></i>{{product.dealPrice}}</span>
+          </div>
+          <ul ng-if="product.ratings" class="rating">
+            <li class="fa fa-star"></li>
+            <li class="fa fa-star"></li>
+            <li class="fa fa-star"></li>
+            <li class="fa fa-star"></li>
+            <li class="fa fa-star disable"></li>
+          </ul>
+          <div class="product-content">
+            <h3 class="title"><a href="#!/product/{{product._id}}">{{product.name}}</a></h3>
+            <div class="price"><i class="fas fa-rupee-sign"></i>{{product.dealPrice}}/{{product.stockType}}
+              <span ng-if="product.priceEachItem > product.dealPrice">{{product.priceEachItem}}</span>
+            </div>
+            <div><i class="fas fa-user-tie"></i>{{product.farmerName| capitalize}}</div>
+            <a class="add-to-cart"  ng-click="addToCart(product)">+ Add To Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

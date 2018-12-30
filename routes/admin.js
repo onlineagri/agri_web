@@ -34,5 +34,7 @@ router.post('/businessperson', adminController.adminAddBusinessPerson);
 router.get('/businessperson/:id', adminController.getBusinessPerson);
 router.put('/businessperson', adminController.adminUpdateBusinessPerson);
 router.delete('/businessperson/:id', adminController.adminDeleteBusinessPerson);
+router.post('/subcategory', adminController.addSubCategory);
+router.get('/subcategory', adminController.getSubCategories);
 
 module.exports = router;

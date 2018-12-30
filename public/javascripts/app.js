@@ -156,6 +156,27 @@ app.config(function($routeProvider, $httpProvider) {
         templateUrl : "../modules/admin/views/updateBusiness.html"
     })
 
+    .when("/category/:id/subcategory", {
+        controller : "customerController",
+        templateUrl : "../modules/customer/views/subcategorys.html"
+    })
+
+    .when("/admin/subcategories", {
+        controller : "subCategoryController",
+        templateUrl : "../modules/admin/views/subcategories.html"
+    })
+
+    .when("/admin/subcategory/add", {
+        controller : "subCategoryController",
+        templateUrl : "../modules/admin/views/addsubcategory.html"
+    })
+
+    .when("/category/:mainId/:type/products", {
+        controller : "categoryCustomerController",
+        templateUrl : "../modules/category/views/products.html"
+    })
+
+    
     .otherwise("/404", {
         template : "<h1>Page not found</h1>"
     })
@@ -224,6 +245,62 @@ app.directive('capitalizeFirst', function($parse) {
      }
    };
 });
+app.directive('ngStars', function(){
+     return {
+         restrict: 'EA',
+         link: function($scope, element, attrs){
+             var stars_template = {
+                 one: 'fa-star',
+                 zero: 'fa-star-o',
+                 half: 'fa-star-half-o'
+             };
+
+             $scope.stars = [];
+             $scope.max = ($scope.max) ? $scope.max : 5;
+             var readOnly = ($scope.readOnly == undefined) ? false : true;
+
+             $scope.$watch('value', function(val){
+                 var stars = [];
+
+                 for ( i=0; i < $scope.max; i++ ){
+                     var val = $scope.value - i;
+
+                     if ( val >= 1 ){
+                         stars.push({ class: stars_template.one })
+                     } else if ( val < 1 && val > 0 ){
+                         stars.push({ class: stars_template.half })
+                     } else if ( val <= 0 ){
+                         stars.push({ class: stars_template.zero })
+                     }
+                 }
+
+                 $scope.stars = stars;
+             });
+
+             $scope.setStars = function(val){
+                 if( !readOnly ){
+                     val += 1;
+                     $scope.value = val;
+
+                     if( typeof($scope.callback) == 'function' ){
+                         if( $scope.callback() == false ){
+                             readOnly = true;
+                         }
+                     }
+                 }
+             }
+         },
+         template: '<span class="fa {{star.class}}" ng-repeat="star in stars track by $index" ng-click="setStars($index)"></span>',
+         scope: {
+             max: '@ngStarsMax',
+             value: '=?ngStars',
+             stars: '=?',
+             readOnly: '@ngStarsReadonly',
+             callback: '=?ngStarsCallback',
+         },
+     };
+ });
+
 
 // app.directive('ckEditor', function() {
 //   return {

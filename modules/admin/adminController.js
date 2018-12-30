@@ -5,6 +5,7 @@ var UserModel = db.UserModel();
 var MenuModel = db.MenuModel();
 var OrderModel = db.OrderModel();
 var CmsModel = db.CmsModel();
+var SubCategoryModel = db.SubCategoryModel();
 var common = require("../../config/common.js");
 var async =require('async');
 var lodash = require('lodash');
@@ -70,8 +71,7 @@ exports.addCategory = function(req, res){
                                     // console.log('image info', info);
                                     file.path = userUploadedImagePath,
                                     file.name = fileName + '.' + imageTypeDetected[1],
-                                    file.type = imageTypeDetected.input
-
+                                    file.type = imageTypeDetected.input;
                                     var categoryBucket = common.default_set.DEALSTICK_CATEGORY_BUCKET;
                                     common.verifyBucket(categoryBucket, function() {
                                         common.uploadFile(file, categoryBucket, function(err) {
@@ -1101,6 +1101,7 @@ exports.deleteContent = function(req, res){
     })
 }
 
+
 exports.getUsers = function(req, res){
     var data = [];
     if(!common.isValid(req.user) || !common.isValid(req.user.id)){
@@ -1263,47 +1264,45 @@ exports.adminAddBusinessPerson = function(req, res){
         }) 
 }
 
-exports.getBusinessPerson = function(req, res){
+exports.getBusinessPerson = function(req, res) {
     let id = req.params.id;
-    if(!common.isValid(id)){
-        res.json({code: 400, message:"Parameters missing"});
+    if (!common.isValid(id)) {
+        res.json({
+            code: 400,
+            message: "Parameters missing"
+        });
         return;
     }
 
     UserModel.findOne({
-            _id: id
-        }).exec(function(err, data) {
-            if (err) {
-                res.json({
-                    code: 400,
-                    message: "Internal Server Error"
-                });
-            } else {
-                let state = {name: data.state};
-                let businessPersonData = {
-                    '_id': data._id,
-                    'firstName': data.firstName,
-                    'lastName': data.lastName,
-                    'status': data.status,
-                    'email': data.email,
-                    'phoneNumber': data.phoneNumber,
-                    'streetAddress': data.streetAddress,
-                    'city': data.city,
-                    'state': state,
-                    'pincode': data.pincode,
-                    'deliveryAddresses' : data.deliveryAddresses,
-                    'country' : data.country,
-                    'role' : data.role,
-                    'about' : data.about
-                }
-                res.json({
-                    code: 200,
-                    message: "User Fetched Successfuly",
-                    data: businessPersonData
-                });
+        _id: id
+    }).exec(function(err, data) {
+            let state = {
+                name: data.state
+            };
+            let businessPersonData = {
+                '_id': data._id,
+                'firstName': data.firstName,
+                'lastName': data.lastName,
+                'status': data.status,
+                'email': data.email,
+                'phoneNumber': data.phoneNumber,
+                'streetAddress': data.streetAddress,
+                'city': data.city,
+                'state': state,
+                'pincode': data.pincode,
+                'deliveryAddresses': data.deliveryAddresses,
+                'country': data.country,
+                'role': data.role,
+                'about': data.about
             }
-        })  
-}
+            res.json({
+                code: 200,
+                message: "User Fetched Successfuly",
+                data: businessPersonData
+            });
+        })
+    }
 
 exports.adminUpdateBusinessPerson = function(req, res){
     let userData = req.body;
@@ -1392,4 +1391,146 @@ exports.adminDeleteBusinessPerson = function(req, res){
             res.json({code: 200, message:"Business person deleted Successfuly", data: []});
         }
     })
+}
+
+exports.addSubCategory = function(req, res) {
+    let categoryParams = req.body;
+    let saveParams = {}
+    async.series([
+        function(callback) {
+            saveParams = {
+                categoryName : categoryParams.category.name,
+                categoryId : mongoose.Types.ObjectId(categoryParams.category._id),
+                name : common.capitalizeFirstLetter(categoryParams.name),
+                description : categoryParams.description,
+                status : categoryParams.status,
+            }
+            callback();
+            
+        },
+        function(callback) {
+            //validation for unique
+            if (!common.isValid(categoryParams._id)) {
+                SubCategoryModel.findOne({
+                    name: categoryParams.name,
+                    isDeleted: false
+                }, function(err, category) {
+                    if (err) {
+                        console.log("dberror addSubCategory", err);
+                        callback("Internal server error");
+                    } else {
+                        if (common.isValid(category)) {
+                            callback("This category is already available");
+                        } else {
+                            callback();
+                        }
+                    }
+                })
+            } else {
+                callback();
+            }
+        },
+        function(callback) {
+            var imageName = categoryParams.image;
+            if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
+                var imageTypeRegularExpression = /\/(.*?)$/;
+                var file = {};
+                var fileName = common.slugify(categoryParams.name) + "_" + new Date().getTime();
+                var imageBuffer = common.decodeBase64Image(categoryParams.image);
+                if (imageBuffer == "err") {
+                    callback('Not a valid image type');
+                } else {
+                    var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
+                    if (common.isValidImageType(imageTypeDetected.input)) {
+                        var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
+                        imageName = fileName + "." + imageTypeDetected[1];
+                        file.path = userUploadedImagePath,
+                            file.name = fileName + '.' + imageTypeDetected[1],
+                            file.type = imageTypeDetected.input;
+
+                        fs.writeFileSync(file.path, imageBuffer.data);
+                        imageName = fileName + '.' + imageTypeDetected[1];
+                        common.verifyBucket(common.default_set.DEALSTICK_CATEGORY_BUCKET, function() {
+                            common.uploadFile(file, common.default_set.DEALSTICK_CATEGORY_BUCKET, function(err) {
+                                if (err) {
+                                    //callback('Unable to upload file');
+                                   
+                                    uploadFileName = file.name;
+                                    saveParams.imageName = uploadFileName;
+                                     callback();
+                                } else {
+                                    uploadFileName = file.name;
+                                    saveParams.imageName = uploadFileName;
+                                    callback();
+                                }
+                            });
+                        });
+                        
+                        //scallback();
+                    } else {
+                        callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
+                    }
+                }
+            } else {
+                callback();
+            }
+        },
+        function(callback){
+            if(!common.isValid(categoryParams._id)){
+                let categoryData = new SubCategoryModel(saveParams);
+                categoryData.save(function(err, data){
+                    if(err){
+                        console.log("dberror addSubCategory", err);
+                        callback("Internal server error");
+                    } else {
+                        callback();
+                    }
+                })
+            } else {
+                let id = categoryParams._id;
+                SubCategoryModel.update({_id: id}, { $set: saveParams}, function(err, data){
+                    if(err){
+                        console.log("dberror addSubCategory", err);
+                        callback("Internal server error");
+                    } else {
+                        callback();
+                    }
+                })
+            }
+        }
+    ], function(err) {
+        if(err){
+            res.json({code : 400, message: err});
+        } else {
+            res.json({code : 200, message: "Sub-Category Added Successfuly", data: []});
+        }  
+    });
+}
+
+exports.getSubCategories = function(req, res) {
+    SubCategoryModel.find({
+            isDeleted: false
+        })
+        .select({
+            '_id': 1,
+            'name': 1,
+            'description': 1,
+            'status': 1,
+            'categoryName': 1,
+            'categoryId': 1
+        })
+        .exec(function(err, data) {
+            if (err) {
+                res.json({
+                    code: 400,
+                    message: "Internal Server Error"
+                });
+            } else {
+                res.json({
+                    code: 200,
+                    message: "Sub-Categories Fetched Successfuly",
+                    data: data
+                });
+            }
+        })
 }

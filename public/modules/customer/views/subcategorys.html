@@ -1,0 +1,27 @@
+<div ng-include="'/staticViews/customerHeader.html'"></div>
+<section class="bg-grey" id="portfolio" style="margin-top: 50px;" ng-init="getSubCategories()">
+  <div class="container">
+    <div class="row">
+      <a class="btn btn-info" href="#!/customer/dashboard">Back</a>
+      <div class="col-md-12 text-center">
+        <h2 class="section-heading">Shop your desires</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-sm-4" ng-repeat="category in subCategories">
+        <div class="post-slide6">
+          <div class="post-img">
+            <img ng-if="category.imageName" style="height: 100px;" src="/uploads/{{category.imageName}}" alt="{{category.name}}">
+            <img ng-if="!category.imageName"  src="/images/img1.jpg" alt="{{category.name}}">
+            <div class="post-info">
+              <ul class="category">
+                <li><a href="#!/category/{{category.categoryName}}/{{category.name}}/products">{{category.name}}</a></li>
+               <!--  <li>{{category.description | limitTo : 80}}</li> -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

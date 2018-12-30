@@ -45,7 +45,11 @@ var webservices = {
     "adminAddBusinessPerson" : baseUrl + "/admin/businessperson",
     "getBusinessPerson" : baseUrl + "/admin/businessperson",
     "adminUpdateBusinessPerson" : baseUrl + "/admin/businessperson",
-    "adminDeleteBusinessPerson" : baseUrl + "/admin/businessperson"
+    "adminDeleteBusinessPerson" : baseUrl + "/admin/businessperson",
+    "addSubCategory" : baseUrl + "/admin/subcategory",
+    "getSubCategories" : baseUrl + "/admin/subcategory",
+    "getSubCategoriesCust" : baseUrl + "/product/getsubcategories",
+    "getRecommondedProducts" : baseUrl + "/product/getrecommondedproducts",
 
 }
 

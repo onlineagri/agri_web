@@ -14,6 +14,7 @@ const carts = require('./schema/cart')(Mongoose);
 const systemparams = require('./schema/systemparams')(Mongoose);
 const orders = require('./schema/orders')(Mongoose);
 const cms = require('./schema/cms')(Mongoose);
+const subcategories = require('./schema/subCategory')(Mongoose);
 
 module.exports = {
     generateHash: function(password) {
@@ -42,6 +43,9 @@ module.exports = {
     },
     CmsModel : function(){
         return cms;
+    },
+    SubCategoryModel : function(){
+        return subcategories;
     } 
 
 }

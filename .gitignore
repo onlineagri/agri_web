@@ -33,6 +33,10 @@ node_modules/
 agri_web/public/bower_components/
 
 # Typescript v1 declaration files
+
+# config files
+agri_web/config/default.js* 
+
 typings/
 
 # Optional npm cache directory

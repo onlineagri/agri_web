@@ -324,5 +324,26 @@ app.factory('adminService',['$http', function ($http) {
       });
     },
 
+    getSubCategories: function(){
+      return $http({
+        method: 'GET',
+        url: webservices.getSubCategories
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+
+    addSubCategory: function (params) {
+      return $http({
+        method: 'POST',
+        data: params,
+        url: webservices.addSubCategory
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
   }
 }]);
