@@ -487,11 +487,16 @@ exports.addMenu = function(req, res){
                 isOrganic : menuParams.isOrganic
 
         	}
-            if(common.isValid(menuParams.remainingQuantity)){
-                saveParams['remainingQuantity'] = menuParams.remainingQuantity;
-            } else {
-                saveParams['remainingQuantity'] = menuParams.quantity;
-            }
+            // if(common.isValid(menuParams.remainingQuantity)){
+            //     if (menuParams.remainingQuantity == 0) {
+            //         saveParams['remainingQuantity'] = menuParams.quantity;
+            //     } else {
+            //         // var actualQuantity = (menuParams.quantity - menuParams.remainingQuantity); 
+            //         saveParams['remainingQuantity'] = menuParams.remainingQuantity;
+            //     }
+            // } else {
+            //     saveParams['remainingQuantity'] = menuParams.quantity;
+            // }
         	callback();
             
         },
@@ -565,7 +570,40 @@ exports.addMenu = function(req, res){
            } else {
                callback();
            }
-       },
+        },
+        function(callback){
+            var meanQuantiy = 0;
+            var meanRemainQty = 0;
+            if (common.isValid(menuParams._id)) {
+                MenuModel.findOne({_id: menuParams._id}).select({'_id': 1, 'quantity': 1, 'remainingQuantity': 1}).exec(function(err, data){
+                    if (err) {
+                        console.log('dberror addMenu', err);
+                        callback('Internal server error');
+                    } else{
+                        if(common.isValid(menuParams.remainingQuantity)){
+                            if (menuParams.remainingQuantity == 0) {
+                                saveParams['remainingQuantity'] = menuParams.quantity;
+                            } else {
+                                if (data.quantity > menuParams.quantity) {
+                                    meanQuantiy = data.quantity - menuParams.quantity;
+                                    meanRemainQty = menuParams.remainingQuantity - meanQuantiy;
+                                    saveParams['remainingQuantity'] = meanRemainQty;
+                                }
+                                if (data.quantity < menuParams.quantity) {
+                                    meanQuantiy = menuParams.quantity - data.quantity;
+                                    meanRemainQty = menuParams.remainingQuantity + meanQuantiy;
+                                    saveParams['remainingQuantity'] = meanRemainQty;
+                                }
+                            }
+                        }
+                        callback();
+                    }
+                });
+            } else {            
+                saveParams['remainingQuantity'] = menuParams.quantity;
+                callback();
+            }
+        },
         function(callback){
         	if(!common.isValid(menuParams._id)){
         		let menuData = new MenuModel(saveParams);
