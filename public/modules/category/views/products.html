@@ -1,0 +1,44 @@
+<div ng-include="'/staticViews/customerHeader.html'"></div>
+<section class="bg-grey" id="portfolio" style="margin-top: 50px;" ng-init="getProducts()">
+  <div class="container">
+    <div class="row">
+      <a class="btn btn-info" href="#!/customer/dashboard">Back</a>
+      <div class="col-md-12 text-center">
+        <h2 class="section-heading">{{type}} Mall</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-sm-6 text-center" ng-repeat="product in products">
+        <div class="product-grid">
+          <div class="product-image">
+            <a href="#!/product/{{product._id}}">
+              <img class="pic-1" src="/uploads/{{product.imageName}}">
+              <!-- <img class="pic-2" src="http://bestjquery.com/tutorial/product-grid/demo9/images/img-2.jpg"> -->
+            </a>
+            <ul class="social">
+              <li><a href="" data-tip="Add to Wishlist"><i class="fa fa-shopping-bag"></i></a></li>
+              <li><a href="javascript:void(0)" data-tip="Add to Cart" ><i class="fa fa-shopping-cart" ng-click="addTocart(product)"></i></a></li>
+            </ul>
+            <span ng-if="product.isOrganic" class="product-new-label">Organic</span>
+            <span ng-if="product.priceEachItem > product.dealPrice" class="product-discount-label">Offer Price: <i class="fas fa-rupee-sign"></i>{{product.dealPrice}}</span>
+          </div>
+          <ul ng-if="product.ratings" class="rating">
+            <li class="fa fa-star"></li>
+            <li class="fa fa-star"></li>
+            <li class="fa fa-star"></li>
+            <li class="fa fa-star"></li>
+            <li class="fa fa-star disable"></li>
+          </ul>
+          <div class="product-content">
+            <h3 class="title"><a href="#!/product/{{product._id}}">{{product.name}}</a></h3>
+            <div class="price"><i class="fas fa-rupee-sign"></i>{{product.dealPrice}}/{{product.stockType}}
+              <span ng-if="product.priceEachItem > product.dealPrice">{{product.priceEachItem}}</span>
+            </div>
+            <div><i class="fas fa-user-tie"></i>{{product.farmerName| capitalize}}</div>
+            <a class="add-to-cart" href="javascript:void(0);" ng-click="addTocart(product)">+ Add To Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

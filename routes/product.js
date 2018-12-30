@@ -11,7 +11,11 @@ router.get('/cart/:id', productController.getCart);
 router.put('/cart', productController.updateCart);
 router.delete('/cart/:id', productController.clearCart);
 router.get('/getproductcategories', productController.getProductCategories);
-router.get('/getcategoryproducts/:id', productController.getCategoryProducts);
+router.get('/getcategoryproducts/:catName/:type', productController.getCategoryProducts);
+router.get('/getsubcategories/:id', productController.getSubCategories);
+router.get('/getrecommondedproducts/:catName/:type', productController.getRecommondedProducts);
+
+
 
 
 

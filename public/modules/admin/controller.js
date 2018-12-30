@@ -972,4 +972,92 @@ app.controller('adminLoginController', ['$scope', 'adminService','toaster','$loc
             });
       }
 
+}]).controller('subCategoryController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage, SweetAlert) {
+    
+    $scope.uploadImage = function(files) {
+        $scope.showMsg = false;
+        if (files.length > 0) {
+            $scope.selectedImg = true;
+        } else {
+            $scope.selectedImg = false;
+        }
+
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    }
+
+    $scope.getCategories = function(){
+        adminService.getCategories().then(function(response){
+            $scope.categoryList = response.data.data;
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.addSubCategory = function(subcategory){
+        if (document.getElementById("image").files[0] && $scope.selectedImg) {
+            var imgElem = document.getElementById("image").files[0];
+            var reader = new FileReader();
+            reader.readAsDataURL(imgElem);
+            reader.onload = function(onLoadEvent) {
+                if (onLoadEvent.target.result) {
+                    var image = new Image();
+                    image.src = onLoadEvent.target.result;
+                    image.onload = function() {
+                        $scope.subcategory["image"] = onLoadEvent.target.result;
+                        // console.log('category', category);
+                        adminService.addSubCategory($scope.subcategory).then(function(response){
+                            if(response.data.code == 200){
+                                SweetAlert.swal("", response.data.message,"success")
+                                $location.path('/admin/categories');
+                            } else {
+                                SweetAlert.swal("", response.data.message,"warning")
+                            }
+                        }).catch(function(response) {
+                            SweetAlert.swal("", "Something went wrong","warning")
+                        });
+                    }
+                }
+            }
+        }else{
+            adminService.addSubCategory($scope.subcategory).then(function(response){
+                if(response.data.code == 200){
+                    SweetAlert.swal("", response.data.message,"success")
+                    $location.path('/admin/categories');
+                } else {
+                    SweetAlert.swal("", response.data.message,"warning")
+                }
+            }).catch(function(response) {
+                SweetAlert.swal("", "Something went wrong","warning")
+            });
+        }
+    }
+
+    $scope.getSubCategories = function(){
+        adminService.getSubCategories().then(function(response){
+            if(response.data.code == 200){
+                var subcategoryArray = response.data.data;
+                $scope.tableParams = new NgTableParams({
+                    // initial grouping
+                    group: {
+                        categoryName: "desc"
+                    }
+                }, {
+                    dataset: subcategoryArray,
+                    groupOptions: {
+                        isExpanded: false
+                    }
+                });
+            } else {
+                SweetAlert.swal("", response.data.message,"warning");
+            }
+        }).catch(function(response) {
+            SweetAlert.swal("", "Something went wrong","warning")
+        });
+    }
 }]);

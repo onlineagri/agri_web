@@ -4,6 +4,7 @@ var CategoryModel = db.CategoryModel();
 var UserModel = db.UserModel();
 var MenuModel = db.MenuModel();
 var CartModel = db.CartModel();
+var SubCategoryModel = db.SubCategoryModel();
 var common = require("../../config/common.js");
 var async =require('async');
 var lodash = require('lodash');
@@ -25,7 +26,7 @@ exports.getNewProducts = function(req, res){
     },
     { $sort : {created_at : -1} },
     { $limit: 20 },
-    { $project : { _id : 1 , name : 1, categoryName: 1, imageName: 1, priceEachItem: 1, stockType: 1, brand: 1, 'product_docs.type' : 1, farmerName: 1, farmerId: 1} }
+    { $project : { _id : 1 , name : 1, categoryName: 1, imageName: 1, priceEachItem: 1, stockType: 1, brand: 1, 'product_docs.type' : 1, farmerName: 1, farmerId: 1, type: 1, isOrganic: 1} }
     ]).exec(function(err, data){
     	if(err){
 			console.log("dberror getNewProducts", err);
@@ -100,7 +101,9 @@ exports.getproduct = function(req, res){
                 dealPrice: 1,
                 quantity: 1,
                 remainingQuantity: 1,
-                farmerId : 1
+                farmerId : 1,
+                type: 1,
+                isOrganic: 1
             }
         }
     ]).exec(function(err, data) {
@@ -466,33 +469,121 @@ exports.getProductCategories = function(req, res) {
 
 exports.getCategoryProducts = function(req, res) {
 	let menuData = [];
-	let catId = req.params.id;
-    MenuModel.aggregate([
-	{
-	  $unwind: "$categoryId"
-	},
-    {
-        $lookup: {
-            from: "categorys",
-            localField: "categoryId",
-            foreignField: "_id",
-            as: "product_docs"
-        }
-    },
-    { $match: {'categoryId' : mongoose.Types.ObjectId(catId), status: true, isDeleted: false} },
-    { $sort : {created_at : -1} },
-    { $project : { _id : 1 , name : 1, categoryName: 1, imageName: 1, priceEachItem: 1, stockType: 1, brand: 1, 'product_docs.type' : 1, farmerName: 1, farmerId: 1} }
-    ]).exec(function(err, data){
+	let catName = req.params.catName;
+	let type = req.params.type;
+	let model = "";
+	if(!common.isValid(catName) || !common.isValid(type)){
+		res.json({code: 400, message: "Parameters missing"});
+		return;
+	}
+
+	if(catName == 'Agriculture'){
+		model = db.MenuModel();
+	}
+
+    model.find({
+        categoryName: catName,
+        type: type,
+        status: true,
+        isDeleted: false
+    }, {
+    	_id : 1 , name : 1, type: 1, categoryName: 1, imageName: 1, priceEachItem: 1, dealPrice: 1, stockType: 1, brand: 1,  farmerName: 1, farmerId: 1, isOrganic : 1
+    }, function(err, data) {
     	if(err){
-			console.log("dberror getNewProducts", err);
+    		console.log("dberror getNewProducts", err);
 			res.json({code:400, message:"Internal server error"});
-		} else {
-			if(common.isValid(data) && data.length){
+    	} else {
+    		if(common.isValid(data) && data.length){
 				menuData = data;
 				res.json({code:200, message:"Product fetched successfully" , data:data});
 			} else {
-				res.json({code:400, message:"NO products found"});
+				res.json({code:400, message:"No Products, we are adding more products for you"});
+			}
+    	}
+    })
+
+ //    MenuModel.aggregate([
+	// {
+	//   $unwind: "$categoryId"
+	// },
+ //    {
+ //        $lookup: {
+ //            from: "categorys",
+ //            localField: "categoryId",
+ //            foreignField: "_id",
+ //            as: "product_docs"
+ //        }
+ //    },
+ //    { $match: {'categoryId' : mongoose.Types.ObjectId(catId), status: true, isDeleted: false} },
+ //    { $sort : {created_at : -1} },
+ //    { $project : { _id : 1 , name : 1, categoryName: 1, imageName: 1, priceEachItem: 1, stockType: 1, brand: 1, 'product_docs.type' : 1, farmerName: 1, farmerId: 1} }
+ //    ]).exec(function(err, data){
+ //    	if(err){
+	// 		console.log("dberror getNewProducts", err);
+	// 		res.json({code:400, message:"Internal server error"});
+	// 	} else {
+	// 		if(common.isValid(data) && data.length){
+	// 			menuData = data;
+	// 			res.json({code:200, message:"Product fetched successfully" , data:data});
+	// 		} else {
+	// 			res.json({code:400, message:"NO products found"});
+	// 		}
+	// 	}
+ //    })
+}
+
+exports.getSubCategories = function(req, res) {
+	let categoryId = req.params.id;
+	if(!common.isValid(categoryId)){
+		res.json({code: 400, message: "Parameters missing"});
+		return;
+	}
+	SubCategoryModel.find({categoryId: categoryId, status: true, isDeleted: false},{name: 1, imageName : 1, description: 1, categoryName: 1}, function(err, data){
+		if(err){
+			console.log("dberror getSubCategories", err);
+			res.json({code: 400, message: "Internal server error"});
+		} else {
+			if(data.length){
+				res.json({code: 200, message: "Sub-Categories fetched", data: data});
+			} else {
+				res.json({code: 400, message: "No Sub-Categories found"});
 			}
 		}
+	})
+}
+
+exports.getRecommondedProducts = function(req, res) {
+	let menuData = [];
+	let catName = req.params.catName;
+	let type = req.params.type;
+	let model = "";
+	if(!common.isValid(catName) || !common.isValid(type)){
+		res.json({code: 400, message: "Parameters missing"});
+		return;
+	}
+
+	if(catName == 'Agriculture'){
+		model = db.MenuModel();
+	}
+
+    model.find({
+        categoryName: catName,
+        type: type,
+        status: true,
+        isDeleted: false
+    }, {
+    	_id : 1 , name : 1, type: 1, categoryName: 1, imageName: 1, priceEachItem: 1, dealPrice: 1, stockType: 1, brand: 1,  farmerName: 1, farmerId: 1, isOrganic : 1
+    }, {limit: 15}, function(err, data) {
+    	if(err){
+    		console.log("dberror getNewProducts", err);
+			res.json({code:400, message:"Internal server error"});
+    	} else {
+    		if(common.isValid(data) && data.length){
+				menuData = data;
+				res.json({code:200, message:"Product fetched successfully" , data:data});
+			} else {
+				res.json({code:400, message:"No Products, we are adding more products for you"});
+			}
+    	}
     })
 }

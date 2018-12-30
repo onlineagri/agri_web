@@ -59,6 +59,37 @@ app.factory('customerService',['$http', function ($http) {
           return response;
       }).catch(function () {
       });
+    },
+
+    getSubCategories : function (id) {
+      return $http({
+        method: 'GET',
+        url: webservices.getSubCategoriesCust + "/" + id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    getRecommondedProducts: function (data) {
+      return $http({
+        method: 'GET',
+        url: webservices.getRecommondedProducts + "/" + data.categoryId + "/" + data.type
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    submitReview: function(data) {
+      return $http({
+        method: 'POST',
+        data: data,
+        url: webservices.submitReview
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
     }
   }
 }]);
