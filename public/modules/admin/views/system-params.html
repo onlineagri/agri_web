@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col-md-3">
+    <div ng-include="'../../../staticViews/adminAside.html'"></div>
+  </div>
+  
+  <div class="col-md-8 containeradmin" ng-init="getDeliveryCharges();">
+    <h3 class="text-center" style="margin-top: 10px;">System Params</h3>
+    <br/>
+    <form name="deliveryForm">
+      <h4 for="deliveryCharges" class="col-md-4 col-md-offset-2">Delivery Parameters</h4>
+      <hr/>
+      <div class="form-group">
+        <label for="percentage" class="col-md-4 col-md-offset-2">How many Percentage *</label>
+        <input type="number" class="col-md-4" id="percentage" name="percentage" ng-model="params.deliveryPercentage" required>
+        <span class="error-messages" ng-show="deliveryForm.percentage.$dirty && deliveryForm.percentage.$invalid">
+          <span  ng-show="deliveryForm.percentage.$error.required">Please enter percentages</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="minPrice" class="col-md-4 col-md-offset-2">How much price *</label>
+        <input type="number" class="col-md-4" id="minPrice" name="minPrice" ng-model="params.deliveryPrice" required>
+        <span class="error-messages" ng-show="deliveryForm.minPrice.$dirty && deliveryForm.minPrice.$invalid">
+          <span  ng-show="deliveryForm.minPrice.$error.required">Please enter price</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="productsperperson" class="col-md-4 col-md-offset-2">Products per person *</label>
+        <input type="number" class="col-md-4" id="perperson" name="perperson" ng-model="params.productsPerPerson" required>
+        <span class="error-messages" ng-show="deliveryForm.perperson.$dirty && deliveryForm.perperson.$invalid">
+          <span  ng-show="deliveryForm.perperson.$error.required">Please enter value</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="minPerchase" class="col-md-4 col-md-offset-2">Minimum perchase quantity *</label>
+        <input type="number" class="col-md-4" id="minPerchase" name="minPerchase" ng-model="params.minPerchaseAmt" required>
+        <span class="error-messages" ng-show="deliveryForm.minPerchase.$dirty && deliveryForm.minPerchase.$invalid">
+          <span  ng-show="deliveryForm.minPerchase.$error.required">Please enter value</span>
+        </span>
+      </div>
+       <div class="form-group">
+        <label for="gst" class="col-md-4 col-md-offset-2">GST *</label>
+        <input type="number" class="col-md-4" id="gst" name="gst" ng-model="params.gstCharges" required>
+        <span class="error-messages" ng-show="deliveryForm.gst.$dirty && deliveryForm.gst.$invalid">
+          <span  ng-show="deliveryForm.gst.$error.required">Please enter value</span>
+        </span>
+      </div>
+      <div class="form-group" style="margin-top: 50px;">
+      <label class="col-md-4"></label>
+      <input type="submit" class="btn btn-primary" value="Update" ng-click="updateDeliveryCharges(params)">
+    </div>
+  </form>
+</div>
+</div>
+<script type="text/ng-template" id="customTemplate.html">
+  <a>
+      <img ng-src="http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}" width="16">
+      <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+  </a>
+</script>

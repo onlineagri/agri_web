@@ -51,6 +51,9 @@ var webservices = {
     "getSubCategoriesCust" : baseUrl + "/product/getsubcategories",
     "getRecommondedProducts" : baseUrl + "/product/getrecommondedproducts",
     "submitReview" : baseUrl + "/product/submitreview",
+    "getDeliveryCharges" : baseUrl + "/admin/systemparams",
+    "updateDeliveryCharges" : baseUrl + "/admin/systemparams"
+    
 }
 
 var headerConstants = {

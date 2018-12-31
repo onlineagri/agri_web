@@ -3,10 +3,11 @@
 	const Schema = mongoose.Schema;
 	const SystemParamsSchema = new Schema({
 	  type : {type: String},
-	  deliveryCharges : {type: Number},
+	  deliveryPercentage : {type: Number},
+	  deliveryPrice : {type: Number},
 	  gstCharges : {type: Number},
-	  productsPerPerson : {type: Number}
-
+	  productsPerPerson : {type: Number},
+	  minPerchaseAmt : {type: Number}
 	},
 	{ timestamps: { createdAt: 'created_at' } });
 	

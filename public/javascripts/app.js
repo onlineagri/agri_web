@@ -170,10 +170,13 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "subCategoryController",
         templateUrl : "../modules/admin/views/addsubcategory.html"
     })
-
     .when("/category/:mainId/:type/products", {
         controller : "categoryCustomerController",
         templateUrl : "../modules/category/views/products.html"
+    })
+    .when("/admin/systemparams", {
+        controller : "systemParamsController",
+        templateUrl : "../modules/admin/views/system-params.html"
     })
 
     

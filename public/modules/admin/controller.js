@@ -1251,4 +1251,38 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
             SweetAlert.swal("", "Something went wrong","warning")
         });
     }
+}]).controller('systemParamsController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage, SweetAlert) {
+    $scope.updateDeliveryCharges = function(params){
+        SweetAlert.swal({
+                title: "Are you sure?",
+                text: "You are updating system parameters?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, update syste parameters",
+                closeOnConfirm: false
+            },
+            function(isConfirm) {
+                if (isConfirm) {
+                    adminService.updateDeliveryCharges(params).then(function(response) {
+                        if (response.data.code == 200) {
+                            SweetAlert.swal("", response.data.message, "success");
+                            $route.reload();
+                        } else {
+                            SweetAlert.swal("", response.data.message, "warning");
+                        }
+                    }).catch(function(response) {});
+                }
+            });
+    }
+
+    $scope.getDeliveryCharges = function(){
+        adminService.getDeliveryCharges().then(function(response){
+            var data = response.data.data;
+            $scope.params = data[0];
+        }).catch(function(response){
+
+        })
+    }
+
 }]);
