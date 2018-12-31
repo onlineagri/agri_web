@@ -1,7 +1,8 @@
 
 
 app.controller('categoryCustomerController', ['$scope', 'categoryService','toaster','$localStorage','$location','$routeParams','$rootScope','SweetAlert','customerService', function($scope, categoryService, toaster, $localStorage, $location, $routeParams, $rootScope, SweetAlert, customerService) {
-     if($localStorage.isCustomerLogin){
+    $rootScope.isFront = false;
+    if($localStorage.isCustomerLogin){
         $rootScope.userLogin = true;
     }
     

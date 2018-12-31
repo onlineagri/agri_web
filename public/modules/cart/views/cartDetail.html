@@ -1,8 +1,9 @@
 <div ng-include="'/staticViews/customerHeader.html'"></div>
 <div class="container" ng-init="getCart()">
   <div class="row justify-content-center" style="margin-top: 100px;">
-    <div class="col-md-12">
+    <div class="col-md-12" style="margin-bottom: 20px;">
       <h4 class="text-center">Shopping Cart</h4>
+
       <table class="table">
         <thead>
           <tr>
@@ -57,7 +58,12 @@
       </table>
       <a class="col-md-4 cartButtons  btn btn-primary" href="#!/customer/dashboard">More Shopping</a>
       <button type="button" class="col-md-4 cartButtons  btn btn-secondary" ng-click="clearCart()">Clear Cart</button>
-      <button type="button" class="col-md-4 cartButtons  btn btn-success" ng-click="placeOrder(cart)">Place Order</button>
+      <button ng-disabled="!validCart" type="button" class="col-md-4 cartButtons  btn btn-success" ng-click="placeOrder(cart)">Place Order</button>
+    </div >
+    <div style="color: #fca279;">
+      <span>* All the products purchased would be delivered on the Weekend with Cash on Delivery payment mode only.</span><br/>
+      <span>* Delivery charge might vary depending on the product weight, quantity, delivery location and minimum order.</span><br/>
+      <span>* If the ordered quantity is found to be more than Stock Quantity system will automatically set the default value of the quanitity.</span><br/>
     </div>
   </div>
 </div>

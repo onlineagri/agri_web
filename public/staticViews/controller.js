@@ -4,22 +4,25 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
     // } else {
     //     $scope.logOut = "Login";
     // }
-
     $scope.adminLogout = function(){
         localStorage.clear();
         $location.path("/admin/login");
     }
 
+    if($location.path() != "/"){
+        $rootScope.isFront = false;
+    } else {
+        $rootScope.isFront = true;
+    }
+
     if($localStorage.isCustomerLogin){
     	$scope.firstName = $localStorage.firstName;
-        $scope.isFront = false;
         $rootScope.userLogin = true;
         $scope.logOut = "Logout";
         getCustomerCart();
     } 
     if(!$localStorage.isCustomerLogin || $localStorage.isCustomerLogin == undefined){
         $scope.logOut = "Login";
-        $rootScope.isFront = true;
         $rootScope.userLogin = false;
     }
 
