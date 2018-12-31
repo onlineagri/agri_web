@@ -50,7 +50,7 @@ var webservices = {
     "getSubCategories" : baseUrl + "/admin/subcategory",
     "getSubCategoriesCust" : baseUrl + "/product/getsubcategories",
     "getRecommondedProducts" : baseUrl + "/product/getrecommondedproducts",
-
+    "submitReview" : baseUrl + "/product/submitreview",
 }
 
 var headerConstants = {

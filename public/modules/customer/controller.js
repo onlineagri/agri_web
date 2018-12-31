@@ -1,7 +1,8 @@
 
 
 app.controller('customerController', ['$scope', 'customerService','toaster','$localStorage','$location','$routeParams','$rootScope', function($scope, customerService, toaster, $localStorage, $location, $routeParams, $rootScope) {
-     if($localStorage.isCustomerLogin){
+    $rootScope.isFront = false;
+    if($localStorage.isCustomerLogin){
         $rootScope.userLogin = true;
     }
     $scope.rating = 5;
@@ -49,8 +50,7 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
                     title: '',
                     body: response.data.message
                 });
-                $scope.product = response.data.data[0];
-                $scope.product.rating = 5;
+                $scope.product = response.data.data;
                 getRecommondedProducts();
             } else {
                 toaster.pop({
@@ -228,7 +228,9 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
     $scope.submitReview = function(rating, review){
         var reviewParam = {
             rating : rating,
-            review : review
+            review : review,
+            productId : $scope.product._id,
+            productName : $scope.product.name
         }
 
         customerService.submitReview(reviewParam).then(function(response){

@@ -20,9 +20,8 @@
               <span class="productdeatilheading">Name: </span><span class="productdeatil">{{product.name | capitalize}}</span><br/>
               <span class="productdeatilheading">Price: </span><span class="productdeatil">&#x20b9;{{product.dealPrice}}/{{product.stockType}}</span><br/>
               <span class="productdeatilheading">Offer Price: </span><span class="productdeatil" ng-if="product.priceEachItem < product.dealPrice">&#x20b9;{{product.priceEachItem}}/{{product.stockType}}</span> <span class="productdeatil" ng-if="product.priceEachItem == product.dealPrice"> ------ </span><br/>
-              <span class="productdeatilheading">Organic: </span><span class="productdeatil" ng-if="product.isOrganic">100% Organic (Assured)<br/>
-              
-              </span> <span class="productdeatil" ng-if="!product.isOrganic"> Non-organic </span>
+              <span class="productdeatilheading" ng-if="product.isOrganic">Organic: </span><span class="productdeatil" ng-if="product.isOrganic">100% Organic (Assured)<br/>
+              </span> 
             </div>
           </div>
           <!-- <div class="col-md-12 col-sm-12 divider"></div> -->
@@ -31,8 +30,11 @@
             <div class="col-md-4">
               <span class="productdeatilheading">Ratings</span>
             </div>
-            <div class="col-md-8">
-              <span> <div ng-stars="product.rating" ng-stars-max="5" ng-stars-readonly></div></span>
+            <div class="col-md-8" style="margin-bottom: 40px;">
+              <span> <div ng-stars="product.rating" ng-stars-max="5" ng-stars-readonly class="stars"></div><span style="font-size:12px;">reviews ({{product.reviewCount}})</span></span><hr>
+              <div style="overflow-y: scroll; height:100px;">
+                <span ng-repeat="revie in product.reviews"><span ng-stars="revie.rating" ng-stars-max="5" ng-stars-readonly class="stars"></span>{{revie.review}}<hr></span>
+              </div>
             </div>
             <div class="col-md-4">
               <span class="productdeatilheading">Rate your purchase</span>
@@ -44,7 +46,7 @@
               </span>
             </div>
           </div>
-          <div class="col-md-12 col-sm-12 divider"></div>
+          <hr>
           <div class="row">
             <div class="col-md-4">
               <span class="productdeatilheading">Product Specifications </span>
@@ -72,7 +74,7 @@
             <div class="col-md-8">
               <span> {{product.remainingQuantity}} {{product.stockType}}</span>
             </div>
-            <div class="col-md-12 col-sm-12 divider"></div>
+            <hr>
             <div class="col-md-4">
             </div>
             <div class="col-md-8">

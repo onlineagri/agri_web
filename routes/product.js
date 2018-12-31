@@ -14,7 +14,7 @@ router.get('/getproductcategories', productController.getProductCategories);
 router.get('/getcategoryproducts/:catName/:type', productController.getCategoryProducts);
 router.get('/getsubcategories/:id', productController.getSubCategories);
 router.get('/getrecommondedproducts/:catName/:type', productController.getRecommondedProducts);
-
+router.post('/submitreview', productController.submitReview);
 
 
 

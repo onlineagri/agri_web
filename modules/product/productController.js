@@ -5,6 +5,7 @@ var UserModel = db.UserModel();
 var MenuModel = db.MenuModel();
 var CartModel = db.CartModel();
 var SubCategoryModel = db.SubCategoryModel();
+var ReviewModel = db.ReviewModel();
 var common = require("../../config/common.js");
 var async =require('async');
 var lodash = require('lodash');
@@ -13,6 +14,14 @@ exports.getNewProducts = function(req, res){
 	let menuData = [];
 
     MenuModel.aggregate([
+    {
+    	$match: {
+            $and: [{
+                isDeleted: false,
+                status: true
+            }]
+        }
+    },
 	{
 	  $unwind: "$categoryId"
 	},
@@ -52,73 +61,140 @@ exports.getproduct = function(req, res){
     }
 
     let id = mongoose.Types.ObjectId(req.params.id);
-    MenuModel.aggregate([
+    let productData = {};
+    let rateData = {};
+    async.series([
+    	function(callback){
+    		 MenuModel.aggregate([
 
-        {
-            $unwind: "$categoryId"
-        }, {
-            $lookup: {
-                from: "categorys",
-                localField: "categoryId",
-                foreignField: "_id",
-                as: "product_docs"
-            }
-        }, {
-            $unwind: "$farmerId"
-        }, {
-            $lookup: {
-                from: "users",
-                localField: "farmerId",
-                foreignField: "_id",
-                as: "user_docs"
-            }
-        }, {
-            $match: {
-                $and: [{
-                    "_id": id,
-                    isDeleted: false,
-                    status: true
-                }]
-            }
-        }, {
-            $project: {
-                _id: 1,
-                name: 1,
-                categoryName: 1,
-                imageName: 1,
-                priceEachItem: 1,
-                stockType: 1,
-                brand: 1,
-                'product_docs.type': 1,
-                'product_docs.description': 1,
-                'user_docs.email':1,
-                'user_docs.streetAddress': 1,
-                'user_docs.city': 1,
-                'user_docs.pincode': 1,
-                'user_docs.about': 1,
-                farmerName: 1,
-                description: 1,
-                dealPrice: 1,
-                quantity: 1,
-                remainingQuantity: 1,
-                farmerId : 1,
-                type: 1,
-                isOrganic: 1
-            }
-        }
-    ]).exec(function(err, data) {
-        if (err) {
-            console.log("dberror getproduct",err);
-            res.json({code:400, message:"Internal server error"});
-        } else {
-            if(common.isValid(data) && data.length > 0){
-            	data[0].imageName = '/uploads/' +data[0].imageName;
-            	res.json({code:200, message:"Product fetched successfully" , data:data});
-        	}else{
-        		res.json({code:400, message:"Product not found"});
-        	}
-        }
-    })
+		        {
+		            $unwind: "$categoryId"
+		        }, {
+		            $lookup: {
+		                from: "categorys",
+		                localField: "categoryId",
+		                foreignField: "_id",
+		                as: "product_docs"
+		            }
+		        }, {
+		            $unwind: "$farmerId"
+		        }, {
+		            $lookup: {
+		                from: "users",
+		                localField: "farmerId",
+		                foreignField: "_id",
+		                as: "user_docs"
+		            }
+		        }, 
+		        {
+		            $match: {
+		                $and: [{
+		                    "_id": id,
+		                    isDeleted: false,
+		                    status: true
+		                }]
+		            }
+		        }, {
+		            $project: {
+		                _id: 1,
+		                name: 1,
+		                categoryName: 1,
+		                imageName: 1,
+		                priceEachItem: 1,
+		                stockType: 1,
+		                brand: 1,
+		                'product_docs.type': 1,
+		                'product_docs.description': 1,
+		                'user_docs.email':1,
+		                'user_docs.streetAddress': 1,
+		                'user_docs.city': 1,
+		                'user_docs.pincode': 1,
+		                'user_docs.about': 1,
+		                farmerName: 1,
+		                description: 1,
+		                dealPrice: 1,
+		                quantity: 1,
+		                remainingQuantity: 1,
+		                farmerId : 1,
+		                type: 1,
+		                isOrganic: 1,
+		            }
+		        }
+		    ]).exec(function(err, data) {
+		        if (err) {
+		            console.log("dberror getproduct",err);
+		            callback("Internal server error");
+		        } else {
+		            if(common.isValid(data) && data.length > 0){
+		            	data[0].imageName = '/uploads/' +data[0].imageName;
+		            	productData = data[0];
+		            	callback()
+		        	}else{
+		        		callback("Product not found");
+		        	}
+		        }
+		    })
+    	},
+    	function(callback){
+    		ReviewModel.aggregate([
+    			{
+		            $match: {
+		                $and: [{
+		                    productId: productData._id,
+		                    isDeleted: false,
+		                    status: true
+		                }]
+		            }
+		        },
+		        
+		        {
+		        	$group: {
+		        		_id: null, avgrating: {$avg: "$rating"}, mycount: {$sum: 1}
+		        	}
+		        },
+		        {
+		        	$project: {
+		        		review: 1,
+		        		rating: 1,
+		        		avgrating : 1,
+		        		productId : 1,
+		        		mycount : 1
+		            }
+		        }
+    			]).exec(function(err, rdata){
+    				if(err){
+    					console.log("dberror getproduct",err);
+		            	callback();
+    				} else {
+    					if(rdata.length)
+    						rateData = rdata[0];
+    					callback();
+    				}
+    			})
+    	},
+    	function(callback){
+    		ReviewModel.find({productId: productData._id, status: true, isDeleted : false},{rating:1, review: 1}, {$limit: 15}, function(err, reviewdata){
+    			if(err){
+    				console.log("dberror getproduct",err);
+		            callback();
+    			} else {
+    				if(reviewdata.length){
+    					productData.reviews = reviewdata;
+    					productData.rating = rateData.avgrating;
+    					productData.reviewCount = rateData.mycount;
+    				}
+    				callback();
+    			}
+    		})
+    	}
+    	], function(err){
+    		if(err){
+    			res.json({code:400, message: err});
+    		} else {
+    			res.json({code:200, message: "Product fetched successfully", data: productData});
+    		}
+    	})
+   
 }
 
 exports.addToCart = function(req, res){
@@ -586,4 +662,37 @@ exports.getRecommondedProducts = function(req, res) {
 			}
     	}
     })
+}
+
+exports.submitReview = function(req, res){
+	let reviewParam = req.body;
+	if(!common.isValid(req.user) || !common.isValid(req.user.id)){
+		res.json({code: 400, message: 'You are not authenticate to perform this'});
+		return;
+	}
+	if(!common.isValid(reviewParam.productId)){
+		res.json({code: 400, message: 'Parameters missing'});
+		return;
+	}
+	let review = {
+		userId : req.user.id,
+		productId : reviewParam.productId,
+		userName : req.user.fullName,
+		productName : reviewParam.productName
+	}
+	if(common.isValid(reviewParam.rating)){
+		review['rating'] = reviewParam.rating;
+	}
+	if(common.isValid(reviewParam.review)){
+		review['review'] = reviewParam.review;
+	}
+	let reviewData = new ReviewModel(review);
+	reviewData.save(function(err, data){
+		if(err){
+			console.log("dberror submitReview", err);
+			res.json({code:400, message:"Internal server error"});
+		} else {
+			res.json({code:200, message: "Thank you for your response"});
+		}
+	})
 }

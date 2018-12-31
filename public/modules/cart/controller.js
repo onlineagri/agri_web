@@ -3,9 +3,11 @@
 
 app.controller('cartController', ['$scope', 'cartService','toaster','$localStorage','$location','$routeParams','$rootScope','SweetAlert',  function($scope, cartService, toaster, $localStorage, $location, $routeParams, $rootScope, SweetAlert) {
     $scope.discount = 0;
+    $rootScope.isFront = false;
      if($localStorage.isCustomerLogin){
         $rootScope.userLogin = true;
     }
+    $scope.validCart = true;
     $scope.getCart = function(){
     	var cartId = $routeParams.id;
         cartService.getCart(cartId).then(function(response){
@@ -50,6 +52,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
                     title: '',
                     body: response.data.message
                 });
+                $scope.validCart = true;
                 $scope.getCart();
             } else {
                 toaster.pop({
@@ -57,6 +60,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
                     title: '',
                     body: response.data.message
                 });
+                $scope.validCart = false;
             }
         }).catch(function(response) {
             toaster.pop({
