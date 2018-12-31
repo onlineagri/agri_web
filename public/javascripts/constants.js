@@ -52,7 +52,10 @@ var webservices = {
     "getRecommondedProducts" : baseUrl + "/product/getrecommondedproducts",
     "submitReview" : baseUrl + "/product/submitreview",
     "getDeliveryCharges" : baseUrl + "/admin/systemparams",
-    "updateDeliveryCharges" : baseUrl + "/admin/systemparams"
+    "updateDeliveryCharges" : baseUrl + "/admin/systemparams",
+    "getUserDetails" : baseUrl + "/user/customer",
+    "updateProfile" : baseUrl + "/user/customer",
+    "updatePassword": baseUrl + "/user/updatepassword"
     
 }
 

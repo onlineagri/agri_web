@@ -90,6 +90,38 @@ app.factory('customerService',['$http', function ($http) {
           return response;
       }).catch(function () {
       });
-    }
+    },
+
+    getUserDetails: function(phoneNumber){
+      return $http({
+        method: 'GET',
+        url: webservices.getUserDetails + "/" + phoneNumber
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    updateProfile: function(userData){
+      return $http({
+        method: 'POST',
+        data: userData,
+        url: webservices.updateProfile
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    updatePassword: function(pass){
+      return $http({
+        method: 'POST',
+        data: pass,
+        url: webservices.updatePassword
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
   }
 }]);

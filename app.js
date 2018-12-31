@@ -16,6 +16,7 @@ var auth = require('./routes/auth');
 var admin = require('./routes/admin');
 var product = require('./routes/product');
 var order = require('./routes/order');
+var user = require('./routes/customer');
 
 
 var app = express();
@@ -58,6 +59,10 @@ app.use('/order', passport.authenticate('authenticationOptional', {
     session: false
 }))
 
+app.use('/user', passport.authenticate('authentication', {
+    session: false
+}))
+
 
 app.use('/', index);
 app.use('/users', users);
@@ -65,6 +70,7 @@ app.use('/api', auth);
 app.use('/admin', admin);
 app.use('/product', product);
 app.use('/order', order);
+app.use('/user', user);
 
 
 // catch 404 and forward to error handler

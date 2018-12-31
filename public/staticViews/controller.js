@@ -18,6 +18,7 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
     if($localStorage.isCustomerLogin){
     	$scope.firstName = $localStorage.firstName;
         $rootScope.userLogin = true;
+        $rootScope.phoneNumber = $localStorage.phoneNumber; 
         $scope.logOut = "Logout";
         getCustomerCart();
     } 

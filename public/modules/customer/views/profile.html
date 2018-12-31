@@ -1,0 +1,146 @@
+<div ng-include="'/staticViews/customerHeader.html'"></div>
+<section class="bg-grey" id="portfolio" style="margin-top: 50px;" ng-init="getUserDetails()">
+<div class="row">
+<div class="col-sm-3"><!--left col-->
+
+<div class="text-center">
+  <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
+  <!-- <h6>Upload a different photo...</h6>
+  <input type="file" class="text-center center-block file-upload"> -->
+</div></hr><br>
+
+</div><!--/col-3-->
+<div class="col-sm-9">
+  
+  <div class="tab-content">
+    <div class="tab-pane active" id="home">
+      <hr>
+      <form class="form" name="profileForm">
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="first_name"><h4>First name</h4></label>
+            <input type="text" class="form-control" name="first_name" id="first_name" placeholder="first name" ng-model="user.firstName" required>
+          </div>
+        </div>
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="last_name"><h4>Last name</h4></label>
+            <input type="text" class="form-control" name="last_name" id="last_name" placeholder="last name" ng-model="user.lastName" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="phone"><h4>Phone</h4></label>
+            <input type="text" class="form-control" name="phone" id="phone" placeholder="enter phone" ng-model="user.phoneNumber" required readonly>
+          </div>
+        </div>
+        
+        
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="email"><h4>Email</h4></label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="you@email.com" ng-model="user.email" required>
+          </div>
+        </div>
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="streetAddress"><h4>Street Address</h4></label>
+            <input type="text" class="form-control" id="streetAddress" name="streetAddress" placeholder="enter street-address" ng-model="user.streetAddress" required>
+          </div>
+        </div>
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="city"><h4>City</h4></label>
+            <input type="text" class="form-control" name="city" id="city" placeholder="enter city" ng-model="user.city" required>
+          </div>
+        </div>
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="state"><h4>State</h4></label>
+            <input type="text" class="form-control" name="state" id="state" placeholder="enter state" ng-model="user.state" required>
+          </div>
+        </div>
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="country"><h4>Country</h4></label>
+            <input type="text" class="form-control" name="country" id="country" placeholder="enter country" ng-model="user.country" required>
+          </div>
+        </div>
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="pincode"><h4>Pincode</h4></label>
+            <input type="text" class="form-control" name="pincode" id="pincode" placeholder="enter pincode" ng-model="user.pincode" required>
+          </div>
+        </div>
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="pincode"><h4>Your address will be</h4></label>
+            <input type="text" class="form-control" name="pincode" id="pincode"  ng-model="user.address" readonly>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-12">
+            <br>
+            <button class="btn btn-lg btn-success" type="submit" ng-disabled="profileForm.$invalid" ng-click="updateProfile(user)"> Update</button>
+          </div>
+        </div>
+      </form>
+      
+      <hr>
+      <h3>Reset Password</h3>
+      <hr>
+      <form class="form" name="resetPassForm">
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="oldPass"><h4>Old Password</h4></label>
+            <input type="text" class="form-control" name="oldPass" id="oldPass" placeholder="Old Password" ng-model="pass.oldPass" required>
+          </div>
+        </div>
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="newPass"><h4>New Password</h4></label>
+            <input type="password" class="form-control" name="newPass" id="newPass" placeholder="New Password" ng-model="pass.newPass" required ng-change="compairePassword(pass.newPass, cPass)" minlength="6" maxlength="15">
+            <span class="error-messages" ng-show="resetPassForm.newPass.$touched || resetPassForm.newPass.$dirty && resetPassForm.newPass.$invalid">
+              <span  ng-show="resetPassForm.newPass.$error.required">Please enter Password</span>
+              <span  ng-show="resetPassForm.newPass.$error.minlength">Password should be 6 to 15 digit only</span>
+            </span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          
+          <div class="col-xs-4">
+            <label for="cPass"><h4>Confirm Password</h4></label>
+            <input type="text" class="form-control" name="cPass" id="cPass" placeholder="Confirm Password" ng-model="cPass" required ng-change="compairePassword(pass.newPass, cPass)">
+            <span  class="error-messages" ng-show="passerror">Password not matched</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-12">
+            <br>
+            <button class="btn btn-lg btn-success" type="submit" ng-disabled="resetPassForm.$invalid || passerror" ng-click="updatePassword(pass)"> Update Password</button>
+          </div>
+        </div>
+      </form>
+        
+     </div>
+   </div>
+ </div>
+</div>
+
+</section>
+
+
