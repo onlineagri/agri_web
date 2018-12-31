@@ -163,6 +163,10 @@ app.config(function($routeProvider, $httpProvider) {
         templateUrl : "../modules/category/views/products.html"
     })
 
+    .when("/customer/profile/:id", {
+        controller : "customerController",
+        templateUrl : "../modules/customer/views/profile.html"
+    })
     
     .otherwise("/404", {
         template : "<h1>Page not found</h1>"

@@ -256,4 +256,84 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
             });
         });
     }
+
+    $scope.getUserDetails = function(){
+        var phoneNumber = $routeParams.id;
+        customerService.getUserDetails(phoneNumber).then(function(response){
+            if(response.data.code == 200){
+                $scope.user = response.data.data;
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+
+            });
+        });
+    }
+
+    $scope.updateProfile = function(user){
+        customerService.updateProfile(user).then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                });
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+
+            });
+        });
+    }
+
+    $scope.compairePassword = function(pass, cpass){
+        if(pass == cpass){
+            $scope.passerror = false;
+        } else {
+            $scope.passerror = true;
+        }
+    }
+
+    $scope.updatePassword = function(pass){
+        customerService.updatePassword(pass).then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                });
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+
+            });
+        });
+    }
 }])
