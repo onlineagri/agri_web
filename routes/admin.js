@@ -36,5 +36,7 @@ router.put('/businessperson', adminController.adminUpdateBusinessPerson);
 router.delete('/businessperson/:id', adminController.adminDeleteBusinessPerson);
 router.post('/subcategory', adminController.addSubCategory);
 router.get('/subcategory', adminController.getSubCategories);
+router.get('/systemparams', adminController.getDeliveryCharges);
+router.put('/systemparams', adminController.updateDeliveryCharges);
 
 module.exports = router;

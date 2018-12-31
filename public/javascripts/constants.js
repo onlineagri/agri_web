@@ -50,6 +50,8 @@ var webservices = {
     "getSubCategories" : baseUrl + "/admin/subcategory",
     "getSubCategoriesCust" : baseUrl + "/product/getsubcategories",
     "getRecommondedProducts" : baseUrl + "/product/getrecommondedproducts",
+    "getDeliveryCharges" : baseUrl + "/admin/systemparams",
+    "updateDeliveryCharges" : baseUrl + "/admin/systemparams"
 
 }
 

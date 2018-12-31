@@ -6,6 +6,7 @@ var MenuModel = db.MenuModel();
 var OrderModel = db.OrderModel();
 var CmsModel = db.CmsModel();
 var SubCategoryModel = db.SubCategoryModel();
+var SystemParamsModel = db.SystemParamsModel();
 var common = require("../../config/common.js");
 var async =require('async');
 var lodash = require('lodash');
@@ -1533,4 +1534,61 @@ exports.getSubCategories = function(req, res) {
                 });
             }
         })
+}
+
+exports.getDeliveryCharges = function(req, res){
+    if(!common.isValid(req.user) || !common.isValid(req.user.id)){
+        res.json({code: 400, message:"You are not authorised to perform this action"});
+        return;
+    }
+
+    SystemParamsModel.find({}).exec(function(err, data){
+        if (err) {
+            console.log('dberror getDeliveryCharges', err);
+            res.json({
+                code: 400,
+                message: "Internal Server Error"
+            });
+        } else{
+            res.json({
+                code: 200,
+                message: "Systemparams fetched successfully",
+                data: data
+            });
+        }
+    });
+
+}
+
+exports.updateDeliveryCharges = function(req, res){
+    var systemParams = req.body;
+    var saveParams = {};
+    if(!common.isValid(req.user) || !common.isValid(req.user.id)){
+        res.json({code: 400, message:"You are not authorised to perform this action"});
+        return;
+    }
+
+    saveParams = {
+        deliveryPercentage : common.isValid(systemParams.deliveryPercentage) ? systemParams.deliveryPercentage : 0,
+        deliveryPrice : common.isValid(systemParams.deliveryPrice) ? systemParams.deliveryPrice : 0,
+        gstCharges : common.isValid(systemParams.gstCharges) ? systemParams.gstCharges : 0,
+        minPerchaseAmt : common.isValid(systemParams.minPerchaseAmt) ? systemParams.minPerchaseAmt : 0,
+        productsPerPerson : common.isValid(systemParams.productsPerPerson) ? systemParams.productsPerPerson : 0
+    }
+
+    SystemParamsModel.update({type: 'system_parameters'}, { $set: saveParams}, function(err, data){
+        if (err) {
+            console.log('dberror updateDeliveryCharges', err);
+            res.json({
+                code: 400,
+                message: "Internal Server Error"
+            });
+        } else{
+            res.json({
+                code: 200,
+                message: "Systemparams updated successfully",
+                data: []
+            });
+        }
+    });
 }

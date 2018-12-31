@@ -345,5 +345,27 @@ app.factory('adminService',['$http', function ($http) {
       }).catch(function () {
       });
     },
+
+    getDeliveryCharges: function () {
+      return $http({
+        method: 'GET',
+        url: webservices.getDeliveryCharges
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    updateDeliveryCharges: function (params) {
+      return $http({
+        method: 'PUT',
+        data: params,
+        url: webservices.updateDeliveryCharges
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
   }
 }]);
