@@ -54,7 +54,7 @@ exports.addCategory = function(req, res){
            if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
                var imageTypeRegularExpression = /\/(.*?)$/;
                var file = {};
-               var fileName = common.slugify(categoryParams.name) + "_" + new Date().getTime();
+               var fileName = new Date().getTime() + "_" + common.slugify(categoryParams.name);
                var imageBuffer = common.decodeBase64Image(categoryParams.image);
                if (imageBuffer == "err") {
                    callback('Not a valid image type');
@@ -162,7 +162,7 @@ exports.getCategoryById = function(req, res) {
 				name: data.name,
 				status: data.status,
 				description: data.description,
-				imageName: '/uploads/' +data.imageName
+				imageName: common.default_set.S3_ENDPOINT+ common.default_set.DEALSTICK_CATEGORY_BUCKET + "/" +data.imageName
 			}
 			res.json({code: 200, message:"Category Fetched Successfuly", data: resdata});
 		}
@@ -657,7 +657,7 @@ exports.getMenuById = function(req, res) {
 				quantity: data.quantity,
 				farmerId: data.farmerId,
 				priceEachItem: data.priceEachItem,
-				imageName: '/uploads/' +data.imageName,
+				imageName: common.default_set.S3_ENDPOINT+ common.default_set.AGRI_PROD_BUCKET + "/" +data.imageName,
                 farmer : {_id: data.farmerId, name: data.farmerName},
                 stockType: data.stockType,
                 farmerPrice : data.farmerPrice,
