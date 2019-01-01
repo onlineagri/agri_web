@@ -217,8 +217,8 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
     function getRecommondedProducts(){
         customerService.getRecommondedProducts({type: $scope.product.type, categoryId: $scope.product.categoryName}).then(function(response){
             if(response.data.code == 200){
-               
-                $scope.recommondedProducts = response.data.data;
+                $scope.imageUrlReco = response.data.data.imageUrl;
+                $scope.recommondedProducts = response.data.data.data;
             } else {
                 SweetAlert.swal("", response.data.message, "warning")
             }
