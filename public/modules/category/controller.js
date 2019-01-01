@@ -11,8 +11,8 @@ app.controller('categoryCustomerController', ['$scope', 'categoryService','toast
     $scope.getProducts = function(){
         categoryService.getProducts({type: $scope.type, categoryId: $scope.mainCatId}).then(function(response){
             if(response.data.code == 200){
-               
-                $scope.products = response.data.data;
+                $scope.imageUrl = response.data.data.imageUrl;
+                $scope.products = response.data.data.data;
             } else {
                 SweetAlert.swal("", response.data.message, "warning")
             }
