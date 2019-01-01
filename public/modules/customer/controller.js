@@ -156,8 +156,8 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
         var id = $routeParams.id;
         customerService.getCategoryProducts(id).then(function(response){
             if(response.data.code == 200){
-               
-                $scope.categoryProducts = response.data.data;
+                $scope.subCatProdImag = response.data.data.imageUrl;
+                $scope.categoryProducts = response.data.data.data;
             } else {
                 toaster.pop({
                     type: 'error',
@@ -195,8 +195,8 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
         $scope.mainCatId = $routeParams.id;
         customerService.getSubCategories(categoryId).then(function(response){
             if(response.data.code == 200){
-               
-                $scope.subCategories = response.data.data;
+                $scope.imageUrlSubCat = response.data.data.imageUrl;
+                $scope.subCategories = response.data.data.data;
             } else {
                 toaster.pop({
                     type: 'error',
