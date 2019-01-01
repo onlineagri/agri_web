@@ -1,10 +1,11 @@
 <div ng-include="'/staticViews/customerHeader.html'"></div>
 <div class="container" ng-init="getCart()">
-  <div class="row justify-content-center" style="margin-top: 100px;">
+  <div class="row justify-content-center" style="margin-top: 100px;" ng-init="getDeliveryCharge()">
     <div class="col-md-12" style="margin-bottom: 20px;">
       <h4 class="text-center">Shopping Cart</h4>
-
+      <div style="color:red;">{{orderAmountHint}}</div>
       <table class="table">
+
         <thead>
           <tr>
             <th>Items</th>
@@ -32,7 +33,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>&#x20b9;<span ng-bind="getDeliveryCharge()"> </span></td>
+            <td>&#x20b9;<span ng-bind="deliveryCharge"> </span></td>
             <td></td>
           </tr>
           <tr>
@@ -41,7 +42,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>&#x20b9;<span ng-bind="getGst()"></span></td>
+            <td>&#x20b9;<span ng-bind="gstCharge"></span></td>
             <td></td>
           </tr>
           <tr>
@@ -58,12 +59,15 @@
       </table>
       <a class="col-md-4 cartButtons  btn btn-primary" href="#!/customer/dashboard">More Shopping</a>
       <button type="button" class="col-md-4 cartButtons  btn btn-secondary" ng-click="clearCart()">Clear Cart</button>
-      <button ng-disabled="!validCart" type="button" class="col-md-4 cartButtons  btn btn-success" ng-click="placeOrder(cart)">Place Order</button>
+      <button ng-disabled="!validCart || blockPurchase" type="button" class="col-md-4 cartButtons  btn btn-success" ng-click="placeOrder(cart)">Place Order</button>
+      <div style="color: green;">{{deliveryHint}}</div>
     </div >
     <div style="color: #fca279;">
       <span>* All the products purchased would be delivered on the Weekend with Cash on Delivery payment mode only.</span><br/>
       <span>* Delivery charge might vary depending on the product weight, quantity, delivery location and minimum order.</span><br/>
       <span>* If the ordered quantity is found to be more than Stock Quantity system will automatically set the default value of the quanitity.</span><br/>
+      <span>* No delibery charges on purchase after <span>&#x20b9; {{deliveryPrice}}</span> </span><br/>
+      <span>* To place order your minimum purchase amount should be <span>&#x20b9; {{minPerchaseAmt}}</span> </span><br/>
     </div>
   </div>
 </div>

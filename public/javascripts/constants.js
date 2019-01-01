@@ -51,7 +51,7 @@ var webservices = {
     "getSubCategoriesCust" : baseUrl + "/product/getsubcategories",
     "getRecommondedProducts" : baseUrl + "/product/getrecommondedproducts",
     "submitReview" : baseUrl + "/product/submitreview",
-    "getDeliveryCharges" : baseUrl + "/admin/systemparams",
+    "getDeliveryCharges" : baseUrl + "/product/systemparams",
     "updateDeliveryCharges" : baseUrl + "/admin/systemparams",
     "getUserDetails" : baseUrl + "/user/customer",
     "updateProfile" : baseUrl + "/user/customer",

@@ -100,46 +100,52 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
     }
 
     $scope.getDeliveryCharge = function(){
-    	// cartService.getDeliveryCharge().then(function(response){
-     //        if(response.data.code == 200){
-     //            toaster.pop({
-     //                type: 'success',
-     //                title: '',
-     //                body: response.data.message
-     //            });
-     //            $location.path("/customer/dashboard")
-     //        } else {
-     //            toaster.pop({
-     //                type: 'error',
-     //                title: '',
-     //                body: response.data.message
-     //            });
-     //        }
-     //    }).catch(function(response) {
-     //        toaster.pop({
-     //            type: 'error',
-     //            title: '',
-     //            body: "Something went wrong"
-     //        });
-     //    });
-     //  
-     if($scope.cart.orderNetAmount <= 1000){
-     	$scope.deliveryCharge = $scope.cart.orderNetAmount * (12/100);
-     	return $scope.deliveryCharge;
-     } else {
-     	$scope.deliveryCharge = 0;
-     	return 0;
-     }
+    	cartService.getDeliveryCharge().then(function(response){
+            if(response.data.code == 200){
+                $scope.deliveryPercent = response.data.data.deliveryPercentage;
+                $scope.gstTax = response.data.data.gstCharges;
+                $scope.deliveryPrice = response.data.data.deliveryPrice;
+                $scope.minPerchaseAmt = response.data.data.minPerchaseAmt;
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
     }
 
-    $scope.getGst = function(){
-    	$scope.gstCharge = 0;
-    	return 0;
+    function getGst(){
+    	return $scope.gstCharge = $scope.gstTax;
+    }
+
+    function getDelivery(){
+        if($scope.cart.orderNetAmount <= $scope.deliveryPrice){
+            $scope.deliveryHint = "Add more items for free delivery";
+            return $scope.deliveryCharge = $scope.cart.orderNetAmount * ($scope.deliveryPercent /100);
+        } else {
+            $scope.deliveryHint = "";
+            return $scope.deliveryCharge = 0;
+        }
     }
 
     $scope.getAllTotal = function(){
-    	$scope.orderNetAmount = $scope.cart.orderNetAmount + $scope.getDeliveryCharge() + $scope.getGst();
-    	return $scope.cart.orderNetAmount + $scope.getDeliveryCharge() + $scope.getGst();
+        if($scope.cart.orderNetAmount < $scope.minPerchaseAmt){
+            $scope.orderAmountHint = "Order total should be greater than Rupees " + $scope.minPerchaseAmt;
+            $scope.blockPurchase = true;
+        } else {
+            $scope.orderAmountHint = "";
+            $scope.blockPurchase = false;
+        }
+        $scope.orderNetAmount = parseInt($scope.cart.orderNetAmount) + getDelivery() + getGst();
+        return $scope.orderNetAmount;
     }
 
     $scope.placeOrder = function(cartData) {

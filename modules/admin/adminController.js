@@ -1567,7 +1567,6 @@ exports.updateDeliveryCharges = function(req, res){
         res.json({code: 400, message:"You are not authorised to perform this action"});
         return;
     }
-
     saveParams = {
         deliveryPercentage : common.isValid(systemParams.deliveryPercentage) ? systemParams.deliveryPercentage : 0,
         deliveryPrice : common.isValid(systemParams.deliveryPrice) ? systemParams.deliveryPrice : 0,

@@ -15,6 +15,7 @@ router.get('/getcategoryproducts/:catName/:type', productController.getCategoryP
 router.get('/getsubcategories/:id', productController.getSubCategories);
 router.get('/getrecommondedproducts/:catName/:type', productController.getRecommondedProducts);
 router.post('/submitreview', productController.submitReview);
+router.get('/systemparams', productController.systemParams);
 
 
 

@@ -53,13 +53,21 @@ exports.placeOrder = function(req, res){
 					if(common.isValid(sysData) && lodash.isEmpty(sysData) == false){
 						systemData = sysData;
 						gst_tax = (systemData.gstCharges <=0) ? 0 : (parseFloat(cartData.orderNetAmount * (systemData.gstCharges/100))).toFixed(2); 
-						delivery_charge = (systemData.deliveryCharges == 0) ? 0 : (parseFloat(cartData.orderNetAmount * (systemData.deliveryCharges/100))).toFixed(2);
+						if(cartData.orderNetAmount <= systemData.deliveryPrice)
+							delivery_charge = (systemData.deliveryPercentage == 0) ? 0 : (parseFloat(cartData.orderNetAmount * (systemData.deliveryPercentage/100))).toFixed(2);
 						callback();
 					} else {
 						callback("We are facing system error");
 					}
 				}
 			})
+		},
+		function(callback){
+			if(systemData.minPerchaseAmt > cartData.orderNetAmount ){
+				callback("Order total should be greater than Rupees " + systemData.minPerchaseAmt);
+			} else {
+				callback();
+			}
 		},
 		function(callback){
 			checkCartValidity(cartData, function(err, succ){
