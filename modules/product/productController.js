@@ -6,6 +6,7 @@ var MenuModel = db.MenuModel();
 var CartModel = db.CartModel();
 var SubCategoryModel = db.SubCategoryModel();
 var ReviewModel = db.ReviewModel();
+var SystemParamsModel = db.SystemParamsModel();
 var common = require("../../config/common.js");
 var async =require('async');
 var lodash = require('lodash');
@@ -693,6 +694,23 @@ exports.submitReview = function(req, res){
 			res.json({code:400, message:"Internal server error"});
 		} else {
 			res.json({code:200, message: "Thank you for your response"});
+		}
+	})
+}
+
+exports.systemParams = function(req, res){
+	if(!common.isValid(req.user) || !common.isValid(req.user.id)){
+		res.json({code: 400, message: 'You are not authorised'});
+		return;
+	}
+	let type = "system_parameters";
+
+	SystemParamsModel.findOne({type: type}, {deliveryPercentage:1, deliveryPrice: 1, gstCharges: 1, minPerchaseAmt: 1},function(err, data){
+		if(err){
+			console.log("dberror systemParams", err);
+			res.json({code:400, message:"Internal server error"});
+		} else {
+			res.json({code: 200, message: "Data fetched successfully", data: data})
 		}
 	})
 }

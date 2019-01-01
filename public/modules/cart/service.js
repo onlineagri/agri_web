@@ -40,6 +40,16 @@ app.factory('cartService',['$http', function ($http) {
           return response;
       }).catch(function () {
       });
+    },
+
+    getDeliveryCharge : function(){
+      return $http({
+        method: 'GET',
+        url: webservices.getDeliveryCharges
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
     }
   }
 }]);
