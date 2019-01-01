@@ -14,7 +14,8 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
                     title: '',
                     body: response.data.message
                 });
-                $scope.newProducts = response.data.data;
+                $scope.newProducts = response.data.data.data;
+                $scope.imageUrl = response.data.data.imageUrl;
                 $(document).ready(function(){
                   $("#news-slider").owlCarousel({
                         items : 3,
@@ -123,7 +124,8 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
         customerService.getCategories().then(function(response){
             if(response.data.code == 200){
                
-                $scope.productCategories = response.data.data;
+                $scope.productCategories = response.data.data.data;
+                $scope.imageUrlCat = response.data.data.imageUrl;
                 $(document).ready(function(){
                     $("#news-slider6").owlCarousel({
                         items : 4,

@@ -13,7 +13,7 @@
             <div class="post-slide" >
               <div class="post-img">
                 <a href="#!/product/{{product._id}}">
-                  <img src="/uploads/{{product.imageName}}" alt="product.name">
+                  <img src="{{imageUrl}}/{{product.imageName}}" alt="product.name">
                   <div class="post-date" ng-if="product.isOrganic">
                     <span class="month">Verified Organic</span>
                   </div>
@@ -46,7 +46,7 @@
         <div id="news-slider6" class="owl-carousel">
           <div class="post-slide6" ng-repeat="category in productCategories">
             <div class="post-img">
-              <img style="height: 100px;" src="/uploads/{{category.imageName}}" alt="">
+              <img style="height: 100px;" src="{{imageUrlCat}}/{{category.imageName}}" alt="">
               <div class="post-info">
                 <ul class="category">
                   <li><a href="#!/category/{{category._id}}/subcategory">{{category.name}}</a></li>
