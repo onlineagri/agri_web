@@ -574,8 +574,8 @@ exports.getCategoryProducts = function(req, res) {
     	} else {
     		if(common.isValid(data) && data.length){
 				menuData = data;
-				data.imageUrl = data.imageUrl = common.default_set.S3_ENDPOINT+ common.default_set.AGRI_PROD_BUCKET;
-				res.json({code:200, message:"Product fetched successfully" , data:data});
+				let imageUrl = data.imageUrl = common.default_set.S3_ENDPOINT+ common.default_set.AGRI_PROD_BUCKET;
+				res.json({code:200, message:"Product fetched successfully" , data : {data:data : imageUrl : imageUrl}});
 			} else {
 				res.json({code:400, message:"No Products, we are adding more products for you"});
 			}
@@ -624,8 +624,8 @@ exports.getSubCategories = function(req, res) {
 			res.json({code: 400, message: "Internal server error"});
 		} else {
 			if(data.length){
-				data.imageUrl =data.imageUrl = common.default_set.S3_ENDPOINT+ common.default_set.DEALSTICK_CATEGORY_BUCKET;
-				res.json({code: 200, message: "Sub-Categories fetched", data: data});
+				let imageUrl = common.default_set.S3_ENDPOINT+ common.default_set.DEALSTICK_CATEGORY_BUCKET;
+				res.json({code: 200, message: "Sub-Categories fetched", data : {data: data, imageUrl: imageUrl}});
 			} else {
 				res.json({code: 400, message: "No Sub-Categories found"});
 			}

@@ -11,7 +11,7 @@
       <div class="col-md-3 col-sm-4" ng-repeat="category in subCategories">
         <div class="post-slide6">
           <div class="post-img">
-            <img ng-if="category.imageName" style="height: 100px;" src="/uploads/{{category.imageName}}" alt="{{category.name}}">
+            <img ng-if="category.imageName" style="height: 100px;" src="{{imageUrlSubCat}}/{{category.imageName}}" alt="{{category.name}}">
             <img ng-if="!category.imageName"  src="/images/img1.jpg" alt="{{category.name}}">
             <div class="post-info">
               <ul class="category">
