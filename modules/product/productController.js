@@ -575,7 +575,7 @@ exports.getCategoryProducts = function(req, res) {
     		if(common.isValid(data) && data.length){
 				menuData = data;
 				let imageUrl = data.imageUrl = common.default_set.S3_ENDPOINT+ common.default_set.AGRI_PROD_BUCKET;
-				res.json({code:200, message:"Product fetched successfully" , data : {data:data : imageUrl : imageUrl}});
+				res.json({code:200, message:"Product fetched successfully" , data : {data:data , imageUrl : imageUrl}});
 			} else {
 				res.json({code:400, message:"No Products, we are adding more products for you"});
 			}
