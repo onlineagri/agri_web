@@ -57,6 +57,14 @@
           
         </tbody>
       </table>
+      <div class="col-md-12">
+        <label  class="col-md-3" > Delivery Address</label>
+        <textarea class="col-md-8"  ng-model="cart.deliveryAddress" placeholder="Enter delivery address" cols="10" rows="2" name="deliveryAddress" id="deliveryAddress"></textarea>
+      </div>
+      <div class="col-md-12">
+        <label  class="col-md-3" > Special Request</label>
+        <textarea class="col-md-8"  ng-model="cart.specialRequest" placeholder="Enter Special request, may charges applicable " cols="10" rows="2" name="specialRequest" id="specialRequest"></textarea>
+      </div>
       <a class="col-md-4 cartButtons  btn btn-primary" href="#!/customer/dashboard">More Shopping</a>
       <button type="button" class="col-md-4 cartButtons  btn btn-secondary" ng-click="clearCart()">Clear Cart</button>
       <button ng-disabled="!validCart || blockPurchase" type="button" class="col-md-4 cartButtons  btn btn-success" ng-click="placeOrder(cart)">Place Order</button>

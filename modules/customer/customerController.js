@@ -139,3 +139,19 @@ exports.updatePassword = function(req, res) {
 		})
 }
 
+exports.getAddress = function(req, res){
+	if(!common.isValid(req.user) || !common.isValid(req.user.id)){
+		res.json({code: 400, message: "You are not authorised"});
+		return;
+	} 
+
+	UserModel.findOne({_id: req.user.id},{address:1}, function(err, data){
+		if(err){
+			console.log("dberror getAddress", err);
+			res.json({code: 400, message: err});
+		} else {
+			res.json({code:200, message: "Success", data: {address : data.address}});
+		}
+	})
+}
+

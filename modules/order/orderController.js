@@ -94,6 +94,14 @@ exports.placeOrder = function(req, res){
 			})
 		}, 
 		function(callback){
+			if(!common.isValid(custData.address) && !common.isValid(req.body.deliveryAddress)){
+				callback("Enter delivery address OR ,Please update your address in customer profile section");
+			} else {
+				custData.address = common.isValid(req.body.deliveryAddress) ? req.body.deliveryAddress : custData.address;
+				callback();
+			}
+		},
+		function(callback){
 
 			function makeid() {
 			  var text = "";
@@ -118,8 +126,11 @@ exports.placeOrder = function(req, res){
 				customerEmail : custData.email,
 				customerPhone : custData.phoneNumber,
 				customerId : req.user.id,
+				specialRequest : common.isValid(req.body.specialRequest) ? req.body.specialRequest : "No special Request",
 				amountPaid : (parseFloat(cartData.orderNetAmount) + parseFloat(gst_tax) + parseFloat(delivery_charge)).toFixed(2)
 			}
+
+
 			let order = new OrderModel(orderData);
 			order.save(function(err, data){
 				if(err){

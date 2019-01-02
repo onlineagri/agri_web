@@ -8,6 +8,22 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
         $rootScope.userLogin = true;
     }
     $scope.validCart = true;
+    
+    function getCustAddress(){
+        cartService.getCustAddress().then(function(response){
+            if(response.data.code == 200){
+                $scope.custaddress = response.data.data.address; 
+            } 
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        })
+    };
+    getCustAddress();
+    
     $scope.getCart = function(){
     	var cartId = $routeParams.id;
         cartService.getCart(cartId).then(function(response){
@@ -18,6 +34,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
                     body: response.data.message
                 });
                 $scope.cart = response.data.data;
+                $scope.cart.deliveryAddress = $scope.custaddress;
             } else {
                 toaster.pop({
                     type: 'error',
@@ -167,7 +184,12 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
                         gstCharge: $scope.deliveryCharge,
                         discount: $scope.discount
                     }
-
+                    if(cartData.deliveryAddress){
+                        orderData["deliveryAddress"] = cartData.deliveryAddress;
+                    }
+                    if(cartData.specialRequest) {
+                        orderData["specialRequest"] = cartData.specialRequest;
+                    }
                     cartService.placeOrder(orderData).then(function(response) {
                         if (response.data.code == 200) {
                             SweetAlert.swal("Your order placed sucessfully");

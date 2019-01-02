@@ -15,7 +15,8 @@
 	  product: {type: Array},
 	  imageName : {type: String}, 
 	  status: { type: Boolean, default: true }, 
-	  isDeleted: { type: Boolean, default: false}
+	  isDeleted: { type: Boolean, default: false},
+	  specialRequest : {type: String}
 	},{ timestamps: { createdAt: 'created_at' } });
 	
 	const Order = mongoose.model('Orders', OrderSchema);

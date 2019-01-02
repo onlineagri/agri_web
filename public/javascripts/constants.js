@@ -55,7 +55,8 @@ var webservices = {
     "updateDeliveryCharges" : baseUrl + "/admin/systemparams",
     "getUserDetails" : baseUrl + "/user/customer",
     "updateProfile" : baseUrl + "/user/customer",
-    "updatePassword": baseUrl + "/user/updatepassword"
+    "updatePassword": baseUrl + "/user/updatepassword",
+    "getCustAddress" : baseUrl + "/user/getaddress"
     
 }
 
