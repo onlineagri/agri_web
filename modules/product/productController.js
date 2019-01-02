@@ -297,7 +297,6 @@ exports.addToCart = function(req, res){
 						console.log("dberror addToCart", err);
 						callback("Internal server error");
 					} else {
-						console.log(data,"after save")
 						cartCount = data.products.length;
 						callback();
 					}

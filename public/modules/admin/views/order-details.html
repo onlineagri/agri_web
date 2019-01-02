@@ -30,6 +30,9 @@
             <div class="col-md-12">Address: {{order.delivery_address}}</div>
           </div>
           <div class="col-md-6">
+            <div class="col-md-12">Special Request: {{order.specialRequest}}</div>
+          </div>
+          <div class="col-md-6">
             <div class="col-md-12">Order Status: {{order.status}}</div>
             <div class="col-md-12">
               <a href="javascript:void(0);" ng-click="orderStatus(order.orderId, order.status)" ng-class="{disabled: process}"><i class="fa fa-box-open" aria-hidden="true"></i></a> 

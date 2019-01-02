@@ -5,6 +5,7 @@ var customerController = require("../modules/customer/customerController.js");
 /* GET home page. */
 router.get('/customer/:phone', customerController.getUser);
 router.post('/customer', customerController.updateProfile);
-router.post('/updatepassword', customerController.updatePassword)
+router.post('/updatepassword', customerController.updatePassword);
+router.get('/getaddress', customerController.getAddress)
 
 module.exports = router;
