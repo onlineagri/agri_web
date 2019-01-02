@@ -1277,7 +1277,7 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
     }
 
     $scope.getDeliveryCharges = function(){
-        adminService.getDeliveryCharges().then(function(response){
+        adminService.getSystemParams().then(function(response){
             var data = response.data.data;
             $scope.params = data[0];
         }).catch(function(response){
