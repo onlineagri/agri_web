@@ -6,6 +6,8 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
     $rootScope.isFront = false;
      if($localStorage.isCustomerLogin){
         $rootScope.userLogin = true;
+    } else {
+        $location.path('/customer/login');
     }
     $scope.validCart = true;
     

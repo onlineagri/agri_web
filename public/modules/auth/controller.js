@@ -2,6 +2,9 @@
 
 app.controller('userLoginController', ['$scope', 'userService','toaster','$localStorage','$location','$routeParams', function($scope, userService, toaster, $localStorage, $location, $routeParams) {
     
+    if($localStorage.isCustomerLogin){
+        $location.path("/customer/dashboard");
+    } 
     $scope.userLogin = function(user){
     	userService.userLogin(user).then(function(response){
     		if(response.data.code == 200){

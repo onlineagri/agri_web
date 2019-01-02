@@ -2,8 +2,10 @@
 
 app.controller('customerController', ['$scope', 'customerService','toaster','$localStorage','$location','$routeParams','$rootScope', function($scope, customerService, toaster, $localStorage, $location, $routeParams, $rootScope) {
     $rootScope.isFront = false;
-    if($localStorage.isCustomerLogin){
+     if($localStorage.isCustomerLogin){
         $rootScope.userLogin = true;
+    } else {
+        $location.path('/customer/login');
     }
     $scope.rating = 5;
     $scope.getNewProducts = function(){

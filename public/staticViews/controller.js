@@ -25,6 +25,7 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
     if(!$localStorage.isCustomerLogin || $localStorage.isCustomerLogin == undefined){
         $scope.logOut = "Login";
         $rootScope.userLogin = false;
+        $location.path("/");
     }
 
     $scope.customerLogout = function(){

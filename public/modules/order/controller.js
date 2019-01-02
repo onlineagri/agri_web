@@ -2,8 +2,10 @@
 app.controller('orderController', ['$scope', 'orderService','toaster','$localStorage','$location','$routeParams','NgTableParams','$rootScope', function($scope, orderService, toaster, $localStorage, $location, $routeParams, NgTableParams, $rootScope) {
      
     $rootScope.isFront = false; 
-    if($localStorage.isCustomerLogin){
+     if($localStorage.isCustomerLogin){
         $rootScope.userLogin = true;
+    } else {
+        $location.path('/customer/login');
     }
     $scope.getOrder = function(){
     	var orderId = $routeParams.id;
