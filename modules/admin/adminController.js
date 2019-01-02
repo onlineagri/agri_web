@@ -663,7 +663,8 @@ exports.getMenuById = function(req, res) {
                 farmerPrice : data.farmerPrice,
                 dealPrice: data.dealPrice,
                 remainingQuantity: data.remainingQuantity,
-                applicationPrice: data.priceEachItem
+                applicationPrice: data.priceEachItem,
+                type: data.type
 			}
 			res.json({code: 200, message:"Menu Fetched Successfuly", data: resdata});
 		}

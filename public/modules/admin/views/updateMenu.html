@@ -22,6 +22,10 @@
         </span>
       </div>
       <div class="form-group">
+        <label for="type" class="col-md-4 col-md-offset-2">Type:*</label>
+        <input type="text" class="col-md-4 " id="type" name="type" ng-model="menu.type" capitalize-first required readonly>
+      </div>
+      <div class="form-group">
         <label for="description" class="col-md-4 col-md-offset-2">Description:</label>
         <textarea name="description" class="col-md-4 " rows="5" cols="30" id="description" ng-model="menu.description"></textarea>
       </div>
