@@ -346,10 +346,10 @@ app.factory('adminService',['$http', function ($http) {
       });
     },
 
-    getDeliveryCharges: function () {
+    getSystemParams: function () {
       return $http({
         method: 'GET',
-        url: webservices.getDeliveryCharges
+        url: webservices.getSystemParams
       }).then(function (response) {
           return response;
       }).catch(function () {
