@@ -64,6 +64,20 @@ exports.userRegister = function(req, res){
     }
     async.series([
         function(callback){
+            UserModel.findOne({phoneNumber: userData.phoneNumber, isDeleted : false, role: 'admin'}, function(err, data){
+                if (err) {
+                    console.log('dberror userRegister', err);
+                    callback('Internal server error');
+                } else{
+                    if (common.isValid(data) && data.length > 0) {
+                        callback('User already exists with this Phone Number');
+                    } else{
+                        callback();
+                    }
+                }
+            });
+        },
+        function(callback){
             UserModel.findOne({email: userData.email, isDeleted : false, role: userData.role}, function(err, data){
                 if(err){
                     console.log("dberror userRegister", err);
