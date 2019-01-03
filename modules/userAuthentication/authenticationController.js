@@ -69,7 +69,7 @@ exports.userRegister = function(req, res){
                     console.log('dberror userRegister', err);
                     callback('Internal server error');
                 } else{
-                    if (common.isValid(data) && data.length > 0) {
+                    if (common.isValid(data)) {
                         callback('User already exists with this Phone Number');
                     } else{
                         callback();
