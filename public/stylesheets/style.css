@@ -1,7 +1,8 @@
 body {
   /*padding: 50px;
   font: 16px "Roboto", sans-serif;*/
-  background-color:  #e6fffa;
+  /*background-color:  #e6fffa;*/
+  background-image: url('/images/backbg.png');
 }
 
 .nav-side-menu {
@@ -758,3 +759,34 @@ post-slide6{
 .stars {
   color:yellow;
 }
+
+#owl-demo .item img{
+display: block;
+width: 100%;
+height: auto;
+}
+.corousalheading{
+font-family: 'Pacifico', cursive;
+font-size: 40px;
+}
+.mottoheading{
+font-family: 'Pacifico', cursive;
+color: #004d00;
+font-size: 50px;
+}
+.paragraphtext {
+font-size: 18px;
+line-height: 30px;
+text-align: center;
+font-family: 'Roboto', sans-serif;
+
+}
+.howworkimg{
+  width:75%;
+  height: 200px; 
+}
+.commentText {
+  font-size: 20px;
+  font-family: 'Dancing Script', cursive;
+}
+
