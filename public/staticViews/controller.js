@@ -1,4 +1,4 @@
-app.controller('staticController', ['$scope','$localStorage','$location', 'customerService','$rootScope', function($scope, $localStorage, $location, customerService, $rootScope) {
+app.controller('staticController', ['$scope','$localStorage','$location', 'customerService','$rootScope','toaster', function($scope, $localStorage, $location, customerService, $rootScope, toaster) {
     // if($localStorage.isAdminLogin){
     //     $scope.logOut = "Logout";
     // } else {
@@ -40,6 +40,30 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
         customerService.getCustomerCart().then(function(response){
             if(response.data.code == 200){
                 $rootScope.userCart = response.data.data;
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.sendContactEmail = function(contact){
+        customerService.sendContactEmail(contact).then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'Success',
+                    title: '',
+                    body: response.data.message
+                });
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
             }
         }).catch(function(response) {
             toaster.pop({

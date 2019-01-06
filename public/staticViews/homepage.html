@@ -83,7 +83,42 @@
     </div>
   </div>
 </section>
-<div class="row" style="background-color:  rgba(255, 255, 0, .4);">
+<section id="contact"  style="background-color: rgba(0, 128, 0, .4);">
+  <div class="section-content">
+    <h1 class="mottoheading text-center">Get in Touch with us</h1>
+    <h3 class="text-center commentText">"dealsTick team will get a Email message from you"</h3>
+  </div>
+  <div class="contact-section">
+  <div class="container">
+    <form class="row col-md-12" name="contactForm">
+      <div class="col-md-6">
+          <div class="form-group">
+            <label for="username">Your name</label>
+            <input type="text" class="form-control" id="" placeholder=" Enter Name" ng-model="contact.name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email" ng-model="contact.email" required>
+          </div>  
+      </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="telephone">Mobile No.</label>
+            <input type="tel" class="form-control" id="telephone" placeholder=" Enter 10-digit mobile no." ng-model="contact.phoneNumber" required>
+          </div>
+          <div class="form-group">
+            <label for ="description"> Message</label>
+            <textarea  class="form-control" id="description" placeholder="Enter Your Message" ng-model="contact.message" required></textarea >
+          </div>
+      </div>
+      <div class="col-md-6 offset-md-5">
+            <button type="button" class="btn btn-success" ng-disabled="contactForm.$invalid" ng-click="sendContactEmail(contact)"><i class="fa fa-paper-plane" aria-hidden="true"  ></i>  Send Message</button>
+          </div>
+    </form>
+  </div>
+</section>
+
+<div class="row" style="background-color:  rgba(255, 255, 0, .4); padding-top: 10px;">
   <div class="col-md-12">
     <h2 class="mottoheading text-center" style="color: #b33c00;">Areas of Operation</h2>
     <p class="paragraphtext">
@@ -94,23 +129,11 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-
-$("#owl-demo").owlCarousel({
-
-// navigation : true, // Show next and prev buttons
-slideSpeed : 100,
-paginationSpeed : 400,
-singleItem:true,
-autoPlay : 3000,
-
-// "singleItem:true" is a shortcut for:
-// items : 1,
-// itemsDesktop : false,
-// itemsDesktopSmall : false,
-// itemsTablet: false,
-// itemsMobile : false
-
-});
-
+  $("#owl-demo").owlCarousel({
+    slideSpeed : 100,
+    paginationSpeed : 400,
+    singleItem:true,
+    autoPlay : 3000,
+  });
 });
 </script>

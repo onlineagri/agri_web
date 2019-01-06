@@ -123,5 +123,16 @@ app.factory('customerService',['$http', function ($http) {
       }).catch(function () {
       });
     },
+
+    sendContactEmail: function(contact){
+      return $http({
+        method: 'POST',
+        data: contact,
+        url: webservices.sendContactEmail
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    }
   }
 }]);
