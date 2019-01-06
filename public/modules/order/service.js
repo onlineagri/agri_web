@@ -18,6 +18,16 @@ app.factory('orderService',['$http', function ($http) {
           return response;
       }).catch(function () {
       });
+    },
+
+    cancleOrder: function (orderId) {
+      return $http({
+        method: 'GET',
+        url: webservices.cancleOrder + "/" + orderId
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
     }
   }
 }]);
