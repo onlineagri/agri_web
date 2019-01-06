@@ -6,4 +6,5 @@ var orderController = require("../modules/order/orderController.js");
 router.post('/placeorder', orderController.placeOrder);
 router.get('/getorder/:id', orderController.getOrder);
 router.get('/getorders', orderController.getOrders);
+router.get('/cancleorder/:orderId', orderController.cancleOrder);
 module.exports = router;

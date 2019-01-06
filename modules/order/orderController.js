@@ -9,6 +9,7 @@ var SystemParamsModel = db.SystemParamsModel();
 var common = require("../../config/common.js");
 var async =require('async');
 var lodash = require('lodash');
+var moment = require('moment');
 
 exports.placeOrder = function(req, res){
 	if(!common.isValid(req.user) || !common.isValid(req.user.id)){
@@ -266,5 +267,41 @@ exports.getOrders = function(req, res) {
 			}
 		}
 	})
+}
+
+exports.cancleOrder = function(req, res){
+	let orderId = req.params.orderId;
+	if(!common.isValid(req.user) || !common.isValid(req.user.id)){
+		res.json({code: 400, message:"You are not authorised to perform this action"});
+		return;
+	}
+
+	if(!common.isValid(orderId)){
+		res.json({code: 400, message:"Parameters missing"});
+		return;
+	}
+	let currentDate = moment().format();
+	let beforeHour = moment().subtract(1, 'hours').format();
+	OrderModel.findOneAndUpdate({$and:[{orderId : orderId }, {created_at:{$lte: currentDate }},{created_at:{$gte: beforeHour}}]}, { $set: { status: 'Cancelled'}}, {new: true}, function (err, data) {
+      if (err) {
+        console.log("dberror cancleOrder", err);
+        res.json({
+            code: 400,
+            message: 'Internal server error'
+        })
+      } else{
+        if (common.isValid(data)) {
+            res.json({
+                code: 200,
+                message: 'Your order has been cancled successfully',
+            });
+        } else{
+            res.json({
+                code: 400,
+                message: 'You can cancle your order within 1 hour after order placed'
+            });
+        }
+      }
+    });
 }
 

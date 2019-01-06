@@ -73,4 +73,28 @@ app.controller('orderController', ['$scope', 'orderService','toaster','$localSto
         });
     }
 
+    $scope.cancleOrder = function(orderId) {
+        orderService.cancleOrder(orderId).then(function(response){
+            if(response.data.code == 200){
+                toaster.pop({
+                    type: 'success',
+                    title: '',
+                    body: response.data.message
+                });
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
 }])
