@@ -57,7 +57,8 @@ var webservices = {
     "getUserDetails" : baseUrl + "/user/customer",
     "updateProfile" : baseUrl + "/user/customer",
     "updatePassword": baseUrl + "/user/updatepassword",
-    "getCustAddress" : baseUrl + "/user/getaddress"
+    "getCustAddress" : baseUrl + "/user/getaddress",
+    "sendContactEmail" : baseUrl + "/api/sendcontactemail"
     
 }
 

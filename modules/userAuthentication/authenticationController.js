@@ -304,3 +304,58 @@ exports.changePassword = function(req, res){
     })
 }
 
+exports.sendContactEmail = function(req, res){
+    let contactData = req.body;
+    var body = common.getEmailHeader() +
+        '                <tr>' +
+        '                  <td valign="top" align="center"  style="border-collapse: collapse; border-spacing: 0px; margin: 0px;"><a href="' + common.default_set.HOST + '" style="text-decoration: none;" target="_blank"><img width="600" vspace="0" hspace="0" border="0" style="' +
+        '           width: 100%;' +
+        '       max-width: 600px;' +
+        '     color: #000000; font-size: 13px; margin: 0; padding: 0; outline: none; text-decoration: none; 600 border: none; display: block;" title="" alt="f2h" src="' + common.default_set.HOST + '/assets/images/email_images/cover.jpg"></a></td>' +
+        '                </tr>' +
+        '                   <tr>' +
+        '    <td valign="top" align="left" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; padding-left: 6.25%; padding-right: 6.25%; width: 87.5%; font-size: 17px; font-weight: 400; line-height: 160%;' +
+        '    padding-top: 25px; ' +
+        '   color: #000000;' +
+        '    font-family: sans-serif;">Dear  dealsTickTeam,<br/><br/>' + contactData.message + ' </td>' +
+        '   <td valign="top" align="left" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; padding-left: 6.25%; padding-right: 6.25%; width: 87.5%; font-size: 17px; font-weight: 400; line-height: 160%;' +
+        '    padding-top: 25px; ' +
+        '   color: #000000;' +
+        '    font-family: sans-serif;">From,<br/><br/>' + contactData.name + ' </td>' +
+        '   <td valign="top" align="left" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; padding-left: 6.25%; padding-right: 6.25%; width: 87.5%; font-size: 17px; font-weight: 400; line-height: 160%;' +
+        '    padding-top: 25px; ' +
+        '   color: #000000;' +
+        '    font-family: sans-serif;">Sender Mobile,<br/><br/>' + contactData.phoneNumber + ' </td>' +
+        '   </tr>' +
+        '<tr>' +
+        '    <td valign="top" align="left" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; padding-left: 6.25%; padding-right: 6.25%; width: 87.5%; font-size: 17px; font-weight: 400; line-height: 160%;' +
+        '    padding-top: 25px; ' +
+        '   color: #000000;' +
+        '    font-family: sans-serif;">Thanks<br/>dealStick team</td>' +
+        '   </tr>' +
+        '                <tr>' +
+        '                </tr>' + common.getEmailFooter();
+
+
+
+    let mailOptions = {
+        from: contactData.email, // sender address
+        to: 'me.dealstick@gmail.com', // list of receivers
+        subject: 'Connection Email', // Subject line
+        text: 'Help request', // plain text body
+        html: body // html body
+    };
+
+
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log(error);
+            res.json({code:400, message:"Internal Server Error"});
+        } else {
+            res.json({code:200, message: "Your message has been sent Successfully"})
+        }
+    });
+}
+
