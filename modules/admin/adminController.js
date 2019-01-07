@@ -485,7 +485,9 @@ exports.addMenu = function(req, res){
                 stockType: menuParams.stockType,
                 brand : common.isValid(menuParams.brand) ? menuParams.brand : menuParams.farmer.name,
                 type: common.capitalizeFirstLetter(menuParams.type),
-                isOrganic : menuParams.isOrganic
+                isOrganic : menuParams.isOrganic,
+                holesaleprice : menuParams.holesaleprice,
+                holesalequantity : menuParams.holesalequantity
 
         	}
             // if(common.isValid(menuParams.remainingQuantity)){
@@ -664,7 +666,9 @@ exports.getMenuById = function(req, res) {
                 dealPrice: data.dealPrice,
                 remainingQuantity: data.remainingQuantity,
                 applicationPrice: data.priceEachItem,
-                type: data.type
+                type: data.type,
+                holesaleprice : data.holesaleprice,
+                holesalequantity : data.holesalequantity
 			}
 			res.json({code: 200, message:"Menu Fetched Successfuly", data: resdata});
 		}
