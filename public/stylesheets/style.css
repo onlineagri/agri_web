@@ -471,7 +471,7 @@ input:checked + .slider:before {
     overflow: hidden;
     margin-right: 15px;
     background-color:#fff !important;
-    height: 150px;
+    height: relative;
 }
 .post-slide .post-img {
     float: left;

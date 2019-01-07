@@ -123,7 +123,6 @@
               <span ng-if="product.priceEachItem > product.dealPrice">{{product.priceEachItem}}</span>
             </div>
             <div><i class="fas fa-user-tie"></i>{{product.farmerName| capitalize}}</div>
-            <div ng-if="product.holesaleprice">Discount price of <i class="fas fa-rupee-sign"></i>{{product.holesaleprice}} over purchase of {{product.holesalequantity}}{{product.stockType}}</div>
             <a class="add-to-cart"  ng-click="addToCart(product)">+ Add To Cart</a>
           </div>
         </div>
