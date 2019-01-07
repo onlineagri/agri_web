@@ -22,6 +22,7 @@
               <span class="productdeatilheading">Offer Price: </span><span class="productdeatil" ng-if="product.priceEachItem < product.dealPrice">&#x20b9;{{product.priceEachItem}}/{{product.stockType}}</span> <span class="productdeatil" ng-if="product.priceEachItem == product.dealPrice"> ------ </span><br/>
               <span class="productdeatilheading" ng-if="product.isOrganic">Organic: </span><span class="productdeatil" ng-if="product.isOrganic">100% Organic (Assured)<br/>
               </span> 
+              <span ng-if="product.holesaleprice" class="productdeatilheading">Hole sale price: <i class="fas fa-rupee-sign"></i>{{product.holesaleprice}} over purchase of {{product.holesalequantity}}{{product.stockType}}</span>
             </div>
           </div>
           <!-- <div class="col-md-12 col-sm-12 divider"></div> -->
@@ -107,6 +108,7 @@
             </ul>
             <span ng-if="product.isOrganic" class="product-new-label">Organic</span>
             <span ng-if="product.priceEachItem > product.dealPrice" class="product-discount-label">Offer Price: <i class="fas fa-rupee-sign"></i>{{product.dealPrice}}</span>
+
           </div>
           <ul ng-if="product.ratings" class="rating">
             <li class="fa fa-star"></li>
@@ -121,6 +123,7 @@
               <span ng-if="product.priceEachItem > product.dealPrice">{{product.priceEachItem}}</span>
             </div>
             <div><i class="fas fa-user-tie"></i>{{product.farmerName| capitalize}}</div>
+            <div ng-if="product.holesaleprice">Discount price of <i class="fas fa-rupee-sign"></i>{{product.holesaleprice}} over purchase of {{product.holesalequantity}}{{product.stockType}}</div>
             <a class="add-to-cart"  ng-click="addToCart(product)">+ Add To Cart</a>
           </div>
         </div>

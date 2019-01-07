@@ -36,7 +36,7 @@ exports.getNewProducts = function(req, res){
     },
     { $sort : {created_at : -1} },
     { $limit: 20 },
-    { $project : { _id : 1 , name : 1, categoryName: 1, imageName: 1, priceEachItem: 1, stockType: 1, brand: 1, 'product_docs.type' : 1, farmerName: 1, farmerId: 1, type: 1, isOrganic: 1} }
+    { $project : { _id : 1 , name : 1, categoryName: 1, imageName: 1, priceEachItem: 1, stockType: 1, brand: 1, 'product_docs.type' : 1, farmerName: 1, farmerId: 1, type: 1, isOrganic: 1, holesaleprice: 1, holesalequantity : 1} }
     ]).exec(function(err, data){
     	if(err){
 			console.log("dberror getNewProducts", err);
@@ -120,6 +120,8 @@ exports.getproduct = function(req, res){
 		                farmerId : 1,
 		                type: 1,
 		                isOrganic: 1,
+		                holesaleprice: 1,
+		                holesalequantity : 1
 		            }
 		        }
 		    ]).exec(function(err, data) {
@@ -473,6 +475,11 @@ exports.updateCart = function(req, res){
 				if(type == 'quantityUpdate'){
 					userCart.products[index].quantity = quantity;
 					userCart.products[index].remainingQuantity = menuDataA.remainingQuantity - quantity;
+					if(quantity >= menuDataA.holesalequantity){
+						userCart.products[index].dealPrice = menuDataA.holesaleprice;
+					} else {
+						userCart.products[index].dealPrice = menuDataA.dealPrice;
+					}
 				}
 
 				if(type == 'delete'){
@@ -480,8 +487,10 @@ exports.updateCart = function(req, res){
 				}
 
 				
-				let netAmount = lodash.sumBy(userCart.products, function(o) { return parseInt(o.quantity) * parseFloat(o.dealPrice) });
-
+				let netAmount = lodash.sumBy(userCart.products, function(o) { 
+					return parseInt(o.quantity) * parseFloat(o.dealPrice)
+					 
+				});
 				userCart.orderNetAmount = netAmount;
 				CartModel.update({ _id: cartId }, { $set: userCart}, function(err, data){
 					if(err){
@@ -565,7 +574,7 @@ exports.getCategoryProducts = function(req, res) {
         status: true,
         isDeleted: false
     }, {
-    	_id : 1 , name : 1, type: 1, categoryName: 1, imageName: 1, priceEachItem: 1, dealPrice: 1, stockType: 1, brand: 1,  farmerName: 1, farmerId: 1, isOrganic : 1
+    	_id : 1 , name : 1, type: 1, categoryName: 1, imageName: 1, priceEachItem: 1, dealPrice: 1, stockType: 1, brand: 1,  farmerName: 1, farmerId: 1, isOrganic : 1,holesalequantity :1 , holesaleprice: 1
     }, function(err, data) {
     	if(err){
     		console.log("dberror getNewProducts", err);
@@ -652,7 +661,7 @@ exports.getRecommondedProducts = function(req, res) {
         status: true,
         isDeleted: false
     }, {
-    	_id : 1 , name : 1, type: 1, categoryName: 1, imageName: 1, priceEachItem: 1, dealPrice: 1, stockType: 1, brand: 1,  farmerName: 1, farmerId: 1, isOrganic : 1
+    	_id : 1 , name : 1, type: 1, categoryName: 1, imageName: 1, priceEachItem: 1, dealPrice: 1, stockType: 1, brand: 1,  farmerName: 1, farmerId: 1, isOrganic : 1, holesaleprice:1 , holesalequantity:1
     }, {limit: 15}, function(err, data) {
     	if(err){
     		console.log("dberror getNewProducts", err);

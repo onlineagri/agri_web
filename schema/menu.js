@@ -21,7 +21,9 @@
 	  priceEachItem: {type: Number},
 	  stockType : {type: String, default: 'kg'},
 	  farmerPrice : {type: Number},
-	  brand: {type: String}
+	  brand: {type: String},
+	  holesaleprice : {type: Number},
+	  holesalequantity : {type: Number}
 	},
 	{ timestamps: { createdAt: 'created_at' } });
 	

@@ -20,6 +20,7 @@ module.exports = {
       'SECRET_ACCESS_KEY': '****************'
   },
   AGRI_PROD_BUCKET : '*****************',
-  DEALSTICK_CATEGORY_BUCKET : '***************'
+  DEALSTICK_CATEGORY_BUCKET : '***************',
+  S3_ENDPOINT : "https://s3.ap-south-1.amazonaws.com/"
   
 };
