@@ -1,12 +1,28 @@
-<nav class="navbar navbar-expand-sm bg-light navbar-light" ng-controller="staticController">
-   <a class="navbar-brand" href="#">
-    <img src="/images/frontlogo.png" alt="Logo" style="height: 57px;">
-  </a>
-  <div class="navbar-nav ml-auto" ng-controller="staticController">
-  	<a href="#!/customer/dashboard" class="nav-link">Dashboard</a>
-  	<a href="#!/customer/products" class="nav-link">Contact Us</a>
-  	<a ng-if="userCart.cartCount > 0" href="#!/customer/cart/{{userCart.id}}" class="nav-link"><i class="fa fa-cart-plus" aria-hidden="true"><span class="badge badge-light">{{userCart.cartCount}}</span></i></a>
-  	<li class="nav-item dropdown">
+
+<header class="header">
+  <div class="container">
+    <nav class="navbar navbar-expand-md navbar-dark">
+      <a class="navbar-brand" href="#">
+        <img src="/images/frontlogo.png" alt="Logo" style="height: 57px;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse " id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a href="#!/customer/dashboard" class="nav-link">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a href="#!/customer/products" class="nav-link">Contact Us</a>
+          </li>
+          <li class="nav-item">
+            <a ng-if="userCart.cartCount > 0" href="#!/customer/cart/{{userCart.id}}" class="nav-link"><i class="fa fa-cart-plus" aria-hidden="true"><span class="badge badge-light">{{userCart.cartCount}}</span></i></a>
+          </li>
+          <li class="nav-item">
+            <a href="#!/products" class="nav-link">Contact Us</a>
+          </li>
+          <li class="nav-item dropdown">
 	    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="true" aria-expanded="false">{{firstName}}</a>
 	    <div class="dropdown-menu">
 	      <a class="dropdown-item" href="#!/customer/orders">My Orders</a>
@@ -16,6 +32,8 @@
 	      <a class="dropdown-item" href="javascript:void(0);" ng-click="customerLogout()">Logout</a>
 	    </div>
 	  </li>
+        </ul>
+      </div>
+    </nav>
   </div>
-
-</nav>
+</header>

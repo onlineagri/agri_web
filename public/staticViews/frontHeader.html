@@ -1,15 +1,31 @@
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
-   <a class="navbar-brand" href="#">
-    <img src="/images/frontlogo.png" alt="Logo" style="height: 57px;">
-  </a>
-  <div class="navbar-nav ml-auto">
-  	<a href="#!/" class="nav-link">Home</a>
-  	<a ng-if="userLogin" href="#!/customer/dashboard" class="nav-link">Dashboard</a>
-  	<a href="#!/products" class="nav-link">Products</a>
-  	<a href="#!/products" class="nav-link">About Us</a>
- 	<a href="#!/products" class="nav-link">Contact Us</a>
- 	
-  	<a href="#!/user/login" class="btn btn-success">Login</a>
+<header class="header">
+  <div class="container">
+    <nav class="navbar navbar-expand-md navbar-dark">
+      <a class="navbar-brand" href="#">
+        <img src="/images/frontlogo.png" alt="Logo" style="height: 57px;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse " id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a href="#!/" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a ng-if="userLogin" href="#!/customer/dashboard" class="nav-link">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a href="#!/products" class="nav-link">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a href="#!/products" class="nav-link">Contact Us</a>
+          </li>
+          <li class="nav-item">
+            <a href="#!/user/login" class="btn btn-success">Login</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
   </div>
-
-</nav>
+</header>
