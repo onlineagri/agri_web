@@ -3,6 +3,7 @@ var UserModel = db.UserModel();
 var common = require("../../config/common.js");
 var async = require("async");
 const nodemailer = require('nodemailer');
+const eventEmmiters = require('../../config/eventEmmiters.js');
 
 let transporter = nodemailer.createTransport({
     service:'gmail', // true for 465, false for other ports
@@ -125,6 +126,12 @@ exports.userRegister = function(req, res){
                     callback("Internal server error");
                     
                 } else {
+                    let emailParams = {
+                        email : userData.email,
+                        role : userData.role,
+                        id : data._id
+                    }
+                    eventEmmiters.emit('send_verification_email', emailParams);
                     callback();
                 }
             })

@@ -12,6 +12,7 @@ var async =require('async');
 var lodash = require('lodash');
 var fs = require('fs');
 const sharp = require('sharp');
+var eventEmmiters = require('../../config/eventEmmiters.js');
 
 exports.addCategory = function(req, res){
 	let categoryParams = req.body;
@@ -765,6 +766,7 @@ exports.updateOrderStatus = function(req, res){
         console.log("dberror updateOrderStatus", err);
       } else{
         if (common.isValid(data)) {
+            eventEmmiters.emit('order_status', {status: data.status, customerName: data.customerName, customerEmail: data.customerEmail});
             res.json({
                 code: 200,
                 message: 'Order status changed to ' + data.status,

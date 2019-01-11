@@ -11,6 +11,8 @@ var async =require('async');
 var lodash = require('lodash');
 var moment = require('moment');
 
+var eventEmmiters = require('../../config/eventEmmiters.js');
+
 exports.placeOrder = function(req, res){
 	if(!common.isValid(req.user) || !common.isValid(req.user.id)){
 		res.json({code: 400, message : "You need to login first"});
@@ -131,6 +133,7 @@ exports.placeOrder = function(req, res){
 				amountPaid : (parseFloat(cartData.orderNetAmount) + parseFloat(gst_tax) + parseFloat(delivery_charge)).toFixed(2)
 			}
 
+			orderData['status'] = "Placed";
 
 			let order = new OrderModel(orderData);
 			order.save(function(err, data){
@@ -138,6 +141,7 @@ exports.placeOrder = function(req, res){
 					console.log("dberror placeOrder", err);
 					callback("Internal server error")
 				} else {
+					eventEmmiters.emit('order_status', orderData);
 					oid = data._id;
 					callback();
 				}
