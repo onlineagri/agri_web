@@ -1,5 +1,5 @@
 <div ng-include="'/staticViews/customerHeader.html'"></div>
-<section class="bg-grey" id="portfolio" style="margin-top: 50px;" ng-init="getNewProducts()">
+<!-- <section class="bg-grey" id="portfolio" style="margin-top: 50px;" ng-init="getNewProducts()">
   <div class="container">
     <div class="row">
       <div class="col-md-12 text-center">
@@ -33,7 +33,29 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
+<div class="container" ng-init="getNewProducts()" style="margin-top: 20px;">
+  <div class="row">
+     <h2 class="col-md-12 corousalheading"> Newly Arrived</h2>
+     <hr/>
+    <div class="col col-md-3 col-lg-3" ng-repeat="product in newProducts" style="margin-top: 20px;">
+      <div class="card mb-4">
+        <img ng-if="imageUrl" class="card-img-top" src="{{imageUrl}}/{{product.imageName}}" alt="{{product.name}}">
+        <!-- <img  class="card-img-top" src="images/default.jpg" alt="{{product.name}}"> -->
+        <div class="card-body">
+          <h5 class="card-title">{{product.name}}</h5>
+          <p class="card-text" style="font-size: 18px;"><i class="fas fa-rupee-sign"></i> <b>{{product.priceEachItem}}/{{product.stockType}}</p>
+          <a href="#!/product/{{product._id}}" class="btn btn-outline-dark btn-sm">Details</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
 <section class="bg-grey" id="portfolio" style="margin-top: 50px;">
   <div class="container">
     <div class="row">

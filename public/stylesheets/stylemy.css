@@ -767,7 +767,7 @@ height: auto;
 }
 .corousalheading{
 font-family: 'Pacifico', cursive;
-font-size: 50px;
+font-size: 30px;
 }
 .mottoheading{
 font-family: 'Pacifico', cursive;
@@ -801,3 +801,13 @@ font-family: 'Libre Baskerville', serif;
 .section-content {
   margin-top: 30px;
 }
+
+footer {
+  background-color: #000;
+  height: 10%;
+}
+
+/*.card-img-top {
+  height: 200px;
+  width: 100%;
+}*/
