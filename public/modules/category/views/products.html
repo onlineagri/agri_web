@@ -1,18 +1,18 @@
 <div ng-include="'/staticViews/customerHeader.html'"></div>
-<section class="bg-grey" id="portfolio" style="margin-top: 50px;" ng-init="getProducts()">
-  <div class="container">
+
+  <div class="container" ng-init="getProducts()" style="margin-top: 20px;">
     <div class="row">
       <a class="btn btn-info" href="#!/customer/dashboard">Back</a>
       <div class="col-md-12 text-center">
-        <h2 class="section-heading">{{type}} Mall</h2>
+        <h2 class="corousalheading">{{type}} Mall</h2>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-3 col-sm-6 text-center" ng-repeat="product in products">
+      <div class="col col-md-4 col-lg-4 " ng-repeat="product in products" style="margin-top: 20px;">
         <div class="product-grid">
           <div class="product-image">
             <a href="#!/product/{{product._id}}">
-              <img class="pic-1" src="{{imageUrl}}/{{product.imageName}}">
+              <img class="pic-1" src="images/default.jpg">
               <!-- <img class="pic-2" src="http://bestjquery.com/tutorial/product-grid/demo9/images/img-2.jpg"> -->
             </a>
             <ul class="social">
@@ -41,4 +41,4 @@
       </div>
     </div>
   </div>
-</section>
+<!-- </section> -->
