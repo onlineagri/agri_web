@@ -1,39 +1,4 @@
 <div ng-include="'/staticViews/customerHeader.html'"></div>
-<!-- <section class="bg-grey" id="portfolio" style="margin-top: 50px;" ng-init="getNewProducts()">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <h2 class="section-heading">Newly Arrived Farm Products</h2>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div id="news-slider"  class="owl-carousel">
-          <div ng-repeat="product in newProducts">
-            <div class="post-slide" >
-              <div class="post-img">
-                <a href="#!/product/{{product._id}}">
-                  <img src="{{imageUrl}}/{{product.imageName}}" alt="product.name">
-                  <div class="post-date" ng-if="product.isOrganic">
-                    <span class="month">Verified Organic</span>
-                  </div>
-                </a>
-              </div>
-              <div class="post-review">
-                <h3 class="post-title"><a href="#!/product/{{product._id}}">{{product.name}}</a></h3>
-                <ul class="post-bar">
-                  <li><i class="fas fa-glasses"></i>{{product.type}}</li>
-                  <li><i class="fas fa-rupee-sign"></i>{{product.priceEachItem}}/{{product.stockType}}</li>
-                  <li><i class="fas fa-user-tie"></i>{{product.farmerName| capitalize}}</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> -->
 <div class="container" ng-init="getNewProducts()" style="margin-top: 20px;">
   <div class="row">
      <h2 class="col-md-12 corousalheading"> Newly Arrived</h2>
@@ -42,6 +7,7 @@
       <div class="card mb-4">
         <img ng-if="imageUrl" class="card-img-top" src="{{imageUrl}}/{{product.imageName}}" alt="{{product.name}}">
         <!-- <img  class="card-img-top" src="images/default.jpg" alt="{{product.name}}"> -->
+        <span ng-if="product.isOrganic" class="organic-top-right">Organic</span>
         <div class="card-body">
           <h5 class="card-title">{{product.name}}</h5>
           <p class="card-text" style="font-size: 18px;"><i class="fas fa-rupee-sign"></i> <b>{{product.priceEachItem}}/{{product.stockType}}</p>
@@ -52,33 +18,17 @@
   </div>
 </div>
 
-
-
-
-
-<section class="bg-grey" id="portfolio" style="margin-top: 50px;">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <h2 class="section-heading" ng-init="getCategories()">Available Categories</h2>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div id="news-slider6" class="owl-carousel">
-          <div class="post-slide6" ng-repeat="category in productCategories">
-            <div class="post-img">
-              <img style="height: 100px;" src="{{imageUrlCat}}/{{category.imageName}}" alt="">
-              <div class="post-info">
-                <ul class="category">
-                  <li><a href="#!/category/{{category._id}}/subcategory">{{category.name}}</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
+<div class="container" ng-init="getCategories()" style="margin-top: 20px;">
+  <div class="row">
+    <h2 class="col-md-12 corousalheading">All Categories</h2>
+     <hr/>
+    <div class="col col-md-3 col-lg-3" ng-repeat="category in productCategories" style="margin-top: 20px;">
+      <div class="card mb-4">
+        <a href="#!/category/{{category._id}}/subcategory"><img  class="card-img-top" src="{{imageUrlCat}}/{{category.imageName}}" alt="{{category.name}}"></a>
+        <div class="card-body">
+          <h5 class="card-title">{{category.name}}</h5>
         </div>
       </div>
     </div>
   </div>
 </div>
-</section>
