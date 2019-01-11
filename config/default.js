@@ -11,8 +11,8 @@ module.exports = {
   port: process.env.PORT || 3002,
   mongoConnectionString :'mongodb://127.0.0.1/agriData',
   PRIVATE_KEY : "Axxxxxxx",
-  EMAIL_FROM: "xxxxxx",
-  EMAIL_FROM_PASS : "xxxxxxxxxx",
+  EMAIL_FROM: "************",
+  EMAIL_FROM_PASS : "***********",
   HOST: process.env.HOST || 'http://localhost:3000',
   AWS: {
       'REGION': '***************',

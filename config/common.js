@@ -190,6 +190,8 @@ exports.uploadFile = function(file, BUCKET_NAME, callback) {
     });
 }
 
+exports.HOST_EMAIL = '**********';
+
 
 exports.default_set = default_set;
     
