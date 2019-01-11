@@ -128,16 +128,6 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
                
                 $scope.productCategories = response.data.data.data;
                 $scope.imageUrlCat = response.data.data.imageUrl;
-                $(document).ready(function(){
-                    $("#news-slider6").owlCarousel({
-                        items : 4,
-                        itemsDesktop:[1199,5],
-                        itemsDesktopSmall:[980,3],
-                        itemsMobile : [600,1],
-                        pagination:true,
-                        autoPlay : true
-                    });
-                })
             } else {
                 toaster.pop({
                     type: 'error',

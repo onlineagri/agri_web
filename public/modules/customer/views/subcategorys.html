@@ -1,27 +1,28 @@
 <div ng-include="'/staticViews/customerHeader.html'"></div>
-<section class="bg-grey" id="portfolio" style="margin-top: 50px;" ng-init="getSubCategories()">
-  <div class="container">
-    <div class="row">
-      <a class="btn btn-info" href="#!/customer/dashboard">Back</a>
+<div class="container" ng-init="getSubCategories()" style="margin-top: 20px;">
+  <div class="row">
+    <a class="btn btn-info" href="#!/customer/dashboard">Back</a>
       <div class="col-md-12 text-center">
-        <h2 class="section-heading">Shop your desires</h2>
+        <h2 class=" corousalheading" >All Sub-Categories</h2>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-3 col-sm-4" ng-repeat="category in subCategories">
-        <div class="post-slide6">
-          <div class="post-img">
-            <img ng-if="category.imageName" style="height: 100px;" src="{{imageUrlSubCat}}/{{category.imageName}}" alt="{{category.name}}">
-            <img ng-if="!category.imageName"  src="/images/img1.jpg" alt="{{category.name}}">
-            <div class="post-info">
-              <ul class="category">
-                <li><a href="#!/category/{{category.categoryName}}/{{category.name}}/products">{{category.name}}</a></li>
-               <!--  <li>{{category.description | limitTo : 80}}</li> -->
-              </ul>
-            </div>
-          </div>
+    <div class="col col-md-3 col-lg-3" ng-repeat="category in subCategories" style="margin-top: 20px;">
+      <div class="card rounded">
+        <div class="card-image">
+          <!-- <span class="card-notify-badge">Low KMS</span>
+          <span class="card-notify-year">2018</span> -->
+          <img class="img-fluid" src="{{imageUrlSubCat}}/{{category.imageName}}" alt="{{category.name}}" />
+        </div>
+        <!-- <div class="card-image-overlay m-auto">
+          <span class="card-detail-badge">Used</span>
+          <span class="card-detail-badge">$28,000.00</span>
+          <span class="card-detail-badge">13000 Kms</span>
+        </div> -->
+        <div class="card-body text-center">
+          <a href="#!/category/{{category.categoryName}}/{{category.name}}/products"><div class="ad-title m-auto">
+            <h5>{{category.name}}</h5>
+          </div></a>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
