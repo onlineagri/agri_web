@@ -17,6 +17,7 @@ var admin = require('./routes/admin');
 var product = require('./routes/product');
 var order = require('./routes/order');
 var user = require('./routes/customer');
+var cms = require('./routes/cms');
 
 
 var app = express();
@@ -71,6 +72,7 @@ app.use('/admin', admin);
 app.use('/product', product);
 app.use('/order', order);
 app.use('/user', user);
+app.use('/cms', cms);
 
 
 // catch 404 and forward to error handler

@@ -1,0 +1,37 @@
+
+<!-- <div ng-include="'/staticViews/customerHeader.html'"></div> -->
+
+<section id="contact" class="jumbotron jumbotron-fluid">
+  <div class="section-content">
+    <h1 class="section-title text-center">Get in Touch with us</h1>
+    <h3 class="text-center commentText">"dealsTick team will get a Email message from you"</h3>
+  </div>
+  <div class="contact-section">
+    <div class="container">
+      <form class="row col-md-12" name="contactForm">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="username">Your name</label>
+            <input type="text" class="form-control" id="" placeholder=" Enter Name" ng-model="contact.name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email" ng-model="contact.email" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="telephone">Mobile No.</label>
+            <input type="tel" class="form-control" id="telephone" placeholder=" Enter 10-digit mobile no." ng-model="contact.phoneNumber" required>
+          </div>
+          <div class="form-group">
+            <label for ="description"> Message</label>
+            <textarea  class="form-control" id="description" placeholder="Enter Your Message" ng-model="contact.message" required></textarea >
+          </div>
+        </div>
+        <div class="col-md-6 offset-md-5">
+          <button type="button" class="btn btn-success" ng-disabled="contactForm.$invalid" ng-click="sendContactEmail(contact)"><i class="fa fa-paper-plane" aria-hidden="true"  ></i>  Send Message</button>
+        </div>
+      </form>
+    </div>
+  </section>

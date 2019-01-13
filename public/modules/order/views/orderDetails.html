@@ -1,36 +1,36 @@
 <div ng-include="'/staticViews/customerHeader.html'"></div>
 <div class="container" ng-init="getOrder()">
   <div class="row justify-content-center" style="margin-top: 100px;">
-    <div class="col-md-12">
+    <div class="col-sm-12 col-md-12">
       <a href="#!/customer/dashboard" class="btn btn-primary" >Back</a>
       <h4 class="text-center">Order Details</h4>
       <div class="row justify-content-center">
-        <div class="col-md-6">
-          <div class="col-md-12">Order Number: {{order.orderId}}</div>
+        <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 col-md-12">Order Number: {{order.orderId}}</div>
           
         </div>
-        <div class="col-md-6">
-          <div class="col-md-12">Placed On: {{order.created_at | date:'medium'}}</div>
+        <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 col-md-12">Placed On: {{order.created_at | date:'medium'}}</div>
         </div>
-        <div class="col-md-6">
-          <div class="col-md-12">Name: {{order.customerName}}</div>
+        <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 col-md-12">Name: {{order.customerName}}</div>
           
         </div>
-        <div class="col-md-6">
-          <div class="col-md-12">Email: {{order.customerEmail}}</div>
+        <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 col-md-12">Email: {{order.customerEmail}}</div>
         </div>
-        <div class="col-md-6">
-          <div class="col-md-12">Phone: {{order.customerPhone}}</div>
+        <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 col-md-12">Phone: {{order.customerPhone}}</div>
           
         </div>
-        <div class="col-md-6">
-          <div class="col-md-12">Address: {{order.delivery_address}}</div>
+        <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 col-md-12">Address: {{order.delivery_address}}</div>
         </div>
-        <div class="col-md-6">
-          <div class="col-md-12">Order Status: {{order.status}}</div>
+        <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 col-md-12">Order Status: {{order.status}}</div>
         </div>
-        <div class="col-md-6">
-          <div class="col-md-12">Special Request: {{order.specialRequest}}</div>
+        <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 col-md-12">Special Request: {{order.specialRequest}}</div>
         </div>
       </div>
 

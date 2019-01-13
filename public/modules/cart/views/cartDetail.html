@@ -1,12 +1,13 @@
 <div ng-include="'/staticViews/customerHeader.html'"></div>
 <div class="container" ng-init="getCart()">
   <div class="row justify-content-center" style="margin-top: 100px;" ng-init="getDeliveryCharge()">
-    <div class="col-md-12" style="margin-bottom: 20px;">
+    <div class="col-sm-12 col-lg-12 col-md-12 " style="margin-bottom: 20px;">
       <h4 class="text-center">Shopping Cart</h4>
       <div style="color:red;">{{orderAmountHint}}</div>
-      <table class="table">
+      <div class="mobiletable">
+      <table class="table ">
 
-        <thead>
+        <thead >
           <tr>
             <th>Items</th>
             <th>Quantity</th>
@@ -57,20 +58,23 @@
           
         </tbody>
       </table>
-      <div class="col-md-12">
-        <label  class="col-md-3" > Delivery Address</label>
-        <textarea class="col-md-8"  ng-model="cart.deliveryAddress" placeholder="Enter delivery address" cols="10" rows="2" name="deliveryAddress" id="deliveryAddress"></textarea>
+    </div>
+      <div class="col-sm-12 col-lg-12 col-md-12">
+        <label  class="col-sm-12 col-md-3" > Delivery Address</label>
+        <textarea class="colsm-12 col-md-8"  ng-model="cart.deliveryAddress" placeholder="Enter delivery address" cols="10" rows="2" name="deliveryAddress" id="deliveryAddress"></textarea>
       </div>
-      <div class="col-md-12">
-        <label  class="col-md-3" > Special Request</label>
-        <textarea class="col-md-8"  ng-model="cart.specialRequest" placeholder="Enter Special request, may charges applicable " cols="10" rows="2" name="specialRequest" id="specialRequest"></textarea>
+      <div class="col-sm-12 col-lg-12 col-md-12">
+        <label  class="col-sm-12 col-md-3" > Special Request</label>
+        <textarea class="col-sm-12 col-md-8"  ng-model="cart.specialRequest" placeholder="Enter Special request, may charges applicable " cols="10" rows="2" name="specialRequest" id="specialRequest"></textarea>
       </div>
-      <a class="col-md-4 cartButtons  btn btn-primary" href="#!/customer/dashboard">More Shopping</a>
-      <button type="button" class="col-md-4 cartButtons  btn btn-secondary" ng-click="clearCart()">Clear Cart</button>
-      <button ng-disabled="!validCart || blockPurchase" type="button" class="col-md-4 cartButtons  btn btn-success" ng-click="placeOrder(cart)">Place Order</button>
+      <div class="col-sm-12 col-md-12 col-lg-12">
+      <a class="col-sm-4 col-md-4 cartButtons  btn btn-primary" href="#!/customer/dashboard">More Shopping</a>
+      <button type="button" class="col-sm-4 col-md-4 cartButtons  btn btn-secondary" ng-click="clearCart()">Clear Cart</button>
+      <button ng-disabled="!validCart || blockPurchase" type="button" class="col-sm-4 col-md-4 cartButtons  btn btn-success" ng-click="placeOrder(cart)">Place Order</button>
+    </div>
       <div style="color: green;">{{deliveryHint}}</div>
     </div >
-    <div style="color: #fca279;">
+    <div class="col-sm-12 col-lg-12 col-md-12" style="color: #fca279;">
       <span>* All the products purchased would be delivered on the Weekend with Cash on Delivery payment mode only.</span><br/>
       <span>* Delivery charge might vary depending on the product weight, quantity, delivery location and minimum order.</span><br/>
       <span>* If the ordered quantity is found to be more than Stock Quantity system will automatically set the default value of the quanitity.</span><br/>

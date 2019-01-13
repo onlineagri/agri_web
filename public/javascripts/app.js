@@ -1,4 +1,4 @@
-var app = angular.module("agriApp", ["ngRoute","toaster", "ngAnimate", 'ngStorage','ngTable','ui.bootstrap','oitozero.ngSweetAlert','ckeditor']);
+var app = angular.module("agriApp", ["ngRoute","toaster", "ngAnimate", 'ngStorage','ngTable','ui.bootstrap','oitozero.ngSweetAlert','ckeditor','ngSanitize']);
 
 app.factory('basicAuthenticationInterceptor',['$localStorage' , '$location', function($localStorage, $location) {
     var basicAuthenticationInterceptor = {
@@ -182,6 +182,16 @@ app.config(function($routeProvider, $httpProvider) {
     .when("/customer/profile/:id", {
         controller : "customerController",
         templateUrl : "../modules/customer/views/profile.html"
+    })
+
+    .when("/contactus", {
+        controller : "staticController",
+        templateUrl : "../staticViews/contactus.html"
+    })
+
+    .when("/aboutus", {
+        controller : "staticController",
+        templateUrl : "../staticViews/aboutus.html"
     })
     
     .otherwise("/404", {

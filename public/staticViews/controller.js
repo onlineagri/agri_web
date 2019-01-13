@@ -1,4 +1,4 @@
-app.controller('staticController', ['$scope','$localStorage','$location', 'customerService','$rootScope','toaster', function($scope, $localStorage, $location, customerService, $rootScope, toaster) {
+app.controller('staticController', ['$scope','$localStorage','$location', 'customerService','$rootScope','toaster','cmsService','$sce', function($scope, $localStorage, $location, customerService, $rootScope, toaster, cmsService, $sce) {
     // if($localStorage.isAdminLogin){
     //     $scope.logOut = "Logout";
     // } else {
@@ -9,7 +9,7 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
         $location.path("/admin/login");
     }
 
-    if($location.path() != "/"){
+    if($location.path() != "/" && $location.path()!= "/contactus" && $location.path()!= "/aboutus"){
         $rootScope.isFront = false;
     } else {
         $rootScope.isFront = true;
@@ -22,7 +22,7 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
         $scope.logOut = "Logout";
         getCustomerCart();
     } 
-    if(!$localStorage.isCustomerLogin || $localStorage.isCustomerLogin == undefined){
+    if(!$localStorage.isAdminLogin && (!$localStorage.isCustomerLogin || $localStorage.isCustomerLogin == undefined)){
         $scope.logOut = "Login";
         $rootScope.userLogin = false;
         $location.path("/");
@@ -73,6 +73,28 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
             });
         });
     }
-    
-    
+
+    $scope.getAboutus = function(){
+        cmsService.getAboutus('About Us').then(function(response){
+            if(response.data.code == 200){
+                $scope.aboutusContent = response.data.data.description;
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.deliberatelyTrustDangerousSnippet = function(){
+         return $sce.trustAsHtml($scope.aboutusContent);
+    }
 }]);
