@@ -193,6 +193,21 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "staticController",
         templateUrl : "../staticViews/aboutus.html"
     })
+
+    .when("/admin/marketingcontent", {
+        controller : "marketingController",
+        templateUrl : "../modules/marketingcontent/views/marketinglist.html"
+    })
+
+    .when("/admin/marketingcontent/add", {
+        controller : "marketingController",
+        templateUrl : "../modules/marketingcontent/views/addContent.html"
+    })
+
+    .when("/admin/marketingcontent/update/:id", {
+        controller : "marketingController",
+        templateUrl : "../modules/marketingcontent/views/updateContent.html"
+    })
     
     .otherwise("/404", {
         template : "<h1>Page not found</h1>"

@@ -28,6 +28,32 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
         $location.path("/");
     }
 
+    function getMarketingContent(){
+        var queryData = {
+            loginUsers : $rootScope.userLogin ? true : false,
+            guestUsers : $rootScope.userLogin ? false : true,
+            contentfor : "Home Page"
+        }
+
+        cmsService.getMarketingContent(queryData).then(function(response){
+            if(response.data.code == 200){
+                $scope.isMarketing = true;
+                $scope.marketingContents = response.data.data;
+                $("#owl-example").owlCarousel({items : 1, autoPlay : true});
+            } else {
+                $scope.isMarketing = false;
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    getMarketingContent();
+
     $scope.customerLogout = function(){
         $localStorage.isCustomerLogin = false;
     	localStorage.clear();
@@ -77,7 +103,7 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
     $scope.getAboutus = function(){
         cmsService.getAboutus('About Us').then(function(response){
             if(response.data.code == 200){
-                $scope.aboutusContent = response.data.data.description;
+                $scope.aboutusContent = deliberatelyTrustDangerousSnippet(response.data.data.description);
             } else {
                 toaster.pop({
                     type: 'error',
@@ -94,7 +120,7 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
         });
     }
 
-    $scope.deliberatelyTrustDangerousSnippet = function(){
-         return $sce.trustAsHtml($scope.aboutusContent);
+    var deliberatelyTrustDangerousSnippet = $scope.deliberatelyTrustDangerousSnippet = function(content){
+         return $sce.trustAsHtml(content);
     }
 }]);

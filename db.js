@@ -16,6 +16,7 @@ const orders = require('./schema/orders')(Mongoose);
 const cms = require('./schema/cms')(Mongoose);
 const subcategories = require('./schema/subCategory')(Mongoose);
 const reviews = require('./schema/review')(Mongoose);
+const marketing = require('./schema/marketing')(Mongoose);
 
 module.exports = {
     generateHash: function(password) {
@@ -50,6 +51,10 @@ module.exports = {
     },
     ReviewModel : function(){
         return reviews;
-    }  
+    },
+
+    MarketingModel : function(){
+        return marketing;
+    }    
 
 }

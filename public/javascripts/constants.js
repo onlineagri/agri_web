@@ -60,8 +60,13 @@ var webservices = {
     "getCustAddress" : baseUrl + "/user/getaddress",
     "sendContactEmail" : baseUrl + "/api/sendcontactemail",
     "cancleOrder" : baseUrl + "/order/cancleorder",
-    "getCms" : baseUrl + "/cms/getcms"
-    
+    "getCms" : baseUrl + "/cms/getcms",
+    "addMarketing" : baseUrl + "/admin/marketing/content",
+    "getMarketingContents" : baseUrl + "/admin/marketing/content",
+    "updateMarketing" : baseUrl + "/admin/marketing/content",
+    "getMarketingContent" : baseUrl + "/admin/marketing/content",
+    "marketingDeleteContent" : baseUrl + "/admin/marketing/content",
+    "getMarketingCustomer" : baseUrl + "/cms/marketingcontent"
 }
 
 var headerConstants = {

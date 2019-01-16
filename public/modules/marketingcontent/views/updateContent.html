@@ -1,0 +1,85 @@
+<div class="row">
+    <div class="col-md-3">
+        <div ng-include="'../../../staticViews/adminAside.html'"></div>
+    </div>
+    <div class="col-md-8 containeradmin">
+    <section class="content-header">
+        <div class="pull-left">
+        <h2>Marketing Content</h2></div>
+        <span class="float-right"><a href="#!/admin/contents" class="btn btn-success">Back</a></span>
+    </section>
+    <!-- <div class="alert alert-{{errorSuccess}} alert-dismissable" ng-show="message">{{message}}</div> -->
+
+
+    <section class="content" ng-init="getMarketingContent()">
+        <div class="clearfix"></div>
+        <div class="add-campaign-form">
+            <div class=" col-md-offset-1 col-md-10 col-sm-10 col-sm-offset-1">
+                <form class="form-horizontal" name="form">
+                    <div class="form-group">
+                        <label for="contentfor" class="col-md-2 col-sm-2 control-label">Content for:</label>
+                        <div class="col-sm-10 col-md-10">
+                        <select ng-model="marketing.contentfor" name="contentfor" id="contentfor"  class="customercountry" required>
+                          <option value="" disabled>Select Content for</option>
+                          <option value="Home Page"> Home Page</option>
+                          <option value="Dashboard"> Dashboard</option>
+                        </select>
+                        <span class="error-messages" ng-show="form.contentfor.$dirty && form.contentfor.$invalid">
+                          <span  ng-show="form.contentfor.$error.required">Please select content for</span>
+                        </span>
+                      </div>
+                  </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="inputEmail3">Title *</label>
+                        <div class="col-sm-10">
+                            <!--input type="text" ng-model="campaign.campaignName" name="name" required class="form-control"-->
+                            <input type="text" name="termsheading" ng-model="marketing.heading" required class="form-control">
+                            <span class="error-messages" ng-show="form.termsheading.$dirty && form.title.$invalid">
+                              <span  ng-show="form.termsheading.$error.required">Please Enter title.</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="inputEmail3">Show to*</label>
+                        <div class="col-sm-10">
+                            <label>
+                                <input type="checkbox" name="loginusers" id="loginusers" ng-model="marketing.loginUsers" required> Login Users
+                            </label> &nbsp; &nbsp;
+                            <label>
+                                <input type="checkbox" name="guestusers" id="guestusers" ng-model="marketing.guestUsers" required> Guest Users
+                            </label>
+                                                        
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2">Active:</label>
+                        <label class="switch col-sm-10 col-md-10"><input type="checkbox" name="status" ng-model="marketing.status">
+                        <span class="slider"></span>
+                      </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="inputEmail3">Content *</label>
+                        <div class="col-sm-10">
+                            <textarea ckeditor="options" ng-model="marketing.description"></textarea>
+                            <span class="error-messages" ng-show="form.termsdescription.$dirty && form.termsdescription.$invalid">
+                                  <span  ng-show="form.termsdescription.required">Please Enter Content.</span>
+                            </span>
+                        </div>
+                        <!-- <div style="margin-top:10px;" class="col-md-6 col-md-offset-2 col-sm-8 col-sm-offset-4">
+                            <label class="termsfont">
+                            <input type="checkbox" ng-model="cms.sendEmail" /> Send terms and condition email</label>
+                        </div> -->
+                        <div style="margin-bottom: 15px;"></div>
+                        <div class="col-md-6 col-md-offset-4 col-sm-8 col-sm-offset-4">
+                            <input type="submit" ng-show="!create" ng-click="updateMarketing(marketing)" value="Add" class='btn btn-primary' />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="spacer50"></div>
+    </section>
+    
+    </div>
+</div>

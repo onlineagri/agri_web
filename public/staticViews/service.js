@@ -8,6 +8,17 @@ app.factory('cmsService',['$http', function ($http) {
           return response;
       }).catch(function () {
       });
-    }
+    },
+
+    getMarketingContent: function (params) {
+      return $http({
+        method: 'POST',
+        url: webservices.getMarketingCustomer,
+        data: params
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
   }
 }]);
