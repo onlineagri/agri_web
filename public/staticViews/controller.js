@@ -39,7 +39,9 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
             if(response.data.code == 200){
                 $scope.isMarketing = true;
                 $scope.marketingContents = response.data.data;
-                $("#owl-example").owlCarousel({items : 1, autoPlay : true});
+                $(document).ready(function(){
+                    $("#owl-example").owlCarousel({items : 1, autoPlay : true});
+                })
             } else {
                 $scope.isMarketing = false;
             }

@@ -1,15 +1,16 @@
- <section class="reviews" ng-if="isMarketing">
-        <div class="container">
-            <div class="row">
-                <div class="col col-sm-12 col-md-12 owl-carousel" id="owl-example" >
-                    <div ng-repeat="content in marketingContents">
-                      <h2 class="section-title text-center">{{content.heading}}</h2>
-                      <div class="text-center" ng-bind-html="deliberatelyTrustDangerousSnippet(content.description)"></div>
-                    </div>
+
+<section class="reviews" ng-if="isMarketing">
+    <div class="container">
+        <div class="row">
+            <div class="col col-sm-12 col-md-12 owl-carousel" id="owl-example" >
+                <div ng-repeat="content in marketingContents">
+                  <h2 class="section-title text-center">{{content.heading}}</h2>
+                  <div class="text-center" ng-bind-html="deliberatelyTrustDangerousSnippet(content.description)"></div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
 <section class="customer-top-banner">
   <div class="container">
@@ -206,11 +207,3 @@
         </div>
     </div>
 </section>
-<!-- <script type="text/javascript">
-  $(function(){
-    $('.carousel').carousel({
-      interval: 2000
-    });
-});
-</script>
- -->
