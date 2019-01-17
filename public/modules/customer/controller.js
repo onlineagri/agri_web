@@ -1,6 +1,6 @@
 
 
-app.controller('customerController', ['$scope', 'customerService','toaster','$localStorage','$location','$routeParams','$rootScope', function($scope, customerService, toaster, $localStorage, $location, $routeParams, $rootScope) {
+app.controller('customerController', ['$scope', 'customerService','toaster','$localStorage','$location','$routeParams','$rootScope','SweetAlert', function($scope, customerService, toaster, $localStorage, $location, $routeParams, $rootScope, SweetAlert) {
     $rootScope.isFront = false;
      if($localStorage.isCustomerLogin){
         $rootScope.userLogin = true;
@@ -11,11 +11,6 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
     $scope.getNewProducts = function(){
         customerService.getNewProducts().then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
                 $scope.newProducts = response.data.data.data;
                 $scope.imageUrl = response.data.data.imageUrl;
                 $(document).ready(function(){
@@ -48,11 +43,6 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
         var id = $routeParams.id;
         customerService.getProductById(id).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
                 $scope.product = response.data.data;
                 getRecommondedProducts();
             } else {
@@ -86,11 +76,7 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
 
         customerService.addToCart(product).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
+                SweetAlert.swal("",response.data.message,"success");
                 getCustomerCart();
             } else {
                 toaster.pop({
@@ -276,11 +262,7 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
     $scope.updateProfile = function(user){
         customerService.updateProfile(user).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
+                SweetAlert.swal("",response.data.message,"success");
             } else {
                 toaster.pop({
                     type: 'error',
@@ -309,11 +291,7 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
     $scope.updatePassword = function(pass){
         customerService.updatePassword(pass).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
+                SweetAlert.swal("",response.data.message,"success");
             } else {
                 toaster.pop({
                     type: 'error',

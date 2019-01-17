@@ -1,6 +1,6 @@
 
 
-app.controller('userLoginController', ['$scope', 'userService','toaster','$localStorage','$location','$routeParams', function($scope, userService, toaster, $localStorage, $location, $routeParams) {
+app.controller('userLoginController', ['$scope', 'userService','toaster','$localStorage','$location','$routeParams','SweetAlert', function($scope, userService, toaster, $localStorage, $location, $routeParams, SweetAlert) {
     
     if($localStorage.isCustomerLogin){
         $location.path("/customer/dashboard");
@@ -8,11 +8,6 @@ app.controller('userLoginController', ['$scope', 'userService','toaster','$local
     $scope.userLogin = function(user){
     	userService.userLogin(user).then(function(response){
     		if(response.data.code == 200){
-    			toaster.pop({
-	                type: 'success',
-	                title: '',
-	                body: response.data.message
-	            });
     			$localStorage.token = response.data.token;
     			if(user.role == 'customer')
     				$localStorage.isCustomerLogin = true;

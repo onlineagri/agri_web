@@ -30,11 +30,6 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
     	var cartId = $routeParams.id;
         cartService.getCart(cartId).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
                 $scope.cart = response.data.data;
                 $scope.cart.deliveryAddress = $scope.custaddress;
             } else {
@@ -66,11 +61,6 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
 
     	cartService.updateCart(itemUpdate).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
                 $scope.validCart = true;
                 $scope.getCart();
             } else {
@@ -95,11 +85,6 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
     	var cartId = $routeParams.id;
     	cartService.clearCart(cartId).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
                 $location.path("/customer/dashboard");
 
             } else {

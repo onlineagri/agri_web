@@ -25,7 +25,10 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
     if(!$localStorage.isAdminLogin && (!$localStorage.isCustomerLogin || $localStorage.isCustomerLogin == undefined)){
         $scope.logOut = "Login";
         $rootScope.userLogin = false;
-        $location.path("/");
+        
+        if($location.path() != "/contactus" && $location.path() != "/aboutus"){
+            $location.path("/");
+        }
     }
 
     function getMarketingContent(){

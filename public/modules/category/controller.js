@@ -38,11 +38,7 @@ app.controller('categoryCustomerController', ['$scope', 'categoryService','toast
 
         customerService.addToCart(productParam).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
+                SweetAlert.swal("",response.data.message,"success");
                 getCustomerCart();
             } else {
                 toaster.pop({

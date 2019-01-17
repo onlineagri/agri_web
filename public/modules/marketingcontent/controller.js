@@ -1,16 +1,12 @@
 
 
-app.controller('marketingController', ['$scope', 'marketingService','toaster','$localStorage','$location','$routeParams','$rootScope', function($scope, marketingService, toaster, $localStorage, $location, $routeParams, $rootScope) {
+app.controller('marketingController', ['$scope', 'marketingService','toaster','$localStorage','$location','$routeParams','$rootScope','SweetAlert', function($scope, marketingService, toaster, $localStorage, $location, $routeParams, $rootScope, SweetAlert) {
       
     $scope.addMarketing = function(marketing){
 
         marketingService.addMarketing(marketing).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
+                SweetAlert.swal("",response.data.message,"success");
             } else {
                 toaster.pop({
                     type: 'error',
@@ -50,11 +46,7 @@ app.controller('marketingController', ['$scope', 'marketingService','toaster','$
     $scope.updateMarketing = function(content){
         marketingService.updateMarketing(content).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
+                SweetAlert.swal("",response.data.message,"success");
             } else {
                 toaster.pop({
                     type: 'error',
@@ -95,11 +87,7 @@ app.controller('marketingController', ['$scope', 'marketingService','toaster','$
     $scope.deleteContent = function(id){
         marketingService.deleteContent(id).then(function(response){
             if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
+                SweetAlert.swal("",response.data.message,"success");
             } else {
                 toaster.pop({
                     type: 'error',
