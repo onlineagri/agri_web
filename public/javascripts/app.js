@@ -208,6 +208,16 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "marketingController",
         templateUrl : "../modules/marketingcontent/views/updateContent.html"
     })
+
+    .when("/admin/services", {
+        controller : "serviceController",
+        templateUrl : "../modules/service/views/services.html"
+    })
+
+    .when("/admin/service/add", {
+        controller : "serviceController",
+        templateUrl : "../modules/service/views/addServices.html"
+    })
     
     .otherwise("/404", {
         template : "<h1>Page not found</h1>"

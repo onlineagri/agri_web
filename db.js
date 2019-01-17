@@ -17,6 +17,7 @@ const cms = require('./schema/cms')(Mongoose);
 const subcategories = require('./schema/subCategory')(Mongoose);
 const reviews = require('./schema/review')(Mongoose);
 const marketing = require('./schema/marketing')(Mongoose);
+const service = require('./schema/service')(Mongoose);
 
 module.exports = {
     generateHash: function(password) {
@@ -55,6 +56,10 @@ module.exports = {
 
     MarketingModel : function(){
         return marketing;
+    },
+
+    ServiceModel : function() {
+        return service;
     }    
 
 }
