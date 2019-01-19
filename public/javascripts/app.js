@@ -218,6 +218,11 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "serviceController",
         templateUrl : "../modules/service/views/addServices.html"
     })
+
+    .when("/admin/service/update/:id", {
+        controller : "serviceController",
+        templateUrl : "../modules/service/views/updateService.html"
+    })
     
     .otherwise("/404", {
         template : "<h1>Page not found</h1>"

@@ -7,7 +7,7 @@ var lodash = require('lodash');
 
 exports.addService = function(req, res){
 	let params = req.body;
-	if(!common.isValid(params.name) || !common.isValid(params.packages)){
+	if(!common.isValid(params.name) || !common.isValid(params.package)){
 		res.json({code:400, message : "Invalid Parameters"});
 		return;
 	}
@@ -18,14 +18,14 @@ exports.addService = function(req, res){
 	}
 	saveParams.package = [];
 
-	for(let i=0; i <  params.packages.length ; i++){
+	for(let i=0; i <  params.package.length ; i++){
 		saveParams.package.push({
-			name : params.packages[i].name,
-			days : params.packages[i].days,
-			netAmount : params.packages[i].netAmount,
-			dealPrice : params.packages[i].dealPrice,
-			description : params.packages[i].description,
-			status : params.packages[i].status,
+			name : params.package[i].name,
+			days : params.package[i].days,
+			netAmount : params.package[i].netAmount,
+			dealPrice : params.package[i].dealPrice,
+			description : params.package[i].description,
+			status : params.package[i].status,
 		})
 	}
 
@@ -58,6 +58,44 @@ exports.getServices = function(req, res){
 			} else {
 				res.json({code : 400, message: "No data found"});
 			}
+		}
+	})
+}
+
+exports.getService = function(req, res){
+	let serviceId = req.params.id;
+	if(!common.isValid(serviceId)){
+		res.json({code : 400, message: 'Invalid Parameters'});
+		return;
+	}
+
+	ServiceModel.findOne({_id: serviceId, isDeleted: false}, {name: 1, status: 1, package:1 }, function(err, data){
+		if(err){
+			console.log("dberror getService", err);
+			res.json({code:400, message:'Internal server error'});
+		} else {
+			if(common.isValid(data)){
+				res.json({code : 200, message: 'Success', data: data});
+			} else {
+				res.json({code:400, message:'Service not found'});
+			}
+		}
+	})
+}
+
+exports.updateService = function(req, res){
+	let params = req.body;
+	if(!common.isValid(params._id) || !common.isValid(params.name) || !common.isValid(params.package)){
+		res.json({code:400, message : "Invalid Parameters"});
+		return;
+	}
+
+	ServiceModel.update(params, function(err, data){
+		if(err){
+			console.log("dberror updateService", err);
+			res.json({code : 400, message: 'Internal server error'});
+		} else {
+			res.json({code : 200, message: "Service Updated successfully"});
 		}
 	})
 }

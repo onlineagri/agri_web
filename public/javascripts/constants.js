@@ -68,7 +68,9 @@ var webservices = {
     "marketingDeleteContent" : baseUrl + "/admin/marketing/content",
     "getMarketingCustomer" : baseUrl + "/cms/marketingcontent",
     "addService" : baseUrl + "/admin/services/service", 
-    "getServices" : baseUrl + "/admin/services/service"
+    "getServices" : baseUrl + "/admin/services/service",
+    "getService" : baseUrl + "/admin/services/service",
+    "updateService" : baseUrl + "/admin/services/service"
 }
 
 var headerConstants = {

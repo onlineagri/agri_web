@@ -5,13 +5,13 @@
     <div class="col-md-8 containeradmin">
     <section class="content-header">
         <div class="pull-left">
-        <h2>Add Service</h2></div>
+        <h2>Update Service</h2></div>
         <span class="float-right"><a href="#!/admin/services" class="btn btn-success">Back</a></span>
     </section>
     <!-- <div class="alert alert-{{errorSuccess}} alert-dismissable" ng-show="message">{{message}}</div> -->
 
 
-    <section class="content">
+    <section class="content" ng-init="getService()">
         <div class="clearfix"></div>
         <div class="add-campaign-form">
             <div class=" col-md-offset-1 col-md-10 col-sm-10 col-sm-offset-1">
@@ -59,7 +59,7 @@
                     <div class="form-group">
                         <div style="margin-bottom: 15px;"></div>
                         <div class="col-md-6 col-md-offset-4 col-sm-8 col-sm-offset-4">
-                            <input type="submit"  ng-click="addService(service)" value="Add" class='btn btn-primary' />
+                            <input type="submit"  ng-click="updateService(service)" value="Add" class='btn btn-primary' />
                         </div>
                     </div>
                 </form>
