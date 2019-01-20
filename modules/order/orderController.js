@@ -141,6 +141,8 @@ exports.placeOrder = function(req, res){
 					console.log("dberror placeOrder", err);
 					callback("Internal server error")
 				} else {
+					let orderUrl = common.default_set.HOST + "/orderdetails/" + orderNumber;
+					orderData['orderUrl']  = orderUrl;
 					eventEmmiters.emit('order_status', orderData);
 					oid = data._id;
 					callback();

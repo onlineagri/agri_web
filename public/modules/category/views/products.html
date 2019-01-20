@@ -16,18 +16,14 @@
               <!-- <img class="pic-2" src="http://bestjquery.com/tutorial/product-grid/demo9/images/img-2.jpg"> -->
             </a>
             <ul class="social">
-              <li><a href="" data-tip="Add to Wishlist"><i class="fa fa-shopping-bag"></i></a></li>
+              <!-- <li><a href="" data-tip="Add to Wishlist"><i class="fa fa-shopping-bag"></i></a></li> -->
               <li><a href="javascript:void(0)" data-tip="Add to Cart" ><i class="fa fa-shopping-cart" ng-click="addTocart(product)"></i></a></li>
             </ul>
             <span ng-if="product.isOrganic" class="product-new-label">Organic</span>
             <span ng-if="product.priceEachItem > product.dealPrice" class="product-discount-label">Offer Price: <i class="fas fa-rupee-sign"></i>{{product.dealPrice}}</span>
           </div>
-          <ul ng-if="product.ratings" class="rating">
-            <li class="fa fa-star"></li>
-            <li class="fa fa-star"></li>
-            <li class="fa fa-star"></li>
-            <li class="fa fa-star"></li>
-            <li class="fa fa-star disable"></li>
+          <ul ng-if="product.rating" class="rating">
+            <li class="fa fa-star"><div ng-stars="product.rating" ng-stars-max="5" ng-stars-readonly class="stars"></div></li>
           </ul>
           <div class="product-content">
             <h3 class="title"><a href="#!/product/{{product._id}}">{{product.name}}</a></h3>
