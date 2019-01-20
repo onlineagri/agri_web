@@ -209,6 +209,11 @@ app.config(function($routeProvider, $httpProvider) {
         templateUrl : "../modules/marketingcontent/views/updateContent.html"
     })
     
+    .when("/user/verifyotp/:userId", {
+        controller : "userLoginController",
+        templateUrl : "../modules/auth/views/verification.html"
+    })
+
     .otherwise("/404", {
         template : "<h1>Page not found</h1>"
     })

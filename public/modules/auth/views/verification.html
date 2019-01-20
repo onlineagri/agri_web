@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="row justify-content-center" style="margin-top: 100px;">
+    <div class="col-md-6 ">
+      <h4 class="text-center">Verify otp</h4>
+      <form name="verificationForm">
+        <div class="form-group">
+          <label for="verificationcode">OTP:</label>
+          <input type="text" class="form-control" id="verificationcode" ng-model="verificationCode" name="verificationcode" required placeholder="Enter otp here">
+        </div>
+        <button type="submit" class="btn btn-success" ng-disabled="verificationForm.$invalid" ng-click="verifyOtp(verificationCode)">Verify</button>
+        <a href="#!/user/register">New User Register here</a>&nbsp;
+        <a href="#!/user/login">Existing Customer Login</a>
+      </form>
+
+    </div>
+  </div>
+</div>

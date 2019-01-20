@@ -49,6 +49,16 @@ app.factory('userService',['$http', function ($http) {
       }).then(function(response) {
           return response;
       }).catch(function() {});
+    },
+
+    verifyOtp : function(data) {
+      return $http({
+          method: 'PUT',
+          url: webservices.verifyOtp,
+          data: data
+      }).then(function(response) {
+          return response;
+      }).catch(function() {});
     }
   }
 }]);

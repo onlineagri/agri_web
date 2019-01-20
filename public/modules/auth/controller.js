@@ -17,11 +17,7 @@ app.controller('userLoginController', ['$scope', 'userService','toaster','$local
     			$localStorage.phoneNumber = response.data.data.phoneNumber;
     			$location.path("/" +user.role + "/dashboard");
     		} else {
-    			toaster.pop({
-	                type: 'error',
-	                title: '',
-	                body: response.data.message
-	            });
+    			SweetAlert.swal("", response.data.message, "warning");
     		}
     	}).catch(function(response) {
     		toaster.pop({
@@ -48,7 +44,7 @@ app.controller('userLoginController', ['$scope', 'userService','toaster','$local
 	                title: '',
 	                body: response.data.message
 	            });
-    			$location.path("/user/login");
+    			$location.path("/user/verifyOtp/" + response.data.data);
     		} else {
     			toaster.pop({
 	                type: 'error',
@@ -138,6 +134,28 @@ app.controller('userLoginController', ['$scope', 'userService','toaster','$local
                     title: '',
                     body: response.data.message
                 });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
+    $scope.verifyOtp = function(code){
+        var userId = $routeParams.userId;
+        var params = {
+            userId : userId,
+            verificationCode : code
+        }
+        userService.verifyOtp(params).then(function(response){
+            if(response.data.code == 200){
+                SweetAlert.swal("", response.data.message, "success");
+                $location.path("/user/login");
+            } else {
+                SweetAlert.swal("", response.data.message, "warning");
             }
         }).catch(function(response) {
             toaster.pop({
