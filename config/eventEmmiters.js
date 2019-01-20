@@ -157,7 +157,7 @@ appEmitter.on('order_status', function(params) {
         '</tr>' +
         '<tr>' +
         '   <td valign="top" align="center" style="border-collapse: collapse; border-spacing: 0px; margin: 0px; width: 87.5%;"><a href="" target="_blank" style="text-decoration: underline;">' +
-        '           <table cellspacing="0" cellpadding="0" border="0" align="center" style="max-width: 240px; min-width: 120px; border-collapse: collapse; border-spacing: 0; padding: 0;"><tbody><tr><td valign="middle" bgcolor="" align="center" style="padding: 12px 24px; margin: 0; text-decoration: underline; border-collapse: collapse; border-spacing: 0; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px;"><a target="_blank" style="text-decoration: underline;                  color:#F2AC00; font-family: sans-serif; font-size: 17px; font-weight: 400; line-height: 120%;" href="' + 'inputOrderData.orderUrl' + '">Track your order</a>' +
+        '           <table cellspacing="0" cellpadding="0" border="0" align="center" style="max-width: 240px; min-width: 120px; border-collapse: collapse; border-spacing: 0; padding: 0;"><tbody><tr><td valign="middle" bgcolor="" align="center" style="padding: 12px 24px; margin: 0; text-decoration: underline; border-collapse: collapse; border-spacing: 0; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px;"><a target="_blank" style="text-decoration: underline;                  color:#F2AC00; font-family: sans-serif; font-size: 17px; font-weight: 400; line-height: 120%;" href="' + params.orderUrl + '">Track your order</a>' +
         '       </td></tr></tbody></table></a>' +
         '   </td>' +
         '</tr>' +
@@ -178,7 +178,7 @@ appEmitter.on('order_status', function(params) {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.log('nodemailer error', error);
-            console.log("emiter error verification email", err);
+            console.log("emiter error verification email", error);
         } else {
             console.log("success");
         }

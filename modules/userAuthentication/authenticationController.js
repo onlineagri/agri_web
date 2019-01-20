@@ -154,7 +154,7 @@ exports.userRegister = function(req, res){
                 role : userData.role,
                 id : userId
             }
-            eventEmmiters.emit('send_verification_email', emailParams);
+            // eventEmmiters.emit('send_verification_email', emailParams);
             callback();
         }
         ], function(err){
@@ -391,6 +391,7 @@ exports.sendContactEmail = function(req, res){
 exports.verifyOtp = function(req, res){
     let params = req.body;
     let userData = {};
+    let token;
     if(!common.isValid(params.userId) || !common.isValid(params.verificationCode)){
         res.json({code: 400, message: 'Invalid request'});
         return;
@@ -398,7 +399,7 @@ exports.verifyOtp = function(req, res){
 
     async.series([
         function(callback){
-            UserModel.findOne({phoneNumber : params.userId, isDeleted: false, role : 'customer'}, {_id:1, verificationCode:1, verified: 1}, function(err, data){
+            UserModel.findOne({phoneNumber : params.userId, isDeleted: false, role : 'customer'}, {_id: 1, phoneNumber: 1, password:1, firstName: 1, status: 1, role: 1, verified : 1, verificationCode:1}, function(err, data){
                 if(err){
                     console.log("dberror verifyOtp", err);
                     callback('Internal server error');
@@ -430,16 +431,31 @@ exports.verifyOtp = function(req, res){
                     callback('Internal server error');
                 } else {
                     UserModel.updateOne({_id: mongoose.Types.ObjectId(userData._id)}, {$unset: {verificationCode: 1 }}, function(err, succ){
+                        userData.status = 'active';
+                        userData.verified = true;
                         callback();
                     })
                 }
             })
+        },
+        function(callback) {
+            if(userData.status == 'active' && userData.verified){
+                let params = {
+                    id: userData._id,
+                    role: userData.role
+                };
+                params['firstName'] = userData.firstName || "";
+                params['phoneNumber'] = userData.phoneNumber;
+
+                token = common.jwtSign(params);
+            } 
+            callback();
         }
         ], function(err){
             if(err){
                 res.json({code:400, message: err});
             } else {
-                res.json({code : 200, message : 'OTP Verified Successfully', data: []});
+                res.json({code : 200, message : 'OTP Verified Successfully', token:token,  data: {"firstName": userData.firstName, phoneNumber: userData.phoneNumber}});
             }
         })
 }

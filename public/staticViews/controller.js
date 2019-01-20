@@ -1,4 +1,4 @@
-app.controller('staticController', ['$scope','$localStorage','$location', 'customerService','$rootScope','toaster','cmsService','$sce', function($scope, $localStorage, $location, customerService, $rootScope, toaster, cmsService, $sce) {
+app.controller('staticController', ['$scope','$localStorage','$location', 'customerService','$rootScope','toaster','cmsService','$sce', '$anchorScroll', function($scope, $localStorage, $location, customerService, $rootScope, toaster, cmsService, $sce, $anchorScroll) {
     // if($localStorage.isAdminLogin){
     //     $scope.logOut = "Logout";
     // } else {
@@ -128,4 +128,9 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
     var deliberatelyTrustDangerousSnippet = $scope.deliberatelyTrustDangerousSnippet = function(content){
          return $sce.trustAsHtml(content);
     }
+
+    $scope.scrollContactUs = function() {
+      // $location.hash();
+      $anchorScroll('contactus');
+    };
 }]);

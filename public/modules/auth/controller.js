@@ -153,7 +153,11 @@ app.controller('userLoginController', ['$scope', 'userService','toaster','$local
         userService.verifyOtp(params).then(function(response){
             if(response.data.code == 200){
                 SweetAlert.swal("", response.data.message, "success");
-                $location.path("/user/login");
+                $localStorage.token = response.data.token;
+                $localStorage.isCustomerLogin = true;
+                $localStorage.firstName = response.data.data.firstName;
+                $localStorage.phoneNumber = response.data.data.phoneNumber;
+                $location.path("/customer/dashboard");
             } else {
                 SweetAlert.swal("", response.data.message, "warning");
             }

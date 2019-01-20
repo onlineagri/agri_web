@@ -574,7 +574,7 @@ exports.getCategoryProducts = function(req, res) {
         status: true,
         isDeleted: false
     }, {
-    	_id : 1 , name : 1, type: 1, categoryName: 1, imageName: 1, priceEachItem: 1, dealPrice: 1, stockType: 1, brand: 1,  farmerName: 1, farmerId: 1, isOrganic : 1,holesalequantity :1 , holesaleprice: 1
+    	_id : 1 , name : 1, type: 1, categoryName: 1, imageName: 1, priceEachItem: 1, dealPrice: 1, stockType: 1, brand: 1,  farmerName: 1, farmerId: 1, isOrganic : 1,holesalequantity :1 , holesaleprice: 1, rating: 1
     }, function(err, data) {
     	if(err){
     		console.log("dberror getNewProducts", err);
@@ -661,7 +661,7 @@ exports.getRecommondedProducts = function(req, res) {
         status: true,
         isDeleted: false
     }, {
-    	_id : 1 , name : 1, type: 1, categoryName: 1, imageName: 1, priceEachItem: 1, dealPrice: 1, stockType: 1, brand: 1,  farmerName: 1, farmerId: 1, isOrganic : 1, holesaleprice:1 , holesalequantity:1
+    	_id : 1 , name : 1, type: 1, categoryName: 1, imageName: 1, priceEachItem: 1, dealPrice: 1, stockType: 1, brand: 1,  farmerName: 1, farmerId: 1, isOrganic : 1, holesaleprice:1 , holesalequantity:1, rating :1
     }, {limit: 15}, function(err, data) {
     	if(err){
     		console.log("dberror getNewProducts", err);

@@ -766,7 +766,8 @@ exports.updateOrderStatus = function(req, res){
         console.log("dberror updateOrderStatus", err);
       } else{
         if (common.isValid(data)) {
-            eventEmmiters.emit('order_status', {status: data.status, customerName: data.customerName, customerEmail: data.customerEmail});
+            let orderUrl = common.default_set.HOST + "/orderdetails/" + data.orderId;
+            eventEmmiters.emit('order_status', {status: data.status, customerName: data.customerName, customerEmail: data.customerEmail, orderUrl : orderUrl});
             res.json({
                 code: 200,
                 message: 'Order status changed to ' + data.status,
