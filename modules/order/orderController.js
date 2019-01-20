@@ -157,7 +157,7 @@ exports.placeOrder = function(req, res){
 		},
 		function(callback){
 	        async.each(cartData.products, function(item, cb) {
-	            MenuModel.update({
+	            MenuModel.updateOne({
 	                _id: mongoose.Types.ObjectId(item.id)
 	            },{ "$inc": { "remainingQuantity": - item.quantity} }, function(err, menuData) {
 	            	if(err){

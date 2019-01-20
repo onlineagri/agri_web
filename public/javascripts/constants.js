@@ -66,7 +66,8 @@ var webservices = {
     "updateMarketing" : baseUrl + "/admin/marketing/content",
     "getMarketingContent" : baseUrl + "/admin/marketing/content",
     "marketingDeleteContent" : baseUrl + "/admin/marketing/content",
-    "getMarketingCustomer" : baseUrl + "/cms/marketingcontent"
+    "getMarketingCustomer" : baseUrl + "/cms/marketingcontent",
+    "verifyOtp" : baseUrl + "/api/verifyotp"
 }
 
 var headerConstants = {

@@ -9,5 +9,6 @@ router.post('/forgotpass', authenticationController.forgotpass);
 router.get('/checktoken/:token', authenticationController.checkToken);
 router.post('/changepassword', authenticationController.changePassword);
 router.post('/sendcontactemail', authenticationController.sendContactEmail);
+router.put('/verifyotp', authenticationController.verifyOtp);
 
 module.exports = router;

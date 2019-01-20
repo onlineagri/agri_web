@@ -18,7 +18,9 @@
 	  isDeleted: { type: Boolean, default: false},
 	  about: {type: String},
 	  address : {type: String},
-	  passwordToken : {type: String}
+	  passwordToken : {type: String},
+	  verificationCode : {type: String},
+	  verified : {type: Boolean, default: false}
 	},
 	{ timestamps: { createdAt: 'created_at' } });
 	
