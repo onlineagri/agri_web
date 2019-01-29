@@ -128,7 +128,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
     }
 
     function getGst(){
-    	return $scope.gstCharge = $scope.gstTax;
+    	return $scope.gstCharge = $scope.cart.orderNetAmount * ($scope.gstTax/100);
     }
 
     function getDelivery(){

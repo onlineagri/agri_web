@@ -119,9 +119,9 @@ exports.placeOrder = function(req, res){
 
 			var orderData = {
 				orderId : orderNumber,
-				orderNetAmount : cartData.orderNetAmount,
-				gst_tax : gst_tax,
-				delivery_charge : delivery_charge,
+				orderNetAmount : parseFloat(cartData.orderNetAmount),
+				gst_tax : parseFloat(gst_tax),
+				delivery_charge : parseFloat(delivery_charge),
 				delivery_address : custData.address,
 				discount : discount,
 				products : cartData.products,
