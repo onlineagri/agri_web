@@ -3,9 +3,9 @@
 		<div ng-include="'../../../staticViews/adminAside.html'"></div>
 	</div>
 	
-	<div class="col-md-8 containeradmin" ng-init="getMenuList()">
-		<h3 class="text-center" style="margin-top: 10px;">Manage Menus</h3>
-		<span class="float-right"><a href="#!/admin/menu/add" class="btn btn-success">ADD</a></span>
+	<div class="col-md-8 containeradmin" ng-init="getAgriMenuList('Agriculture')">
+		<h3 class="text-center" style="margin-top: 10px;">Manage Agriculture Menus</h3>
+		<span class="float-right"><a href="#!/admin/menu/agri/add" class="btn btn-success">ADD</a></span>
 		<table ng-table="tableParams" class="table table-condensed table-bordered table-hover">
         
         <tr class="ng-table-group" ng-repeat-start="group in $groups">
@@ -36,7 +36,7 @@
             {{menu.remainingQuantity}}
           </td>
           <td data-title="'Farmer'">
-            {{menu.brand}}
+            {{menu.farmerName}}
           </td>
           <td data-title="'status'">
             <span ng-if="menu.status"><i class="fa fa-check-circle" aria-hidden="true"></i></span>

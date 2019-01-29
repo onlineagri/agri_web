@@ -75,10 +75,10 @@ app.factory('adminService',['$http', function ($http) {
       });
     },
 
-    getMenuList: function(){
+    getMenuList: function(catId){
       return $http({
         method: 'GET',
-        url: webservices.getMenuList
+        url: webservices.getMenuList + '/'+ catId 
       }).then(function (response) {
           return response;
       }).catch(function () {

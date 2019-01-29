@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var db = require("../../db.js");
 var CategoryModel = db.CategoryModel();
 var UserModel = db.UserModel();
-var MenuModel = db.MenuModel();
+var AgricultureModel = db.AgricultureModel();
 var CartModel = db.CartModel();
 var OrderModel = db.OrderModel();
 var SystemParamsModel = db.SystemParamsModel();
@@ -159,7 +159,7 @@ exports.placeOrder = function(req, res){
 		},
 		function(callback){
 	        async.each(cartData.products, function(item, cb) {
-	            MenuModel.updateOne({
+	            AgricultureModel.updateOne({
 	                _id: mongoose.Types.ObjectId(item.id)
 	            },{ "$inc": { "remainingQuantity": - item.quantity} }, function(err, menuData) {
 	            	if(err){
@@ -183,7 +183,7 @@ exports.placeOrder = function(req, res){
 function checkCartValidity(cartData,callback) {
 	async.each(cartData.products, function(item, cb){
 		if(item.id){
-			MenuModel.findOne({_id: mongoose.Types.ObjectId(item.id), status: true, isDeleted: false}, function(err, menuData){
+			AgricultureModel.findOne({_id: mongoose.Types.ObjectId(item.id), status: true, isDeleted: false}, function(err, menuData){
 				if(err){
 					console.log("dberror placeOrder", err);
 					cb();

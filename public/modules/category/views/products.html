@@ -11,7 +11,7 @@
       <div class="col col-md-4 col-lg-4 " ng-repeat="product in products" style="margin-top: 20px;">
         <div class="product-grid">
           <div class="product-image">
-            <a href="#!/product/{{product._id}}">
+            <a href="#!/product/{{product.categoryName}}/{{product._id}}">
               <img class="pic-1" src="{{imageUrl}}/{{product.imageName}}" alt="{{product.name}}">
               <!-- <img class="pic-2" src="http://bestjquery.com/tutorial/product-grid/demo9/images/img-2.jpg"> -->
             </a>
@@ -26,7 +26,7 @@
             <li class="fa fa-star"><div ng-stars="product.rating" ng-stars-max="5" ng-stars-readonly class="stars"></div></li>
           </ul>
           <div class="product-content">
-            <h3 class="title"><a href="#!/product/{{product._id}}">{{product.name}}</a></h3>
+            <h3 class="title"><a href="#!/product/{{product.categoryName}}/{{product._id}}">{{product.name}}</a></h3>
             <div class="price"><i class="fas fa-rupee-sign"></i>{{product.dealPrice}}/{{product.stockType}}
               <span ng-if="product.priceEachItem > product.dealPrice">{{product.priceEachItem}}</span>
             </div>

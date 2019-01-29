@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var db = require("../../db.js");
 var CategoryModel = db.CategoryModel();
 var UserModel = db.UserModel();
-var MenuModel = db.MenuModel();
+var AgricultureModel = db.AgricultureModel();
 var CartModel = db.CartModel();
 var SubCategoryModel = db.SubCategoryModel();
 var ReviewModel = db.ReviewModel();
@@ -14,7 +14,7 @@ var lodash = require('lodash');
 exports.getNewProducts = function(req, res){
 	let menuData = [];
 
-    MenuModel.aggregate([
+    AgricultureModel.aggregate([
     {
     	$match: {
             $and: [{
@@ -67,7 +67,7 @@ exports.getproduct = function(req, res){
     let rateData = {};
     async.series([
     	function(callback){
-    		 MenuModel.aggregate([
+    		 AgricultureModel.aggregate([
 
 		        {
 		            $unwind: "$categoryId"
@@ -225,7 +225,7 @@ exports.addToCart = function(req, res){
 	async.series([
 		
 		function(callback){
-			MenuModel.findOne({_id: mongoose.Types.ObjectId(cartData.id), status: true, isDeleted: false}, function(err, menuData){
+			AgricultureModel.findOne({_id: mongoose.Types.ObjectId(cartData.id), status: true, isDeleted: false}, function(err, menuData){
 				if(err){
 					console.log("dberror addToCart", err);
 					callback("Internal server error");
@@ -434,7 +434,7 @@ exports.updateCart = function(req, res){
 	async.series([
 		
 		function(callback){
-			MenuModel.findOne({_id: mongoose.Types.ObjectId(itemId), status: true, isDeleted: false}, function(err, menuData){
+			AgricultureModel.findOne({_id: mongoose.Types.ObjectId(itemId), status: true, isDeleted: false}, function(err, menuData){
 				if(err){
 					console.log("dberror updateCart", err);
 					callback("Internal server error");
@@ -565,7 +565,7 @@ exports.getCategoryProducts = function(req, res) {
 	}
 
 	if(catName == 'Agriculture'){
-		model = db.MenuModel();
+		model = db.AgricultureModel();
 	}
 
     model.find({
@@ -652,7 +652,7 @@ exports.getRecommondedProducts = function(req, res) {
 	}
 
 	if(catName == 'Agriculture'){
-		model = db.MenuModel();
+		model = db.AgricultureModel();
 	}
 
     model.find({

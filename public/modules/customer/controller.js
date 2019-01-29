@@ -8,6 +8,12 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
         $location.path('/customer/login');
     }
     $scope.rating = 5;
+
+    $scope.getProductCat = function(){
+        var pathParams = $routeParams.category;
+        $scope.productCategory = pathParams;
+    }
+
     $scope.getNewProducts = function(){
         customerService.getNewProducts().then(function(response){
             if(response.data.code == 200){
@@ -94,7 +100,7 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
         });
     }
 
-    function getCustomerCart(){
+    /*function getCustomerCart(){
         customerService.getCustomerCart().then(function(response){
             if(response.data.code == 200){
                 $rootScope.userCart = response.data.data;
@@ -106,7 +112,7 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
                 body: "Something went wrong"
             });
         });
-    }
+    }*/
 
     $scope.getCategories = function(){
         customerService.getCategories().then(function(response){

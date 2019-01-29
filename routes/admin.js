@@ -14,7 +14,7 @@ router.post('/customer', adminController.adminAddCustomer);
 router.get('/customer/:id', adminController.getCustomer);
 router.put('/customer', adminController.adminUpdateCustomer);
 router.delete('/customer/:id', adminController.adminDeleteCustomer);
-router.get('/menu', adminController.getMenuList);
+router.get('/menulist/:category', adminController.getMenuList);
 router.post('/menu', adminController.addMenu);
 router.get('/menu/:id', adminController.getMenuById);
 router.put('/menu', adminController.addMenu);

@@ -82,21 +82,21 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "customerController",
         templateUrl : "../modules/customer/views/dashboard.html"
     })
-    .when("/admin/menulist", {
-        controller : "menuController",
-        templateUrl : "../modules/admin/views/menulist.html"
+    .when("/admin/menu/Agriculture", {
+        controller : "agriMenuController",
+        templateUrl : "../modules/admin/views/agrimenulist.html"
     })
-    .when("/admin/menu/add", {
-        controller : "menuController",
-        templateUrl : "../modules/admin/views/addMenu.html"
+    .when("/admin/menu/agri/add", {
+        controller : "agriMenuController",
+        templateUrl : "../modules/admin/views/addAgriMenu.html"
     })
     .when("/admin/menu/update/:id", {
-        controller : "menuController",
+        controller : "agriMenuController",
         templateUrl : "../modules/admin/views/updateMenu.html"
     })
-    .when("/product/:id", {
+    .when("/product/:category/:id", {
         controller : "customerController",
-        templateUrl : "../modules/customer/views/productDetail.html"
+        templateUrl : "../modules/customer/views/common.html"
     })
 
     .when("/customer/cart/:id", {
@@ -212,6 +212,16 @@ app.config(function($routeProvider, $httpProvider) {
     .when("/user/verifyotp/:userId", {
         controller : "userLoginController",
         templateUrl : "../modules/auth/views/verification.html"
+    })
+
+    .when("/admin/menu/Clothing", {
+        controller : "clothingMenuController",
+        templateUrl : "../modules/admin/views/clothingmenulist.html"
+    })
+
+    .when("/admin/menu/clothing/add", {
+        controller : "clothingMenuController",
+        templateUrl : "../modules/admin/views/addclothingMenu.html"
     })
 
     .otherwise("/404", {

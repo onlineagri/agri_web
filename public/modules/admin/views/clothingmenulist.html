@@ -1,0 +1,52 @@
+<div class="row">
+	<div class="col-md-3">
+		<div ng-include="'../../../staticViews/adminAside.html'"></div>
+	</div>
+	
+	<div class="col-md-8 containeradmin" ng-init="getClothingMenuList('Clothing')">
+		<h3 class="text-center" style="margin-top: 10px;">Manage Clothing Menus</h3>
+		<span class="float-right"><a href="#!/admin/menu/clothing/add" class="btn btn-success">ADD</a></span>
+		<table ng-table="tableParams" class="table table-condensed table-bordered table-hover">
+        
+        <tr class="ng-table-group" ng-repeat-start="group in $groups">
+          <td colspan="3">
+            <a href="" ng-click="group.$hideRows = !group.$hideRows">
+              <!-- <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span> -->
+              <strong>{{ group.value }}</strong>
+            </a>
+          </td>
+        </tr>
+        <tr ng-hide="group.$hideRows" ng-repeat="menu in group.data" ng-repeat-end>
+          <!-- <td sortable="'categoryName'" data-title="'Category'" groupable="'categoryName'" ng-if="false">
+            {{menu.name}}
+          </td> -->
+          <td sortable="'name'" data-title="'Name'"  >
+            {{menu.name}}
+          </td>
+          <td sortable="'description'" data-title="'Details'" ">
+            {{menu.description}}
+          </td>
+          <td sortable="'priceEachItem'" data-title="'Price/perItem'">
+            {{menu.priceEachItem}}
+          </td>
+          <td sortable="'quantity'" data-title="'Quantity'">
+            {{menu.quantity}}
+          </td>
+          <td data-title="'Quantity Left'">
+            {{menu.remainingQuantity}}
+          </td>
+          <td data-title="'Farmer'">
+            {{menu.brand}}
+          </td>
+          <td data-title="'status'">
+            <span ng-if="menu.status"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
+			<span ng-if="!menu.status"><i class="fa fa-times" aria-hidden="true"></i></span>
+          </td>
+          <td title="'Actions'">
+			<a href="#!/admin/menu/clothing/update/{{menu._id}}" alt="Click to edit" title="Click to delete"><i class="fa fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
+			<a href="javascript:void(0)" alt="Click to delete" title="Click to delete"><i class="fa fa-trash" aria-hidden="true" ng-click="deleteMenu(menu._id)"></i></a>
+		</td>
+        </tr>
+      </table>
+	</div>
+</div>

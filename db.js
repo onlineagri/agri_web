@@ -9,7 +9,7 @@ const SALT_WORK_FACTOR = 8;
 Mongoose.connect(common.default_set.mongoConnectionString);
 const users = require('./schema/users')(Mongoose);
 const categories = require('./schema/category')(Mongoose);
-const menus = require('./schema/menu')(Mongoose);
+const agriculture = require('./schema/agricultures')(Mongoose);
 const carts = require('./schema/cart')(Mongoose);
 const systemparams = require('./schema/systemparams')(Mongoose);
 const orders = require('./schema/orders')(Mongoose);
@@ -17,6 +17,7 @@ const cms = require('./schema/cms')(Mongoose);
 const subcategories = require('./schema/subCategory')(Mongoose);
 const reviews = require('./schema/review')(Mongoose);
 const marketing = require('./schema/marketing')(Mongoose);
+const clothing = require('./schema/clothings')(Mongoose);
 
 module.exports = {
     generateHash: function(password) {
@@ -31,8 +32,8 @@ module.exports = {
     CategoryModel: function(){
     	return categories;
     },
-    MenuModel: function(){
-        return menus;
+    AgricultureModel: function(){
+        return agriculture;
     },
     CartModel: function(){
         return carts;
@@ -55,6 +56,9 @@ module.exports = {
 
     MarketingModel : function(){
         return marketing;
-    }    
+    }, 
 
+    ClothingModel : function(){
+        return clothing;
+    }
 }
