@@ -141,6 +141,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
     }
 
     $scope.getAllTotal = function(){
+        console.log($scope.cart,"cart data");
         if($scope.cart.orderNetAmount < $scope.minPerchaseAmt){
             $scope.orderAmountHint = "Order total should be greater than Rupees " + $scope.minPerchaseAmt;
             $scope.blockPurchase = true;
