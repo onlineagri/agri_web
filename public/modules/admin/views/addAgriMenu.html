@@ -125,19 +125,18 @@
     </div>
     <div class="form-group" style="margin-top: 50px;">
       <label class="col-md-4"></label>
-      <input type="submit" class="btn btn-primary" ng-disabled="menuForm.$invalid" value="Submit" ng-click="addMenu(menu)">
-      <a class="btn btn-warning" href="#!/admin/menulist" role="button">Cancel</a>
+      <input type="submit" class="btn btn-primary" ng-disabled="menuForm.$invalid" value="Submit" ng-click="addAgriMenu(menu)">
+      <a class="btn btn-warning" href="#!/admin/menu/Agriculture" role="button">Cancel</a>
     </div>
   </div>
   </form>
-  <div  ng-if="menu.category.name == 'Clothing and Fashion'">
+  <!-- <div  ng-if="menu.category.name == 'Clothing and Fashion'">
       <div ng-include="'modules/admin/views/addclothingMenu.html'"></div>
-  </div>
+  </div> -->
 </div>
 </div>
 <script type="text/ng-template" id="customTemplate.html">
   <a>
-      <img ng-src="http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}" width="16">
       <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
   </a>
 </script>

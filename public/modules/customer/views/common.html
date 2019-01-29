@@ -1,0 +1,4 @@
+<div ng-include="'/staticViews/customerHeader.html'"></div>
+<div ng-init="getProductCat()"></div>
+<div ng-if="productCategory == 'Agriculture'" ng-include="'/modules/customer/views/agriProductDetail.html'">
+</div>

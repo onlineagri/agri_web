@@ -1,4 +1,14 @@
-
+<div class="row">
+  <div class="col-md-3">
+    <div ng-include="'../../../staticViews/adminAside.html'"></div>
+  </div>
+  
+  <div class="col-md-8 containeradmin" ng-init="getCategories();">
+    <h3 class="text-center" style="margin-top: 10px;">Add Menu</h3>
+    <div class="form-group">
+        <label for="categoryname" class="col-md-4 col-md-offset-2">Category:*</label>
+        <input type="text" class="col-md-4" id="categoryname" name="categoryname" ng-model="menu.category" uib-typeahead="category as category.name for category in categoryList | filter:{name:$viewValue}" typeahead-template-url="customTemplate.html" typeahead-min-length="0">
+      </div>
     <form name="menuForm">
       <div class="form-group">
         <label for="categoryname" class="col-md-4 col-md-offset-2">Product Category:*</label>
@@ -137,11 +147,11 @@
         <input type="text" name="colour"  class="col-md-4 "  id="colour" placeholder="'Red','Green',etc" ng-model="menu.colour" /> 
       </div>
 
-      <div class="form-group" ng-init="getFamrmerList()">
-        <label for="farmerId" class="col-md-4 col-md-offset-2">Sellers:*</label>
-        <input type="text" class="col-md-4" id="farmerId" name="farmerId" ng-model="menu.farmer" uib-typeahead="farmer as farmer.name for farmer in farmerList | filter:{name:$viewValue}" typeahead-template-url="customTemplate.html" typeahead-min-length="0" required>
-        <span class="error-messages" ng-show="menuForm.farmerId.$dirty && menuForm.farmerId.$invalid">
-          <span  ng-show="menuForm.farmerId.$error.required">please select seller</span>
+      <div class="form-group" ng-init="getProviderList()">
+        <label for="providerId" class="col-md-4 col-md-offset-2">Providers:*</label>
+        <input type="text" class="col-md-4" id="providerId" name="providerId" ng-model="menu.provider" uib-typeahead="provider as provider.name for provider in providerList | filter:{name:$viewValue}" typeahead-template-url="customTemplate.html" typeahead-min-length="0" required>
+        <span class="error-messages" ng-show="menuForm.providerId.$dirty && menuForm.providerId.$invalid">
+          <span  ng-show="menuForm.providerId.$error.required">please select Provider</span>
         </span>
       </div>
      
@@ -164,3 +174,10 @@
     </div>
   </div>
   </form>
+</div>
+</div>
+<script type="text/ng-template" id="customTemplate.html">
+  <a>
+      <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+  </a>
+</script>

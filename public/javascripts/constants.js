@@ -14,7 +14,7 @@ var webservices = {
     "customerRegister": baseUrl + "/api/register",
     "addMenu" : baseUrl + "/admin/menu",
     "updateMenu" : baseUrl + "/admin/menu",
-    "getMenuList" : baseUrl + "/admin/menu",
+    "getMenuList" : baseUrl + "/admin/menulist",
     "getMenuById" : baseUrl + "/admin/menu",
     "deleteMenu": baseUrl + "/admin/menu",
     "getNewProducts" : baseUrl + "/product/getnewproducts",
