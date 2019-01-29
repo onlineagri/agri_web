@@ -32,7 +32,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
             if(response.data.code == 200){
                 $scope.cart = response.data.data;
                 $scope.cart.deliveryAddress = $scope.custaddress;
-                $scope.getAllTotal();
+                // $scope.getAllTotal();
             } else {
                 toaster.pop({
                     type: 'error',
