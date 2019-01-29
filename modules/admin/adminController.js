@@ -1546,7 +1546,7 @@ function addAgriMenu(menuParams, cb){
                    var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
                    if (common.isValidImageType(imageTypeDetected.input)) {
                        var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
-                       /*sharp(imageBuffer.data)
+                       sharp(imageBuffer.data)
                             .resize(512, 312)
                             .toFile(userUploadedImagePath, (err, info) => {
                                 if (err) {
@@ -1573,8 +1573,7 @@ function addAgriMenu(menuParams, cb){
                                         });
                                     });
                                 }
-                            });*/
-                            callback();
+                            });
                    } else {
                        callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
                    }
