@@ -169,7 +169,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
                         cartId: $routeParams.id,
                         orderNetAmount: $scope.orderNetAmount,
                         deliveryCharge: $scope.deliveryCharge,
-                        gstCharge: $scope.deliveryCharge,
+                        gstCharge: $scope.gstCharge,
                         discount: $scope.discount
                     }
                     if(cartData.deliveryAddress){
