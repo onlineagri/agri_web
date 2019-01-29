@@ -44,7 +44,7 @@ app.controller('userLoginController', ['$scope', 'userService','toaster','$local
 	                title: '',
 	                body: response.data.message
 	            });
-    			$location.path("/user/verifyOtp/" + response.data.data);
+    			$location.path("/user/verifyotp/" + response.data.data);
     		} else {
     			toaster.pop({
 	                type: 'error',
