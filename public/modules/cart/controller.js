@@ -32,6 +32,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
             if(response.data.code == 200){
                 $scope.cart = response.data.data;
                 $scope.cart.deliveryAddress = $scope.custaddress;
+                $scope.getAllTotal();
             } else {
                 toaster.pop({
                     type: 'error',
@@ -141,7 +142,6 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
     }
 
     $scope.getAllTotal = function(){
-        console.log($scope.cart,"cart data");
         if($scope.cart.orderNetAmount < $scope.minPerchaseAmt){
             $scope.orderAmountHint = "Order total should be greater than Rupees " + $scope.minPerchaseAmt;
             $scope.blockPurchase = true;
