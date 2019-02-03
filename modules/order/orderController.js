@@ -154,6 +154,7 @@ exports.placeOrder = function(req, res){
 				if(err){
 					console.log("dberror placeOrder", err);
 				} 
+				eventEmmiters.emit('order_status_provider', data);
 				callback();
 			})
 		},

@@ -540,7 +540,7 @@ exports.getFarmerList = function(req, res) {
     UserModel.aggregate([
         { "$match": {role: "farmer", isDeleted: false, status: "active"} },
         {
-            $project: { name: { $concat: [ "$firstName", "  ", "$lastName" ] } }
+            $project: { name: { $concat: [ "$firstName", "  ", "$lastName" ] }, email: 1 }
 
         }
 
@@ -1505,7 +1505,8 @@ function addAgriMenu(menuParams, cb){
                 type: common.capitalizeFirstLetter(menuParams.type),
                 isOrganic : menuParams.isOrganic,
                 holesaleprice : menuParams.holesaleprice,
-                holesalequantity : menuParams.holesalequantity
+                holesalequantity : menuParams.holesalequantity,
+                farmerEmail : menuParams.farmer.email
 
             }
             callback();

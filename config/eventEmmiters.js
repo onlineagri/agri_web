@@ -187,4 +187,79 @@ appEmitter.on('order_status', function(params) {
 
 });
 
+appEmitter.on('order_status_provider', function(params) {
+    var tableString = "";
+    var items = "";
+    console.log(params,"params");
+    let productGroups = lodash.groupBy(params.products, 'providerEmail');
+    // console.log(productGroups);
+
+    lodash.forEach(productGroups, function(value, key){
+        
+        for(let i= 0; i < value.length; i++){
+            items += '<tr>' +
+            '  <td align="left" style="padding:5px;">' + value[i].name +'</td>' +
+            '  <td align="left" style="padding:5px;">₹' + value[i].dealPrice + '/' + value[i].stockType +'</td>' +
+            '  <td align="left" style="padding:5px;">' + value[i].quantity + '</td>' +
+            '  <td align="left" style="padding:5px;">₹' + (value[i].dealPrice * value[i].quantity).toFixed(2) + '</td>' +
+            '</tr>';
+        }
+        tableString = '<tr>' +
+
+        '<td valign="top" align="center" class="list-item" style="border-collapse: collapse; border-spacing: 0px; margin: 0px; float: left; width: 100%; padding: 20px 0px 20px 40px;"><table cellspacing="0" cellpadding="0" border="1" style="margin: 0px; padding: 0px; border-collapse: collapse; border-spacing: 0px;" align="center" width="100%">' +
+        '<tbody><tr>' +
+        '<th align="left" style="padding:5px;">Item</th>' +
+        '<th align="left" style="padding:5px;">Price (each)</th>' +
+        '<th align="left" style="padding:5px;">Quantity</th>' +
+        '<th align="left" style="padding:5px;">Total</th>' +
+        '</tr>' +
+        items +
+        '</tbody></table></td>' +
+        '</tr>';
+
+        var body = common.getEmailHeader() +
+        '<tr>' +
+        '   <td valign="top" align="center" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; padding-left: 6.25%; padding-right: 6.25%; width: 87.5%; font-size: 24px; font-weight: bold; line-height: 130%;"' +
+        '       padding-top: 25px;' +
+        '       color: #000000;' +
+        '       font-family: sans-serif;">You Have Recieved a New Order </td>' +
+        '</tr>' +
+        '<tr>' +
+        '   <td valign="top" align="center" style="border-collapse: collapse; border-spacing: 0px; margin: 0px; width: 87.5%; font-size: 17px; font-weight: 400; line-height: 160%; color: rgb(0, 0, 0); font-family: sans-serif; padding: 0px 6.25%;"> Dear ' + params.providerName + ', <br/><br/> You have recieved a new order.</td>' +
+        '</tr>' +
+        '<tr>' +
+        '   <td valign="top" align="center" style="border-collapse: collapse; border-spacing: 0px; margin: 0px; width: 87.5%;"><a href="" target="_blank" style="text-decoration: underline;">' +
+        '           <table cellspacing="0" cellpadding="0" border="0" align="center" style="max-width: 240px; min-width: 120px; border-collapse: collapse; border-spacing: 0; padding: 0;"><tbody><tr><td valign="middle" bgcolor="" align="center" style="padding: 12px 24px; margin: 0; text-decoration: underline; border-collapse: collapse; border-spacing: 0; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px;"><a target="_blank" style="text-decoration: underline;                  color:#F2AC00; font-family: sans-serif; font-size: 17px; font-weight: 400; line-height: 120%;" href="' + params.orderUrl + '">Track your order</a>' +
+        '       </td></tr></tbody></table></a>' +
+        '   </td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td valign="top" align="center"  style="border-collapse: collapse; border-spacing: 0px; margin: 0px; font-size: 18px;"><strong>Your Order is ' + params.status + '</strong></td>' +
+        '</tr>' +
+        '<tr>' +
+        tableString + common.getEmailFooter();
+
+        console.log(body)
+
+        let mailOptions = {
+            from: common.default_set.EMAIL_FROM, // sender address
+            to: key, // list of receivers
+            subject: 'dealsTick - Order Placed', // Subject line
+            html: body // html body
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('nodemailer error', error);
+                console.log("emiter error verification email", error);
+            } else {
+                console.log("success");
+            }
+        });
+            
+    })  
+
+});
+
 module.exports = appEmitter;

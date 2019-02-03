@@ -18,6 +18,7 @@
 	  remainingQuantity: {type: Number},
 	  farmerId : mongoose.Schema.Types.ObjectId,
 	  farmerName : {type: String},
+	  farmerEmail : {type: String},
 	  priceEachItem: {type: Number},
 	  stockType : {type: String, default: 'kg'},
 	  farmerPrice : {type: Number},

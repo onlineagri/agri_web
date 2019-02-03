@@ -72,11 +72,12 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
             id : product._id,
             name : product.name,
             category_name : product.categoryName,
-            farmerName : product.brand,
+            providerName : product.brand,
             priceEachItem : product.priceEachItem,
             stockType : product.stockType,
             quantity : 1,
-            farmerId : product.farmerId,
+            providerId : product.providerId,
+            providerEmail : product.providerEmail,
             dealPrice : product.dealPrice
         }
 

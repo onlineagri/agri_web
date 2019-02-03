@@ -44,6 +44,10 @@ exports.getNewProducts = function(req, res){
 		} else {
 			if(common.isValid(data) && data.length){
 				menuData = data;
+				menuData['providerId'] = data.farmerId;
+				menuData['providerEmail'] = data.farmerEmail;
+				delete menuData.farmerId;
+				delete menuData.farmerEmail;
 				let imageUrl = common.default_set.S3_ENDPOINT+ common.default_set.AGRI_PROD_BUCKET;
 				res.json({code:200, message:"Product fetched successfully" , data: {data : data, imageUrl: imageUrl}});
 			} else {
@@ -107,21 +111,21 @@ exports.getproduct = function(req, res){
 		                brand: 1,
 		                'product_docs.type': 1,
 		                'product_docs.description': 1,
-		                'user_docs.email':1,
 		                'user_docs.streetAddress': 1,
 		                'user_docs.city': 1,
 		                'user_docs.pincode': 1,
 		                'user_docs.about': 1,
-		                farmerName: 1,
+		                proverName: '$farmerName',
 		                description: 1,
 		                dealPrice: 1,
 		                quantity: 1,
 		                remainingQuantity: 1,
-		                farmerId : 1,
+		                providerId : '$farmerId',
 		                type: 1,
 		                isOrganic: 1,
 		                holesaleprice: 1,
-		                holesalequantity : 1
+		                holesalequantity : 1,
+		                providerEmail : '$farmerEmail'
 		            }
 		        }
 		    ]).exec(function(err, data) {
@@ -203,7 +207,8 @@ exports.getproduct = function(req, res){
 
 exports.addToCart = function(req, res){
 	let cartData = req.body;
-	if(!common.isValid(cartData.id) || !common.isValid(cartData.name) || !common.isValid(cartData.farmerName) || !common.isValid(cartData.priceEachItem) ||!common.isValid(cartData.quantity)){
+
+	if(!common.isValid(cartData.id) || !common.isValid(cartData.name) || !common.isValid(cartData.providerName) || !common.isValid(cartData.priceEachItem) ||!common.isValid(cartData.quantity)){
 		res.json({code:400, message: "Parameters missing"});
 		return;
 	}
@@ -223,7 +228,7 @@ exports.addToCart = function(req, res){
 	let cartId;
 	let userCart = {};
 	async.series([
-		
+
 		function(callback){
 			AgricultureModel.findOne({_id: mongoose.Types.ObjectId(cartData.id), status: true, isDeleted: false}, function(err, menuData){
 				if(err){
@@ -232,6 +237,8 @@ exports.addToCart = function(req, res){
 				} else {
 					if(common.isValid(menuData) && lodash.isEmpty(menuData) == false){
 						menuDataA = menuData;
+						menuDataA.providerId = menuDataA.farmerId;
+						menuDataA.providerEmail = menuDataA.farmerEmail;
 						callback();
 					} else {
 						callback("This product is not available, please try after sometime");
@@ -285,8 +292,9 @@ exports.addToCart = function(req, res){
 							quantity: cartData.quantity,
 							priceEachItem : menuDataA.priceEachItem,
 							dealPrice : menuDataA.dealPrice,
-							farmerId : menuDataA.farmerId,
+							providerId : menuDataA.providerId,
 							imageName : menuDataA.imageName,
+							providerEmail : menuDataA.providerEmail,
 							stockType : menuDataA.stockType,
 							remainingQuantity : menuDataA.remainingQuantity
 						}
@@ -310,10 +318,11 @@ exports.addToCart = function(req, res){
 					quantity: cartData.quantity,
 					priceEachItem : menuDataA.priceEachItem,
 					dealPrice : menuDataA.dealPrice,
-					farmerId : menuDataA.farmerId,
+					providerId : menuDataA.providerId,
 					imageName : menuDataA.imageName,
 					stockType : menuDataA.stockType,
-					remainingQuantity : menuDataA.remainingQuantity
+					remainingQuantity : menuDataA.remainingQuantity,
+					providerEmail : menuDataA.providerEmail,
 
 				});
 				userCart.orderNetAmount += parseInt(cartData.quantity) * parseFloat(menuDataA.dealPrice);
