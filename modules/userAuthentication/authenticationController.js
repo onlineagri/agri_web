@@ -31,8 +31,10 @@ exports.login = function(req, res){
 				} else {
 					let userData = data;
 					if(common.isValid(userData)){
+                        console.log(userData,"userData");
 						if(db.validPassword(queryData.password, userData.password)){
-							if(userData.status == 'active' && userData.verified){
+                            console.log(userData.status , userData.verified);
+							if(userData.status == 'active'){
 								let params = {
 					                id: userData._id,
 					                role: userData.role

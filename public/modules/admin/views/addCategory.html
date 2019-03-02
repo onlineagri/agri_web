@@ -14,12 +14,8 @@
         </span>
       </div>
       <div class="form-group">
-        <label for="description" class="col-md-4 col-md-offset-2">Description:</label>
-        <textarea name="description" class="col-md-4 " rows="5" cols="30" id="description" ng-model="category.description"></textarea>
-      </div>
-      <div class="form-group">
         <label class="col-md-4">Active:</label>
-        <label class="switch"><input type="checkbox" name="status" ng-model="category.status">
+        <label class="switch"><input type="checkbox" name="status" ng-model="category.status" ng-true-value="'active'" ng-false-value="'inactive'">
         <span class="slider"></span>
       </label>
     </div>

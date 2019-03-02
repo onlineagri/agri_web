@@ -14,6 +14,7 @@ const lodash = require('lodash');
 const fs = require('fs');
 const sharp = require('sharp');
 const eventEmmiters = require('../../config/eventEmmiters.js');
+const Joi = require('joi');
 
 exports.addCategory = function(req, res){
 	let categoryParams = req.body;
@@ -21,11 +22,36 @@ exports.addCategory = function(req, res){
     var uploadFileName;
 	async.series([
         function(callback) {
+            categoryParams.name = common.capitalizeFirstLetter(categoryParams.name);
+            let num = Math.floor(1000 + Math.random() * 9000);
+            let subName = (categoryParams.name).substring(0,5);
+            categoryParams["cat_id"] = subName + num;
+
+        },
+        function(callback) {
+            const schema = Joi.object().keys({
+                name: Joi.string().required(),
+                status: Joi.string().valid(['active', 'inactive']).required(),
+                image: Joi.string(),
+                cat_id : Joi.string()..alphanum().min(6).max(10).required()
+            });
+            Joi.validate(categoryParams, schema, function(err){
+                if(err){
+                    callback('Some Parameters are invalid or missing');
+                } else {
+                    callback();
+                }
+            });
+ 
+        },
+        function(callback) {
         	saveParams = {
-        		name : common.capitalizeFirstLetter(categoryParams.name),
-        		description : categoryParams.description,
-        		status : categoryParams.status,
+        		name : categoryParams.name,
+        		status : categoryParams.status
         	}
+            if(!common.isValid(categoryParams._id)) {
+                saveParams['cat_id'] = categoryParams.cat_id;
+            }
         	callback();
             
         },
@@ -34,6 +60,7 @@ exports.addCategory = function(req, res){
 	        if (!common.isValid(categoryParams._id)) {
 	            CategoryModel.findOne({
 	                name: categoryParams.name,
+                    cat_id: categoryParams.cat_id, 
 	                isDeleted: false
 	            }, function(err, category) {
 	                if (err) {
@@ -137,7 +164,7 @@ exports.deleteCategory = function(req, res) {
 	if(!common.isValid(id)){
 		res.json({code: 400, message:"Parameters missing"});
 	}
-	CategoryModel.update({_id: id}, { $set: {'isDeleted': true}}, function(err, data){
+	CategoryModel.update({_id: id}, { $set: {'isDeleted': true, status : 'inactive'}}, function(err, data){
 		if(err){
 			console.log("dberror addCategory", err);
 			res.json({code: 400, message:"Internal server error"});
@@ -163,7 +190,7 @@ exports.getCategoryById = function(req, res) {
 				_id: data._id,
 				name: data.name,
 				status: data.status,
-				description: data.description,
+				cat_id : data.cat_id,
 				imageName: common.default_set.S3_ENDPOINT+ common.default_set.DEALSTICK_CATEGORY_BUCKET + "/" +data.imageName
 			}
 			res.json({code: 200, message:"Category Fetched Successfuly", data: resdata});
