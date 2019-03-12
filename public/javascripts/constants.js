@@ -12,11 +12,18 @@ var webservices = {
     "getCustomer" : baseUrl + "/admin/customer",
     "userLogin" : baseUrl + "/api/login",
     "customerRegister": baseUrl + "/api/register",
-    "addMenu" : baseUrl + "/admin/menu",
-    "updateMenu" : baseUrl + "/admin/menu",
-    "getMenuList" : baseUrl + "/admin/menulist",
-    "getMenuById" : baseUrl + "/admin/menu",
-    "deleteMenu": baseUrl + "/admin/menu",
+    "addProduct" : baseUrl + "/admin/product",
+    "getProductById" : baseUrl + "/admin/product",
+    "updateProduct" : baseUrl + "/admin/product",
+    "getProductList" : baseUrl + "/admin/getproductlist",
+    "deleteProduct": baseUrl + "/admin/product",
+    "getCombos" : baseUrl + "/admin/combo",
+    "getProductsCombo" : baseUrl + "/admin/comboproducts",
+    "addCombo" : baseUrl + "/admin/combo",
+    "getComboById" : baseUrl + "/admin/combo",
+    
+    
+    
     "getNewProducts" : baseUrl + "/product/getnewproducts",
     "getFamrmerList" : baseUrl + "/admin/farmer/list",
     "getProduct" : baseUrl + "/product/getproduct",

@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-md-3">
+    <div ng-include="'../../../staticViews/adminAside.html'"></div>
+  </div>
+  
+  <div class="col-md-8 containeradmin" ng-init="getProductList()">
+    <h3 class="text-center" style="margin-top: 10px;">Manage Products</h3>
+    <span class="float-right"><a href="#!/admin/product/add" class="btn btn-success">ADD</a></span>
+    <table ng-table="tableParams" class="table table-condensed table-bordered table-hover">
+      
+      <tr class="ng-table-group" ng-repeat-start="group in $groups">
+        <td colspan="3">
+          <a href="" ng-click="group.$hideRows = !group.$hideRows">
+            <!-- <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span> -->
+            <strong>{{ group.value }}</strong>
+          </a>
+        </td>
+      </tr>
+      <tr ng-hide="group.$hideRows" ng-repeat="product in group.data" ng-repeat-end>
+        <td filter="{prod_id: 'text'}" data-title="'ProductId'"  >
+          {{product.prod_id}}
+        </td>
+        <td sortable="'name'" data-title="'Name'"  >
+          {{product.name}}
+        </td>
+        <!-- <td data-title="'Details'" ">
+          {{product.description}}
+        </td> -->
+        <td sortable="'price'" data-title="'Price/perItem'">
+          {{product.price}}
+        </td>
+        <td sortable="'quantity'" data-title="'Quantity'">
+          {{product.quantity}}
+        </td>
+        <td data-title="'Quantity Left'">
+          {{product.quantity_remaining}}
+        </td>
+        <td data-title="'Price Range'">
+          {{product.price_range}}
+        </td>
+        <td data-title="'status'">
+          <span ng-if="product.status == 'active'"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
+          <span ng-if="product.status == 'inactive'"><i class="fa fa-times" aria-hidden="true"></i></span>
+        </td>
+        <td title="'Actions'">
+          <a href="#!/admin/product/update/{{product._id}}" alt="Click to edit" title="Click to delete"><i class="fa fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
+          <a href="javascript:void(0)" alt="Click to delete" title="Click to delete"><i class="fa fa-trash" aria-hidden="true" ng-click="deleteProduct(product._id)"></i></a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

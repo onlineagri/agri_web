@@ -1,0 +1,22 @@
+<div class="model-content modal-header">
+    <h3 class="modal-title" id="modal-title">Select Products</h3>
+</div>
+<div class="modal-body" id="modal-body" ng-init="getProductsCombo()">
+    <hr>
+    <div class="text-center">
+        <table ng-table="tableParams" class="table table-condensed table-bordered table-striped">
+        <tr ng-repeat="product in $data">
+          <td data-title="'Name'" filter="{name:'text'}">{{product.name}}</td>
+          <td data-title="'Price'">{{product.price}}</td>
+        <td title="'Select'">
+          <input type="checkbox" name="select" id="select" ng-model="selectProd[$index]" ng-change="addProductToCombo(product, selectProd[$index])">
+        </td>
+
+        </tr>
+      </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button  type="button" ng-click="addOptions(); ctrl.cancel();" class="btn btn-success">Add</button>
+    <button class="btn btn-warning" type="button" ng-click="ctrl.cancel()">Cancel</button>
+</div>

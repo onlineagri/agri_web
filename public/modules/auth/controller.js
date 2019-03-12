@@ -61,9 +61,9 @@ app.controller('userLoginController', ['$scope', 'userService','toaster','$local
         });
     }
 
-    $scope.userForgotPass = function(email, role){
+    $scope.userForgotPass = function(phoneNumber, role){
         var paramData = {
-            email: email,
+            phoneNumber: phoneNumber,
             role : role
         }
         userService.userForgotPass(paramData).then(function(response){
@@ -73,7 +73,7 @@ app.controller('userLoginController', ['$scope', 'userService','toaster','$local
                     title: '',
                     body: response.data.message
                 });
-                $location.path("/user/login");
+                $location.path("/user/verifyUser");
             } else {
                 toaster.pop({
                     type: 'error',
@@ -90,34 +90,10 @@ app.controller('userLoginController', ['$scope', 'userService','toaster','$local
         });
     }
 
-    if($location.path().split('/')[1] == 'verifyUser'){
-        var id = $routeParams.token;
-        userService.checktoken(id).then(function(response){
-            if(response.data.code == 200){
-                $scope.error = false;
-                $scope.userId = response.data.data.id;
-            } else {
-                $scope.error = true;
-                $scope.errorMsg = response.data.message;
-                toaster.pop({
-                    type: 'error',
-                    title: '',
-                    body: response.data.message
-                });
-            }
-        }).catch(function(response) {
-            toaster.pop({
-                type: 'error',
-                title: '',
-                body: "Something went wrong"
-            });
-        });
-    };
-
-    $scope.changePassword = function(password){
+    $scope.changePassword = function(otp,password){
         var data = {
             password: password,
-            id: $scope.userId
+            id: otp
         }
 
         userService.changePassword(data).then(function(response){

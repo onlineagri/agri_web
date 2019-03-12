@@ -6,6 +6,7 @@ var textLocal = require("../../config/textLocal.js");
 var async = require("async");
 const nodemailer = require('nodemailer');
 const eventEmmiters = require('../../config/eventEmmiters.js');
+const joi = require('joi');
 
 let transporter = nodemailer.createTransport({
     service:'gmail', // true for 465, false for other ports
@@ -23,7 +24,7 @@ exports.login = function(req, res){
 	}
 
 	UserModel.findOne({phoneNumber : queryData.phoneNumber, isDeleted : false, role: queryData.role})
-			.select({'_id': 1, 'phoneNumber': 1, 'password':1, 'firstName': 1, 'status': 1, 'role': 1, 'verified' : 1})
+			.select({'_id': 1, 'phoneNumber': 1, 'password':1, 'firstName': 1, 'status': 1, 'role': 1})
 			.exec(function(err, data){
 				if(err){
 					console.log("dberror login", err);
@@ -31,9 +32,7 @@ exports.login = function(req, res){
 				} else {
 					let userData = data;
 					if(common.isValid(userData)){
-                        console.log(userData,"userData");
 						if(db.validPassword(queryData.password, userData.password)){
-                            console.log(userData.status , userData.verified);
 							if(userData.status == 'active'){
 								let params = {
 					                id: userData._id,
@@ -57,19 +56,20 @@ exports.login = function(req, res){
 					}
 				}
 			})
-
-
 }
 
 exports.userRegister = function(req, res){
 	let userData = req.body;
     let userId;
-	if(!common.isValid(userData.firstName) || !common.isValid(userData.email) || !common.isValid(userData.lastName) || !common.isValid(userData.phoneNumber) || !common.isValid(userData.password) || !common.isValid(userData.role)){
+	if(!common.isValid(userData.phoneNumber) || !common.isValid(userData.password) || !common.isValid(userData.role)){
         res.json({code: 400, message:"Parameters missing"});
         return;
     }
 
-    let verificationCode = Math.floor((Math.random() * 1000000) + 1);
+    let subCode = (userData.phoneNumber).substring(0,3);
+    let num = Math.floor(1000 + Math.random() * 9000);
+    let verificationCode = "" + subCode + num;
+
     async.series([
         function(callback){
             UserModel.findOne({phoneNumber: userData.phoneNumber, isDeleted : false, role: 'admin'}, function(err, data){
@@ -86,20 +86,6 @@ exports.userRegister = function(req, res){
             });
         },
         function(callback){
-            UserModel.findOne({email: userData.email, isDeleted : false, role: userData.role}, function(err, data){
-                if(err){
-                    console.log("dberror userRegister", err);
-                    callback("Internal server error");
-                } else {
-                    if(common.isValid(data)){
-                        callback("User already exists with this email address")
-                    } else {
-                        callback();
-                    }
-                }
-            })
-        },
-        function(callback){
             UserModel.findOne({phoneNumber: userData.phoneNumber, isDeleted : false, role: userData.role}, function(err, data){
                 if(err){
                     console.log("dberror userRegister", err);
@@ -114,21 +100,33 @@ exports.userRegister = function(req, res){
             })
         },
         function(callback){
+            const schema = Joi.object().keys({
+                phoneNumber: Joi.string().min(10).max(10).required(),
+                password : Joi.string().required(),
+                role : Joi.string().valid(['customer', 'admin', 'retailer','employee']).required(),
+                verificationCode : Joi.string().required()
+            });
+            Joi.validate(userData, schema, function(err){
+                if(err){
+                    console.log(err);
+                    callback('Some Parameters are invalid or missing');
+                } else {
+                    callback();
+                }
+            });
+        },
+
+        function(callback){
             let user = {
-                firstName : userData.firstName,
-                lastName : userData.lastName,
                 phoneNumber : userData.phoneNumber,
-                status : "active",
+                status : "inRegistration",
                 role : userData.role,
-                email : userData.email
+                verificationCode : verificationCode
             }
+
             let pass = userData.password;
             let password = db.generateHash(pass);
-
             user["password"] = password;
-            user["verificationCode"] = verificationCode;
-            user["verified"] = false;
-            user["status"] = 'inRegistration';
             let userParams = new UserModel(user);
             userParams.save(function(err, data){
                 if(err){
@@ -150,15 +148,6 @@ exports.userRegister = function(req, res){
                 }
             })
         },
-        function(callback){
-            let emailParams = {
-                email : userData.email,
-                role : userData.role,
-                id : userId
-            }
-            // eventEmmiters.emit('send_verification_email', emailParams);
-            callback();
-        }
         ], function(err){
             if(err){
                 res.json({
@@ -178,38 +167,39 @@ exports.userRegister = function(req, res){
 
 exports.forgotpass = function(req, res){
     let params = req.body;
-    if(!common.isValid(params.email) || !common.isValid(params.role)){
+    if(!common.isValid(params.phoneNumber) || !common.isValid(params.role)){
         res.json({code:400, message:"Parameters missing"});
         return;
     }
 
     UserModel.findOne({
-        email: params.email,
+        email: params.phoneNumber,
         isDeleted: false,
         role: params.role,
-        verified : true
+        status : 'active'
     }, function(err, data) {
         if (err) {
             console.log("dberror forgotpass", err);
             callback("Internal server error");
         } else {
             if (common.isValid(data)) {
-                let token = common.jwtSign({email: data.email, id: data._id});
+                let subCode = (data.phoneNumber).substring(0,3);
+                let num = Math.floor(1000 + Math.random() * 9000);
+                let verificationCode = "" + subCode + num;
                 var tokenData = {
-                    email : data.email,
-                    token : token,
-                    firstName : data.firstName
+                    phoneNumber : data.phoneNumber,
+                    token : verificationCode
                 }
 
-                UserModel.updateOne({_id: data._id}, {$set:{passwordToken : token}}, function(err, succ){
+                UserModel.updateOne({_id: data._id}, {$set:{passwordToken : verificationCode}}, function(err, succ){
                     if(err){
                         res.json({code:400, message:"Internal server error"});
                     } else {
-                        forgotPassEmail(tokenData, function(err, succ){
+                        forgotPassSms(tokenData, function(err, succ){
                             if(err){
-                                res.json({code:400, message:"Error sending email"});
+                                res.json({code:400, message:"Error sending sms"});
                             } else {
-                                res.json({code: 200, message: "We have sent a email containing link to reset your password", data:[]});
+                                res.json({code: 200, message: "We have sent a sms containing one time code to reset your password"});
                             }
                         });
                     }
@@ -222,93 +212,29 @@ exports.forgotpass = function(req, res){
 }
 
 
-function forgotPassEmail(data, callback){
-
-
-    var body = common.getEmailHeader() +
-        '                <tr>' +
-        '                  <td valign="top" align="center"  style="border-collapse: collapse; border-spacing: 0px; margin: 0px;"><a href="' + common.default_set.HOST + '" style="text-decoration: none;" target="_blank"><img width="600" vspace="0" hspace="0" border="0" style="' +
-        '           width: 100%;' +
-        '       max-width: 600px;' +
-        '     color: #000000; font-size: 13px; margin: 0; padding: 0; outline: none; text-decoration: none; 600 border: none; display: block;" title="" alt="f2h" src="' + common.default_set.HOST + '/assets/images/email_images/cover.jpg"></a></td>' +
-        '                </tr>' +
-        '                   <tr>' +
-        '    <td valign="top" align="left" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; padding-left: 6.25%; padding-right: 6.25%; width: 87.5%; font-size: 17px; font-weight: 400; line-height: 160%;' +
-        '    padding-top: 25px; ' +
-        '   color: #000000;' +
-        '    font-family: sans-serif;">Dear ' + data.firstName + ',<br/><br/> We have received a password change request for your account. To reset your password, <a target="_blank" style="text-decoration: underline;' +
-        '                   font-family: sans-serif; font-size: 17px; font-weight: 400; line-height: 120%;" href="' + common.default_set.HOST + '/#!/verifyUser/' + data.token + '">go to this page</a>. This link will be active for one hour. </td>' +
-        '   </tr>' +
-        '<tr>' +
-        '    <td valign="top" align="left" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; padding-left: 6.25%; padding-right: 6.25%; width: 87.5%; font-size: 17px; font-weight: 400; line-height: 160%;' +
-        '    padding-top: 25px; ' +
-        '   color: #000000;' +
-        '    font-family: sans-serif;">Thanks<br/>dealStick team</td>' +
-        '   </tr>' +
-        '                <tr>' +
-        '                </tr>' + common.getEmailFooter();
-
-
-
-    let mailOptions = {
-        from: '"dealStick"', // sender address
-        to: data.email, // list of receivers
-        subject: 'Password Change Request', // Subject line
-        text: 'Change Password', // plain text body
-        html: body // html body
-    };
-
-
-
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log(error);
-            callback(true, null);
-        } else {
-            callback(null, true);
-        }
-    });
-}
-
-exports.checkToken = function(req,res) {
-    let token = req.params.token;
-    if(!common.isValid(token)){
-        res.json({code:400, message:"Parameters missing"});
-        return;
+function forgotPassSms(data, callback){
+    let otpParams = {
+        phoneNumber : '91' + data.phoneNumber,
+        verificationCode : data.token
     }
-
-    UserModel.findOne({
-        passwordToken: token
-    }, function(err, data) {
-        if (err) {
-            console.log("dberror forgotpass", err);
-            callback("Internal server error");
+    textLocal.sendOtp(otpParams, function(serr){
+        if(err){
+            callback(serr);
         } else {
-            if (common.isValid(data)) {
-                // UserModel.update({_id: data._id}, {$unset: {passwordToken: 1 }}, function(err, succ){
-                //     if(err){
-                //         res.json({code:400, message:"Internal server error"});
-                //     } else {
-                        res.json({code:200, message:"Success", data: {id: data._id}})
-                   // }
-                //})
-            } else {
-                res.json({code:400, message:"This token is expired"});
-            }
+            callback();
         }
     })
 }
 
 exports.changePassword = function(req, res){
     let userParam = req.body;
-    if(!common.isValid(userParam.password) || !common.isValid(userParam.id)){
+    if(!common.isValid(userParam.password) || !common.isValid(userParam.otp)){
         res.json({code:400, message:"Parameters missing"});
         return;
     }
 
     UserModel.findOne({
-        _id: userParam.id,
+        passwordToken: userParam.otp,
         isDeleted : false,
         status : 'active'
     }, function(err, data) {
@@ -317,9 +243,7 @@ exports.changePassword = function(req, res){
             callback("Internal server error");
         } else {
             if (common.isValid(data)) {
-                console.log(userParam.password,"userParam");
                 let password = db.generateHash(userParam.password);
-                console.log(password,"this is password");
                 UserModel.updateOne({_id: userParam.id}, {$set: {password: password }}, function(err, succ){
                     if(err){
                         res.json({code:400, message:"Internal server error"});
@@ -329,7 +253,7 @@ exports.changePassword = function(req, res){
                     }
                 })
             } else {
-                res.json({code:400, message:"User is not active"});
+                res.json({code:400, message:"Invalid One time code"});
             }
         }
     })
@@ -393,13 +317,13 @@ exports.verifyOtp = function(req, res){
 
     async.series([
         function(callback){
-            UserModel.findOne({phoneNumber : params.userId, isDeleted: false, role : 'customer'}, {_id: 1, phoneNumber: 1, password:1, firstName: 1, status: 1, role: 1, verified : 1, verificationCode:1}, function(err, data){
+            UserModel.findOne({phoneNumber : params.userId, isDeleted: false, role : 'customer', status: 'inRegistration'}, {_id: 1, phoneNumber: 1, status: 1, role: 1, verificationCode:1}, function(err, data){
                 if(err){
                     console.log("dberror verifyOtp", err);
                     callback('Internal server error');
                 } else {
                     if(common.isValid(data)){
-                        if(data.verified){
+                        if(data.status == 'active'){
                             callback('You are a verified customer, go to login page and singIn');
                         } else {
                             userData = data;
@@ -419,7 +343,7 @@ exports.verifyOtp = function(req, res){
             }
         }, 
         function(callback) {
-            UserModel.updateOne({_id: mongoose.Types.ObjectId(userData._id)}, {$set: {verified: true, status: 'active'}}, function(err, data){
+            UserModel.updateOne({_id: mongoose.Types.ObjectId(userData._id)}, {$set: {status: 'active'}}, function(err, data){
                 if(err){
                     console.log("dberror verifyOtp", err);
                     callback('Internal server error');
@@ -433,7 +357,7 @@ exports.verifyOtp = function(req, res){
             })
         },
         function(callback) {
-            if(userData.status == 'active' && userData.verified){
+            if(userData.status == 'active'){
                 let params = {
                     id: userData._id,
                     role: userData.role

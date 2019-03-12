@@ -1,5 +1,8 @@
-var app = angular.module("agriApp", ["ngRoute","toaster", "ngAnimate", 'ngStorage','ngTable','ui.bootstrap','oitozero.ngSweetAlert','ckeditor','ngSanitize']);
-
+var app = angular.module("agriApp", ["ngRoute","toaster", "ngAnimate", 'ngStorage','ngTable', 'ngSanitize', 'ui.bootstrap','oitozero.ngSweetAlert','ckeditor'])
+.constant('lodash', window._)
+.run(['$rootScope', function ($rootScope) {
+     $rootScope.lodash = window._;
+  }]);
 app.factory('basicAuthenticationInterceptor',['$localStorage' , '$location', function($localStorage, $location) {
     var basicAuthenticationInterceptor = {
         request: function(config) {
@@ -82,18 +85,35 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "customerController",
         templateUrl : "../modules/customer/views/dashboard.html"
     })
-    .when("/admin/menu/Agriculture", {
-        controller : "agriMenuController",
-        templateUrl : "../modules/admin/views/agrimenulist.html"
+    .when("/admin/products", {
+        controller : "productController",
+        templateUrl : "../modules/admin/views/productlist.html"
     })
-    .when("/admin/menu/agri/add", {
-        controller : "agriMenuController",
-        templateUrl : "../modules/admin/views/addAgriMenu.html"
+    .when("/admin/product/add", {
+        controller : "productController",
+        templateUrl : "../modules/admin/views/addProduct.html"
     })
-    .when("/admin/menu/update/:id", {
-        controller : "agriMenuController",
-        templateUrl : "../modules/admin/views/updateMenu.html"
+    .when("/admin/product/update/:id", {
+        controller : "productController",
+        templateUrl : "../modules/admin/views/updateProduct.html"
     })
+
+    .when("/admin/combos", {
+        controller : "comboController",
+        templateUrl : "../modules/admin/views/comboList.html"
+    })
+
+    .when("/admin/combo/add", {
+        controller : "comboController",
+        templateUrl : "../modules/admin/views/addCombo.html"
+    })
+
+    .when("/admin/combo/update/:id", {
+        controller : "comboController",
+        templateUrl : "../modules/admin/views/updateCombo.html"
+    })
+   
+
     .when("/product/:category/:id", {
         controller : "customerController",
         templateUrl : "../modules/customer/views/common.html"
@@ -127,7 +147,7 @@ app.config(function($routeProvider, $httpProvider) {
         templateUrl : "../modules/admin/views/order-details.html"
     })
 
-    .when("/verifyUser/:token", {
+    .when("/verifyUser", {
         controller : "userLoginController",
         templateUrl : "../modules/auth/views/changePassword.html"
     })

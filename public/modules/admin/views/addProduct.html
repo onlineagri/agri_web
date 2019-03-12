@@ -1,0 +1,130 @@
+<div class="row">
+  <div class="col-md-3">
+    <div ng-include="'../../../staticViews/adminAside.html'"></div>
+  </div>
+  
+  <div class="col-md-8 containeradmin" ng-init="getCategories();">
+    <h3 class="text-center" style="margin-top: 10px;">Add Product</h3>
+    <form name="menuForm">
+      <div class="form-group">
+        <label for="categoryname" class="col-md-4 col-md-offset-2">Category:*</label>
+        <input type="text" class="col-md-4" id="categoryname" name="categoryname" ng-model="menu.category" uib-typeahead="category as category.name for category in categoryList | filter:{name:$viewValue}" typeahead-template-url="customTemplate.html" typeahead-min-length="0">
+      </div>
+      <div class="form-group">
+        <label for="categoryname" class="col-md-4 col-md-offset-2">Product Category:*</label>
+        <input type="text" class="col-md-4" id="categoryname" name="categoryname" ng-model="menu.category" uib-typeahead="category as category.name for category in categoryList | filter:{name:$viewValue}" typeahead-template-url="customTemplate.html" typeahead-min-length="0" required readonly>
+        <span class="error-messages" ng-show="menuForm.categoryname.$dirty && menuForm.categoryname.$invalid">
+          <span  ng-show="menuForm.categoryname.$error.required">please select category</span>
+        </span>
+      </div>
+      <div>
+      <div class="form-group">
+        <label for="name" class="col-md-4 col-md-offset-2">Name:*</label>
+        <input type="text" class="col-md-4 " id="name" name="name" ng-model="menu.name" capitalize-first required>
+        <span class="error-messages" ng-show="menuForm.name.$dirty && menuForm.name.$invalid">
+          <span  ng-show="menuForm.name.$error.required">please enter product name</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="isChemical" class="col-md-4 col-md-offset-2"> Chemical Free:*</label>
+        <input type="checkbox" name="isChemical" id="isChemical" ng-model="menu.isChemicalfree">
+      </div>
+
+
+      <div class="row form-group">
+        <label for="description" class="col-md-4 col-md-offset-2">Description:</label>
+        <div class="col-md-6">
+        <textarea  ckeditor="options" name="description"  rows="5" cols="30" id="description" ng-model="menu.description" required></textarea>
+      </div>
+      </div>
+      <div class="form-group">
+        <label for="quantity" class="col-md-4 col-md-offset-2">Quantity:*</label>
+        <input type="number" name="quantity" class="col-md-4 " rows="5" cols="30" id="quantity" ng-model="menu.quantity" ng-pattern="/^[0-9]*$/" required />
+        <span class="error-messages" ng-show="menuForm.quantity.$dirty && menuForm.quantity.$invalid">
+          <span  ng-show="menuForm.quantity.$error.required">please enter quantity</span>
+          <span ng-show="menuForm.quantity.$error.pattern">Not a valid number</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="appPrice" class="col-md-4 col-md-offset-2">Application Price (each item):*</label>
+        <input type="number" name="actualPrice" class="col-md-4 " rows="5" cols="30" id="actualPrice" ng-model="menu.actualPrice" ng-pattern="/^[0-9]*$/" required />
+        <span class="error-messages" ng-show="menuForm.actualPrice.$dirty && menuForm.actualPrice.$invalid">
+          <span  ng-show="menuForm.actualPrice.$error.required">please enter Application price</span>
+          <span ng-show="menuForm.actualPrice.$error.pattern">Not a valid number</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="price" class="col-md-4 col-md-offset-2">Display Price (each item):*</label>
+        <input type="number" name="price" class="col-md-4 " id="price" ng-model="menu.price" ng-pattern="/^[0-9]*$/" required/>
+        <span class="error-messages" ng-show="menuForm.price.$dirty && menuForm.price.$invalid">
+          <span ng-show="menuForm.price.$error.pattern">Not a valid number</span>
+          <span ng-show="menuForm.price.$error.required">Please enter display price</span>
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="dealPrice" class="col-md-4 col-md-offset-2">Deal Price (each item):*</label>
+        <input type="number" name="dealPrice" class="col-md-4 " id="dealPrice" ng-model="menu.dealPrice" ng-pattern="/^[0-9]*$/" required/>
+        <span class="error-messages" ng-show="menuForm.dealPrice.$dirty && menuForm.dealPrice.$invalid">
+          <span ng-show="menuForm.dealPrice.$error.pattern">Not a valid number</span>
+          <span ng-show="menuForm.dealPrice.$error.required">Please enter deal price</span>
+        </span>
+      </div>
+
+
+      <div class="form-group">
+        <label for="stockType" class="col-md-4 col-md-offset-2">Stock Type:*</label>
+        <select name="stockType" id="stockType" ng-model="menu.stockType" ng-options="x for x in stockTypes" class="col-md-4 customercountry" required>
+          <option value="" disabled>Please select stock type</option>
+        </select>
+        <span class="error-messages" ng-show="menuForm.stockType.$dirty && menuForm.stockType.$invalid">
+          <span  ng-show="menuForm.stockType.$error.required">please select Stock Type</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="price_range" class="col-md-4 col-md-offset-2">Price Range:*</label>
+        <select name="price_range" id="price_range" ng-model="menu.price_range" class="col-md-4 customercountry" required>
+          <option value="" disabled>Please select price range</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+        <span class="error-messages" ng-show="menuForm.price_range.$dirty && menuForm.price_range.$invalid">
+          <span  ng-show="menuForm.price_range.$error.required">please select Price Range</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="isDaily" class="col-md-4 col-md-offset-2">Daily Product:*</label>
+        <input type="checkbox" name="isDaily" id="isDaily" ng-model="menu.isDaily">
+      </div>
+     
+      <div class="form-group">
+        <label class="col-md-4">Active:</label>
+        <label class="switch"><input type="checkbox" ng-true-value="'active'" ng-false-value="'inactive'" name="status" ng-model="menu.status">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="form-group">
+      <label class="col-md-4" for="image">Image:</label>
+      <span class="col-md-4">
+        <input type="file" name='image' id="image" accept="image/jpeg,image/png,image/jpg" ng-model="menu.image" onchange="angular.element(this).scope().uploadImage(this.files)">
+      </span>
+    </div>
+    <div class="form-group" style="margin-top: 50px;">
+      <label class="col-md-4"></label>
+      <input type="submit" class="btn btn-primary" ng-disabled="menuForm.$invalid" value="Submit" ng-click="addProduct(menu)">
+      <a class="btn btn-warning" href="#!/admin/products" role="button">Cancel</a>
+    </div>
+  </div>
+  </form>
+  <!-- <div  ng-if="menu.category.name == 'Clothing and Fashion'">
+      <div ng-include="'modules/admin/views/addclothingMenu.html'"></div>
+  </div> -->
+</div>
+</div>
+<script type="text/ng-template" id="customTemplate.html">
+  <a>
+      <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+  </a>
+</script>

@@ -4,11 +4,11 @@
       <h4 class="text-center">Forgot Pasword</h4>
       <form name="userForgotPassForm">
         <div class="form-group">
-          <label class="col-md-12" for="email">Email:
-            <input type="email" class="form-control" id="email" ng-model="email" name="email" pattern="([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$" required>
-            <span class="error-messages" ng-show="userForgotPassForm.email.$touched || userForgotPassForm.email.$dirty && userForgotPassForm.email.$invalid">
-              <span  ng-show="userForgotPassForm.email.$error.required">Please enter Email</span>
-              <span  ng-show="userForgotPassForm.email.$error.pattern">Enter valid email</span>
+          <label class="col-md-12" for="phoneNumber">Phone Number*:
+            <input type="text" class="form-control" id="phoneNumber" ng-model="phoneNumber" name="phoneNumber" maxlength="10" minlength="10" pattern= "[0-9]*$" required>
+            <span class="error-messages" ng-show="userForgotPassForm.phoneNumber.$touched || userForgotPassForm.phoneNumber.$dirty && userForgotPassForm.phoneNumber.$invalid">
+              <span  ng-show="userForgotPassForm.phoneNumber.$error.required">Please enter Phone number</span>
+              <span  ng-show="userForgotPassForm.phoneNumber.$error.pattern">Enter valid phone number</span>
             </span>
           </label>
 
@@ -20,7 +20,7 @@
             <!-- <label><input type="radio" name="roleType" id="roleTypeFarmer" ng-model="user.role" value="farmer"> Farmer</label> -->
           </div>
         </div>
-        <button type="submit" class="btn btn-success" ng-disabled="userForgotPassForm.$invalid" ng-click="userForgotPass(email, role)">Submit</button>
+        <button type="submit" class="btn btn-success" ng-disabled="userForgotPassForm.$invalid" ng-click="userForgotPass(phoneNumber, role)">Submit</button>
         <a href="#!/user/register">New User Register here</a>&nbsp;
         <a href="#!/user/login">Back to Login</a>
       </form>

@@ -18,6 +18,8 @@ const subcategories = require('./schema/subCategory')(Mongoose);
 const reviews = require('./schema/review')(Mongoose);
 const marketing = require('./schema/marketing')(Mongoose);
 const clothing = require('./schema/clothings')(Mongoose);
+const product = require('./schema/products')(Mongoose);
+const combo = require('./schema/combo')(Mongoose);
 
 module.exports = {
     generateHash: function(password) {
@@ -60,5 +62,13 @@ module.exports = {
 
     ClothingModel : function(){
         return clothing;
+    },
+
+    ProductModel : function(){
+        return product;
+    },
+
+    ComboModel : function(){
+        return combo;
     }
 }

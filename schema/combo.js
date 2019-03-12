@@ -4,14 +4,16 @@
 	  combo_id : {type: String},
 	  name: { type: String, required: true},
 	  imageName : {type: String},
+	  actualPrice : {type: Number},
 	  price : {type: Number},
 	  description : {type: String},
-	  products : {
+	  products : [{
 	  	name : {type: String},
 	  	id : {type: String},
 	  	price : {type: Number}
-	  }, 
-	  status: { type: Boolean, default: true }, //active, inactive 
+	  }], 
+	  status: { type: String, default: 'active' }, //active, inactive 
+	  comboDiscount : {type: Number},
 	  isDeleted: { type: Boolean, default: false}
 	},{ timestamps: { createdAt: 'created_at' } });
 	

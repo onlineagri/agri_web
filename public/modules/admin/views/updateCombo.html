@@ -1,0 +1,94 @@
+<div class="row">
+  <div class="col-md-3">
+    <div ng-include="'../../../staticViews/adminAside.html'"></div>
+  </div>
+  
+  <div class="col-md-8 containeradmin" ng-init="getCombo();">
+    <h3 class="text-center" style="margin-top: 10px;">Update Combo</h3>
+    <form name="comboForm">
+      <div>
+      <div class="form-group">
+        <label for="name" class="col-md-4 col-md-offset-2">Name:*</label>
+        <input type="text" class="col-md-4 " id="name" name="name" ng-model="combo.name" capitalize-first required>
+        <span class="error-messages" ng-show="comboForm.name.$dirty && comboForm.name.$invalid">
+          <span  ng-show="comboForm.name.$error.required">please enter combo name</span>
+        </span>
+      </div>
+      <div class="row form-group">
+        <label for="description" class="col-md-4 col-md-offset-2">Description:</label>
+        <div class="col-md-6">
+        <textarea  ckeditor="options" name="description"  rows="5" cols="30" id="description" ng-model="combo.description" required></textarea>
+        <span class="error-messages" ng-show="comboForm.description.$dirty && comboForm.description.$invalid">
+          <span  ng-show="comboForm.description.$error.required">please enter combo description</span>
+        </span>
+      </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4">Products*:</label>
+        <input type="button" class="btn btn-primary" name="selectproduct" value="Select Products" ng-click="openProduct()">
+      </div>
+      <div class="row form-group" ng-if="combo.products.length">
+        <label class="col-md-4"></label>
+        <div class="col-md-6">
+        <table style="width:100%" class="table table-condensed table-bordered table-striped">
+          <tr>
+            <th>Name</th>
+            <th>Price</th> 
+          </tr>
+          <tr ng-repeat="prod in combo.products track by $index">
+            <td>{{prod.name}}</td>
+            <td>{{prod.price}}</td>
+          </tr>
+        </table>
+      </div>
+      </div>
+
+      <div class="form-group">
+        <label for="actualPrice" class="col-md-4 col-md-offset-2">Actual Price:*</label>
+        <input type="number" name="actualPrice" class="col-md-4 " id="actualPrice" ng-model="combo.actualPrice" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" required readonly>
+        <span class="error-messages" ng-show="comboForm.actualPrice.$dirty && comboForm.actualPrice.$invalid">
+          <span ng-show="comboForm.actualPrice.$error.pattern">Not a valid number</span>
+          <span ng-show="comboForm.actualPrice.$error.required">Please enter actual price</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="comboDiscount" class="col-md-4 col-md-offset-2">Combo Discount(%):*</label>
+        <input type="number" name="comboDiscount" class="col-md-4 " id="comboDiscount" ng-model="combo.comboDiscount" ng-pattern="/^[0-9]*$/" required ng-blur="calculatePrice(combo.comboDiscount)">
+        <span class="error-messages" ng-show="comboForm.comboDiscount.$dirty && comboForm.comboDiscount.$invalid">
+          <span ng-show="comboForm.comboDiscount.$error.pattern">Not a valid number</span>
+          <span ng-show="comboForm.comboDiscount.$error.required">Please enter combo discount</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="price" class="col-md-4 col-md-offset-2">Display Price:*</label>
+        <input type="number" name="price" class="col-md-4 " id="price" ng-model="combo.price" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" required readonly>
+        <span class="error-messages" ng-show="comboForm.price.$dirty && comboForm.price.$invalid">
+          <span ng-show="comboForm.price.$error.pattern">Not a valid number</span>
+          <span ng-show="comboForm.price.$error.required">Please enter price</span>
+        </span>
+      </div>
+     
+      <div class="form-group">
+        <label class="col-md-4">Active:</label>
+        <label class="switch"><input type="checkbox" ng-true-value="'active'" ng-false-value="'inactive'" name="status" ng-model="combo.status">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="form-group">
+      <label class="col-md-4" for="image">Image:</label>
+      <span class="col-md-4">
+        <input type="file" name='image' id="image" accept="image/jpeg,image/png,image/jpg" ng-model="combo.image" onchange="angular.element(this).scope().uploadImage(this.files)">
+      </span>
+    </div>
+    <div class="form-group" style="margin-top: 50px;">
+      <label class="col-md-4"></label>
+      <input type="submit" class="btn btn-primary" ng-disabled="comboForm.$invalid" value="Submit" ng-click="addCombo(combo)">
+      <a class="btn btn-warning" href="#!/admin/combos" role="button">Cancel</a>
+    </div>
+  </div>
+  </form>
+</div>
+</div>

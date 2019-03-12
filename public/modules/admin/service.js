@@ -64,57 +64,110 @@ app.factory('adminService',['$http', function ($http) {
       });
     },
 
-    addMenu: function (params) {
+    addProduct: function (params) {
       return $http({
         method: 'POST',
         data: params,
-        url: webservices.addMenu
+        url: webservices.addProduct
       }).then(function (response) {
           return response;
       }).catch(function () {
       });
     },
 
-    getMenuList: function(catId){
+    getProductList: function(catId){
       return $http({
         method: 'GET',
-        url: webservices.getMenuList + '/'+ catId 
+        url: webservices.getProductList 
       }).then(function (response) {
           return response;
       }).catch(function () {
       });
     },
 
-    getMenuById: function(id){
+    getProductById: function(id){
       return $http({
         method: 'GET',
-        url: webservices.getMenuById + "/" + id
+        url: webservices.getProductById + "/" + id
       }).then(function (response) {
           return response;
       }).catch(function () {
       });
     },
 
-    updateMenu: function (params) {
+    updateProduct: function (params) {
       return $http({
         method: 'PUT',
         data: params,
-        url: webservices.updateMenu
+        url: webservices.updateProduct
       }).then(function (response) {
           return response;
       }).catch(function () {
       });
     }, 
 
-    deleteMenu : function(id){
+    deleteProduct : function(id){
       return $http({
         method: 'DELETE',
-        url: webservices.deleteMenu + "/" + id
+        url: webservices.deleteProduct + "/" + id
       }).then(function (response) {
           return response;
       }).catch(function () {
       });
     },
+
+    getCombos : function() {
+      return $http({
+        method: 'GET',
+        url: webservices.getCombos
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    getProductsCombo : function() {
+      return $http({
+        method: 'GET',
+        url: webservices.getProductsCombo
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    addCombo : function(params) {
+      return $http({
+        method: 'POST',
+        data: params,
+        url: webservices.addCombo
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    getComboById : function(id) {
+      return $http({
+        method: 'GET',
+        url: webservices.getComboById + '/' +id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+    deleteCombo : function(id) {
+      return $http({
+        method: 'DELETE',
+        url: webservices.getComboById + '/' +id
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
+    
+
 
     getCustomers : function(){
       return $http({

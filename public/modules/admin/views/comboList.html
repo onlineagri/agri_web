@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-3">
+    <div ng-include="'../../../staticViews/adminAside.html'"></div>
+  </div>
+  
+  <div class="col-md-8 containeradmin" ng-init="getCombos()">
+    <h3 class="text-center" style="margin-top: 10px;">Manage Combos</h3>
+    <span class="float-right"><a href="#!/admin/combo/add" class="btn btn-success">ADD</a></span>
+    <table ng-table="tableParamsCombo" class="table table-condensed table-bordered table-striped">
+        <tr ng-repeat="combo in $data">
+          <td data-title="'ComboId'" filter="{combo_id:'text'}">{{combo.combo_id}}</td>
+          <td data-title="'Name'" filter="{name:'text'}">{{combo.name}}</td>
+
+          <td data-title="'Price'">{{combo.price}}</td>
+          <td data-title="'Actual Price'">{{combo.actualPrice}}</td>
+          <td data-title="'products'"><div ng-repeat= "prod in combo.products"><span>Name: {{prod.name}}</span></br><span>Price: {{prod.price}}</span></div></td>
+          <td data-title="'status'">
+          <span ng-if="combo.status == 'active'"><i class="fa fa-check-circle" aria-hidden="true"></i></span>
+          <span ng-if="combo.status == 'inactive'"><i class="fa fa-times" aria-hidden="true"></i></span>
+        </td>
+        <td title="'Actions'">
+          <a href="#!/admin/combo/update/{{combo._id}}" alt="Click to edit" title="Click to edit"><i class="fa fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
+          <a href="javascript:void(0)" alt="Click to delete" title="Click to delete"><i class="fa fa-trash" aria-hidden="true" ng-click="deleteCombo(combo._id)"></i></a>
+        </td>
+
+        </tr>
+      </table>
+  </div>
+</div>

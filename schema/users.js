@@ -15,12 +15,13 @@
 	  	state : { type: String},
 	  	pincode : {type: String}
 	  },
-	  role: { type: String, required: true }, //customer, admin, retailer
+	  role: { type: String, required: true }, //customer, admin, retailer, employee
 	  status: { type: String }, // inRegistration, active, suspended
 	  isDeleted: { type: Boolean, default: false},
 	  passwordToken : {type: String},
 	  verificationCode : {type: String},
-	  userId : {type: String}
+	  userId : {type: String},
+	  deliveryAddresses : {type: String}
 	},
 	{ timestamps: { createdAt: 'created_at' } });
 	

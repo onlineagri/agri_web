@@ -2,12 +2,11 @@ const mongoose = require('mongoose');
 const db = require("../../db.js");
 const CategoryModel = db.CategoryModel();
 const UserModel = db.UserModel();
-const AgricultureModel = db.AgricultureModel();
 const OrderModel = db.OrderModel();
 const CmsModel = db.CmsModel();
-const SubCategoryModel = db.SubCategoryModel();
 const SystemParamsModel = db.SystemParamsModel();
-const ClothingModel =db.ClothingModel();
+const ProductModel = db.ProductModel();
+const ComboModel = db.ComboModel();
 const common = require("../../config/common.js");
 const async =require('async');
 const lodash = require('lodash');
@@ -26,14 +25,14 @@ exports.addCategory = function(req, res){
             let num = Math.floor(1000 + Math.random() * 9000);
             let subName = (categoryParams.name).substring(0,5);
             categoryParams["cat_id"] = subName + num;
-
+            callback();
         },
         function(callback) {
             const schema = Joi.object().keys({
                 name: Joi.string().required(),
                 status: Joi.string().valid(['active', 'inactive']).required(),
                 image: Joi.string(),
-                cat_id : Joi.string()..alphanum().min(6).max(10).required()
+                cat_id : Joi.string().alphanum().min(6).max(10).required()
             });
             Joi.validate(categoryParams, schema, function(err){
                 if(err){
@@ -96,7 +95,7 @@ exports.addCategory = function(req, res){
                             .toFile(userUploadedImagePath, (err, info) => {
                                 if (err) {
                                     console.log('error sharp', err);
-                                    callback('Unable to upload image')
+                                    callback()
                                 } else {
                                     // console.log('image info', info);
                                     file.path = userUploadedImagePath,
@@ -201,8 +200,8 @@ exports.getCategoryById = function(req, res) {
 
 exports.getCategories = function(req, res) {
 
-	CategoryModel.find({isDeleted: false})
-		.select({'_id': 1, 'name': 1, 'description':1, 'status': 1})
+	CategoryModel.find({isDeleted: false, status: 'active'})
+		.select({'_id': 1, 'name': 1, 'status': 1, 'cat_id' : 1})
 		.exec(function(err, data){
 			if(err){
 				res.json({code : 400, message: "Internal Server Error"});
@@ -211,6 +210,654 @@ exports.getCategories = function(req, res) {
 			}
 		})
 }
+
+exports.addProduct = function(req, res) {
+
+    const productData = req.body;
+    async.series([
+        function(callback) {
+            productData.name = common.capitalizeFirstLetter(productData.name);
+            let num = Math.floor(1000 + Math.random() * 9000);
+            let subName = (productData.name).substring(0,5);
+            if(!common.isValid(productData.prod_id))
+                productData["prod_id"] = subName + num;
+
+            productData['category_id'] = productData.category._id;
+            productData['category_name'] = productData.category.name;
+            productData['cat_id'] = productData.category.cat_id;
+            delete productData.category;
+
+            callback();
+        },
+        function(callback) {
+            const schema = Joi.object().keys({
+                name: Joi.string().required(),
+                price : Joi.number().required(),
+                dealPrice : Joi.number().required(),
+                actualPrice : Joi.number().required(),
+                category_id : Joi.string().required(),
+                category_name : Joi.string().required(),
+                cat_id : Joi.string().required(),
+                retailer_id : Joi.string().optional(),
+                retailer_name : Joi.string().optional(),
+                quantity_remaining : Joi.number().optional(),
+                quantity : Joi.number().required(),
+                price_range : Joi.string().required(),
+                stockType : Joi.string().required(),
+                isChemicalfree: Joi.boolean().required(),
+                description : Joi.string().required(),
+                isDaily : Joi.boolean().optional(),
+                status: Joi.string().valid(['active', 'inactive']).required(),
+                image: Joi.string(),
+                prod_id : Joi.string().alphanum().min(6).max(10).required()
+            });
+            Joi.validate(productData, schema, function(err){
+                if(err){
+                    callback('Some Parameters are invalid or missing');
+                } else {
+                    callback();
+                }
+            });
+        },
+        function(callback){
+            if (!common.isValid(productData._id)) {
+                ProductModel.findOne({
+                    name: productData.name,
+                    prod_id : productData.prod_id,
+                    isDeleted: false
+                }, function(err, category) {
+                    if (err) {
+                        console.log("dberror addProduct", err);
+                        callback("Internal server error");
+                    } else {
+                        if (common.isValid(category)) {
+                            callback("This menu is already available");
+                        } else {
+                            callback();
+                        }
+                    }
+                })
+            } else {
+                callback();
+            }
+        },
+        function(callback) {
+            var imageName = productData.image;
+            if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
+                var imageTypeRegularExpression = /\/(.*?)$/;
+                var file = {};
+                var fileName = common.slugify(productData.name) + "_" + new Date().getTime();
+                var imageBuffer = common.decodeBase64Image(productData.image);
+                if (imageBuffer == "err") {
+                    callback('Not a valid image type');
+                } else {
+                    var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
+                    if (common.isValidImageType(imageTypeDetected.input)) {
+                        var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
+                        sharp(imageBuffer.data)
+                            .resize(512, 312)
+                            .toFile(userUploadedImagePath, (err, info) => {
+                                if (err) {
+                                    console.log('error sharp', err);
+                                    callback('Unable to upload image')
+                                } else {
+                                    // console.log('image info', info);
+                                    file.path = userUploadedImagePath;
+                                    file.name = fileName + '.' + imageTypeDetected[1];
+                                    file.type = imageTypeDetected.input;
+
+                                    var productBucket = common.default_set.PROD_BUCKET;
+                                    common.verifyBucket(productBucket, function() {
+                                        common.uploadFile(file, productBucket, function(err) {
+                                            if (err) {
+                                                fs.unlink(userUploadedImagePath);
+                                                return callback(err);
+                                            } else {
+                                                uploadFileName = file.name;
+                                                productData.imageName = uploadFileName;
+                                                fs.unlink(userUploadedImagePath);
+                                                callback();
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                    } else {
+                        callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
+                    }
+                }
+            } else {
+                callback();
+            }
+        },
+        function(callback){
+            var meanQuantiy = 0;
+            var meanRemainQty = 0;
+            if (common.isValid(productData._id)) {
+                ProductModel.findOne({_id: productData._id, prod_id: productData.prod_id}).select({'_id': 1, 'quantity': 1, 'quantity_remaining': 1}).exec(function(err, data){
+                    if (err) {
+                        console.log('dberror addProduct', err);
+                        callback('Internal server error');
+                    } else{
+                        if(common.isValid(productData.quantity_remaining)){
+                            if (productData.quantity_remaining == 0) {
+                                productData['quantity_remaining'] = productData.quantity;
+                            } else {
+                                if (data.quantity > productData.quantity) {
+                                    meanQuantiy = data.quantity - productData.quantity;
+                                    meanRemainQty = productData.quantity_remaining - meanQuantiy;
+                                    productData['quantity_remaining'] = meanRemainQty;
+                                }
+                                if (data.quantity < productData.quantity) {
+                                    meanQuantiy = productData.quantity - data.quantity;
+                                    meanRemainQty = productData.quantity_remaining + meanQuantiy;
+                                    productData['quantity_remaining'] = meanRemainQty;
+                                }
+                            }
+                        }
+                        callback();
+                    }
+                });
+            } else {            
+                productData['quantity_remaining'] = productData.quantity;
+                callback();
+            }
+        },
+        function(callback){
+            if(!common.isValid(productData._id)){
+                let menuData = new ProductModel(productData);
+                menuData.save(function(err, data){
+                    if(err){
+                        console.log("dberror addProduct", err);
+                        callback("Internal server error");
+                    } else {
+                        callback();
+                    }
+                })
+            } else {
+                let id = productData._id;
+                ProductModel.update({_id: id, prod_id: productData.prod_id}, { $set: productData}, function(err, data){
+                    if(err){
+                        console.log("dberror addProduct", err);
+                        callback("Internal server error");
+                    } else {
+                        callback();
+                    }
+                })
+            }
+        }
+        ], function(err){
+            if(err){
+                res.json({code: 400, message: err});
+            } else {
+                res.json({code: 200, message: 'Product successfully added'});
+            }
+        })
+}
+
+exports.getProducts = function(req, res){
+    ProductModel.find({isDeleted: false}, {categoryName:1})
+    .select({'_id': 1, 'name': 1, 'description':1, 'status': 1, 'quantity': 1, 'remainingQuantity' : 1, 'price': 1, 'category_name': 1, 'prod_id' : 1,'price_range' : 1, 'quantity_remaining': 1})
+    .exec(function(err, data){
+        if(err){
+            console.log("dberror getAgriMenuList", err);
+            res.json({code:400, message: 'Internal server error'});
+        } else {
+            if(data.length){
+                res.json({code:200, message: 'Products fetched successfully', data: data});
+            } else {
+                res.json({code:400, message: 'No products found'});
+            }
+        }
+    })
+}
+
+exports.getProductById = function(req, res) {
+    let id = req.params.id;
+    if(!common.isValid(id)){
+        res.json({code: 400, message:"Parameters missing"});
+    }
+    ProductModel.findOne({_id: id, isDeleted: false}, function(err, data){
+        if(err){
+            console.log("dberror getMenuById", err);
+            res.json({code: 400, message:"Internal server error"});
+        } else {
+            let prodData = {
+                _id: data._id,
+                category: {name :data.category_name, _id: data.category_id, cat_id : data.cat_id},
+                name: data.name,
+                status: data.status,
+                description: data.description,
+                quantity: data.quantity,
+                price: data.price,
+                dealPrice : data.dealPrice,
+                actualPrice : data.actualPrice,
+                price_range : data.price_range,
+                isChemicalfree : data.isChemicalfree,
+                isDaily : data.isDaily,
+                imageName: common.default_set.S3_ENDPOINT+ common.default_set.AGRI_PROD_BUCKET + "/" +data.imageName,
+                stockType: data.stockType,
+                quantity_remaining: data.quantity_remaining,
+                prod_id : data.prod_id
+            }
+            res.json({code: 200, message:"Menu Fetched Successfuly", data: prodData});
+        }
+    })
+    
+}
+
+
+exports.updateProduct = function(req, res) {
+
+    const productData = req.body;
+    async.series([
+        function(callback) {
+            productData.name = common.capitalizeFirstLetter(productData.name);
+            productData['category_id'] = productData.category._id;
+            productData['category_name'] = productData.category.name;
+            productData['cat_id'] = productData.category.cat_id;
+            delete productData.category;
+            delete productData.imageName;
+            callback();
+        },
+        function(callback) {
+            const schema = Joi.object().keys({
+                _id: Joi.string().required(),
+                name: Joi.string().required(),
+                price : Joi.number().required(),
+                dealPrice : Joi.number().required(),
+                actualPrice : Joi.number().required(),
+                category_id : Joi.string().required(),
+                category_name : Joi.string().required(),
+                cat_id : Joi.string().required(),
+                retailer_id : Joi.string().optional(),
+                retailer_name : Joi.string().optional(),
+                quantity_remaining : Joi.number().optional(),
+                quantity : Joi.number().required(),
+                price_range : Joi.string().required(),
+                stockType : Joi.string().required(),
+                isChemicalfree: Joi.boolean().required(),
+                description : Joi.string().required(),
+                isDaily : Joi.boolean().optional(),
+                status: Joi.string().valid(['active', 'inactive']).required(),
+                image: Joi.string(),
+                prod_id : Joi.string().alphanum().min(6).max(10).required()
+            });
+            Joi.validate(productData, schema, function(err){
+                if(err){
+                    callback('Some Parameters are invalid or missing');
+                } else {
+                    callback();
+                }
+            });
+        },
+        function(callback) {
+            var imageName = productData.image;
+            if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
+                var imageTypeRegularExpression = /\/(.*?)$/;
+                var file = {};
+                var fileName = common.slugify(productData.name) + "_" + new Date().getTime();
+                var imageBuffer = common.decodeBase64Image(productData.image);
+                if (imageBuffer == "err") {
+                    callback('Not a valid image type');
+                } else {
+                    var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
+                    if (common.isValidImageType(imageTypeDetected.input)) {
+                        var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
+                        sharp(imageBuffer.data)
+                            .resize(512, 312)
+                            .toFile(userUploadedImagePath, (err, info) => {
+                                if (err) {
+                                    console.log('error sharp', err);
+                                    callback('Unable to upload image')
+                                } else {
+                                    // console.log('image info', info);
+                                    file.path = userUploadedImagePath;
+                                    file.name = fileName + '.' + imageTypeDetected[1];
+                                    file.type = imageTypeDetected.input;
+
+                                    var productBucket = common.default_set.PROD_BUCKET;
+                                    common.verifyBucket(productBucket, function() {
+                                        common.uploadFile(file, productBucket, function(err) {
+                                            if (err) {
+                                                fs.unlink(userUploadedImagePath);
+                                                return callback(err);
+                                            } else {
+                                                uploadFileName = file.name;
+                                                productData.imageName = uploadFileName;
+                                                fs.unlink(userUploadedImagePath);
+                                                callback();
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                    } else {
+                        callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
+                    }
+                }
+            } else {
+                callback();
+            }
+        },
+        function(callback){
+            var meanQuantiy = 0;
+            var meanRemainQty = 0;
+            if (common.isValid(productData._id)) {
+                ProductModel.findOne({_id: productData._id, prod_id: productData.prod_id}).select({'_id': 1, 'quantity': 1, 'quantity_remaining': 1}).exec(function(err, data){
+                    if (err) {
+                        console.log('dberror addProduct', err);
+                        callback('Internal server error');
+                    } else{
+                        if(common.isValid(productData.quantity_remaining)){
+                            if (productData.quantity_remaining == 0) {
+                                productData['quantity_remaining'] = productData.quantity;
+                            } else {
+                                if (data.quantity > productData.quantity) {
+                                    meanQuantiy = data.quantity - productData.quantity;
+                                    meanRemainQty = productData.quantity_remaining - meanQuantiy;
+                                    productData['quantity_remaining'] = meanRemainQty;
+                                }
+                                if (data.quantity < productData.quantity) {
+                                    meanQuantiy = productData.quantity - data.quantity;
+                                    meanRemainQty = productData.quantity_remaining + meanQuantiy;
+                                    productData['quantity_remaining'] = meanRemainQty;
+                                }
+                            }
+                        }
+                        callback();
+                    }
+                });
+            } 
+        },
+        function(callback){
+            let id = productData._id;
+            ProductModel.update({_id: id, prod_id: productData.prod_id}, { $set: productData}, function(err, data){
+                if(err){
+                    console.log("dberror addProduct", err);
+                    callback("Internal server error");
+                } else {
+                    callback();
+                }
+            })
+        }
+        ], function(err){
+            if(err){
+                res.json({code: 400, message: err});
+            } else {
+                res.json({code: 200, message: 'Product successfully updated'});
+            }
+        })
+}
+
+exports.deleteProduct = function(req, res){
+    let id = req.params.id;
+    if(!common.isValid(id)){
+        res.json({code: 400, message:"Parameters missing"});
+    }
+    ProductModel.update({_id: id}, { $set: {'isDeleted': true}}, function(err, data){
+        if(err){
+            console.log("dberror deleteProduct", err);
+            res.json({code: 400, message:"Internal server error"});
+        } else {
+            res.json({code: 200, message:"Product deleted Successfuly"});
+        }
+    })
+}
+
+exports.getCombos = function(req, res) {
+    ComboModel.find({
+            isDeleted: false
+        })
+        .select({
+            '_id': 1,
+            'name': 1,
+            'price' : 1,
+            'actualPrice' : 1,
+            'description' : 1,
+            'products' : 1,
+            'status' : 1,
+            'combo_id' : 1
+        })
+        .exec(function(err, data) {
+            if (err) {
+                console.log("dberror getCombos", err);
+                res.json({
+                    code: 400,
+                    message: 'Internal server error'
+                });
+            } else {
+                if (data.length) {
+                    res.json({
+                        code: 200,
+                        message: 'Combos fetched successfully',
+                        data: data
+                    });
+                } else {
+                    res.json({
+                        code: 400,
+                        message: 'No Combos found'
+                    });
+                }
+            }
+        })
+}
+
+exports.comboProducts = function(req, res){
+    ProductModel.find({isDeleted: false, status: 'active'})
+    .select({
+            '_id': 1,
+            'prod_id': 1,
+            'name':1,
+            'price' : 1
+        })
+        .exec(function(err, data){
+        if(err){
+            console.log('dberror comboProducts', err);
+            res.json({code: 400, message: 'Internal server error'});
+        } else {
+            if (data.length) {
+                res.json({
+                    code: 200,
+                    message: 'Combos Products fetched successfully',
+                    data: data
+                });
+            } else {
+                res.json({
+                    code: 400,
+                    message: 'No Combos found'
+                });
+            }
+        }
+    })
+}
+
+exports.addCombo = function(req, res){
+    let comboParam = req.body;
+    async.series([
+        function(callback){
+            comboParam.name = common.capitalizeFirstLetter(comboParam.name);
+            let num = Math.floor(1000 + Math.random() * 9000);
+            let subName = (comboParam.name).substring(0,5);
+            if(!common.isValid(comboParam.combo_id))
+                comboParam["combo_id"] = subName + num;
+            callback();
+        },
+        function(callback){
+            const schema = Joi.object().keys({
+                _id : Joi.string().optional(),
+                name: Joi.string().required(),
+                price : Joi.number().required(),
+                actualPrice : Joi.number().required(),
+                comboDiscount : Joi.number().min(1).max(99).required(),
+                combo_id : Joi.string().alphanum().min(6).max(10).required(),
+                description : Joi.string().required(),
+                status: Joi.string().valid(['active', 'inactive']).required(),
+                image: Joi.string(),
+                products : Joi.array().items(Joi.object().keys({
+                    name : Joi.string().required(),
+                    price : Joi.number().required(),
+                    id : Joi.string().required(),
+                    _id : Joi.string(),
+                })),
+                imageName : Joi.string().optional()
+            });
+            Joi.validate(comboParam, schema, function(err){
+                if(err){
+                    console.log(err);
+                    callback('Some Parameters are invalid or missing');
+                } else {
+                    callback();
+                }
+            });
+        },
+        function(callback) {
+            var imageName = comboParam.image;
+            if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
+                var imageTypeRegularExpression = /\/(.*?)$/;
+                var file = {};
+                var fileName = common.slugify(comboParam.name) + "_" + new Date().getTime();
+                var imageBuffer = common.decodeBase64Image(comboParam.image);
+                if (imageBuffer == "err") {
+                    callback('Not a valid image type');
+                } else {
+                    var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
+                    if (common.isValidImageType(imageTypeDetected.input)) {
+                        var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
+                        sharp(imageBuffer.data)
+                            .resize(512, 312)
+                            .toFile(userUploadedImagePath, (err, info) => {
+                                if (err) {
+                                    console.log('error sharp', err);
+                                    callback('Unable to upload image')
+                                } else {
+                                    // console.log('image info', info);
+                                    file.path = userUploadedImagePath;
+                                    file.name = fileName + '.' + imageTypeDetected[1];
+                                    file.type = imageTypeDetected.input;
+
+                                    var productBucket = common.default_set.PROD_BUCKET;
+                                    common.verifyBucket(productBucket, function() {
+                                        common.uploadFile(file, productBucket, function(err) {
+                                            if (err) {
+                                                fs.unlink(userUploadedImagePath);
+                                                return callback(err);
+                                            } else {
+                                                uploadFileName = file.name;
+                                                comboParam.imageName = uploadFileName;
+                                                fs.unlink(userUploadedImagePath);
+                                                callback();
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                    } else {
+                        callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
+                    }
+                }
+            } else {
+                callback();
+            }
+        },
+        function(callback){
+            const products = [];
+            let totalPrice = 0;
+            lodash.each(comboParam.products, function(item){
+                products.push({name: item.name, price: item.price, id: item.id});
+                totalPrice += item.price;
+            })
+            comboParam['products'] = products;
+            comboParam.actualPrice = totalPrice;
+            comboParam.price = totalPrice - (totalPrice * comboParam.comboDiscount) / 100;
+            callback();
+        },
+        function(callback){
+            if(!common.isValid(comboParam._id)){
+                let combo = new ComboModel(comboParam);
+                combo.save(function(err, data){
+                    if(err){
+                        console.log("dberror addCombo", err);
+                        callback('Internal server error');
+                    } else {
+                        callback();
+                    }
+                })
+            } else {
+                ComboModel.update(comboParam, function(err){
+                    if(err){
+                        console.log("dberror addCombo", err);
+                        callback('Internal server error');
+                    } else {
+                        callback();
+                    }
+                })
+            }
+            
+        }
+        ], function(err){
+            if(err){
+                res.json({code:400, message: err});
+            } else {
+                let message = comboParam._id ? 'Combo Updated successfully' : 'Combo Added Successfuly';
+                res.json({code:200, message: message});
+            }
+        })
+}
+
+exports.getComboById = function(req, res){
+    let id = req.params.id;
+    if(!common.isValid(id)){
+        res.json({code:400, message:'Parameters missing'});
+        return;
+    }
+
+    ComboModel.findOne({_id: id, isDeleted: false}, function(err, data){
+        if(err){
+            console.log("dberror getComboById", err);
+            res.json({code:400, message: 'Internal server error'});
+        } else {
+            if(common.isValid(data)){
+                let comboData = {
+                    _id: data._id,
+                    name: data.name,
+                    status: data.status,
+                    description: data.description,
+                    price: data.price,
+                    actualPrice : data.actualPrice,
+                    imageName: data.imageName,
+                    combo_id : data.combo_id,
+                    products : data.products,
+                    comboDiscount : data.comboDiscount
+
+                }
+                res.json({code: 200, message:"Menu Fetched Successfuly", data: comboData});
+            }
+            else
+                res.json({code:400, message:'Combo not available'});
+        }
+    })
+}
+
+exports.deleteComboById = function(req, res){
+    let id = req.params.id;
+    if(!common.isValid(id)){
+        res.json({code: 400, message:"Parameters missing"});
+    }
+    ComboModel.update({_id: id}, { $set: {'isDeleted': true}}, function(err, data){
+        if(err){
+            console.log("dberror deleteComboById", err);
+            res.json({code: 400, message:"Internal server error"});
+        } else {
+            res.json({code: 200, message:"Combo deleted Successfuly"});
+        }
+    })
+}
+
+
+
+
+
 
 exports.getCustomers = function(req, res) {
     UserModel.find({
@@ -247,7 +894,7 @@ exports.getCustomers = function(req, res) {
         })
 }
 
-exports.adminAddCustomer = function(req, res) {
+/*exports.adminUpdateCustomer = function(req, res) {
     let userData = req.body;
     if(!common.isValid(userData.firstName) || !common.isValid(userData.lastName) || !common.isValid(userData.phoneNumber)){
         res.json({code: 400, message:"Parameters missing"});
@@ -268,6 +915,36 @@ exports.adminAddCustomer = function(req, res) {
                 }
             })
         },
+        function(callback){
+            const schema = Joi.object().keys({
+                firstName: Joi.string().required(),
+                lastName : Joi.string().required(),
+                email : Joi.string().optional(),
+                phoneNumber : Joi.string().min(10).max(10).required(),
+                address : Joi.object().keys({
+                    society : Joi.string().required(),
+                    wing : Joi.string().optional(),
+                    flatNo : Joi.string().required(),
+                    city : Joi.string().required(),
+                    state : Joi.string().required(),
+                    pincode : Joi.string().required()
+                }),
+                role : Joi.string().required(),
+                status : Joi.string().valid(['active', 'suspended', 'inRegistration']).required(),
+                verificationCode : Joi.string().optional(),
+                userId : Joi.string().required(),
+                deliveryAddresses : Joi.string().required()
+            });
+            Joi.validate(comboParam, schema, function(err){
+                if(err){
+                    console.log(err);
+                    callback('Some Parameters are invalid or missing');
+                } else {
+                    callback();
+                }
+            });
+        }
+
         function(callback){
             let customer = {
                 firstName : userData.firstName,
@@ -322,7 +999,12 @@ exports.adminAddCustomer = function(req, res) {
             }
         })
 
-}
+}*/
+
+
+
+
+
 
 exports.getCustomer = function(req, res){
     let id = req.params.id;
