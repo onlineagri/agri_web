@@ -420,5 +420,16 @@ app.factory('adminService',['$http', function ($http) {
       });
     },
 
+    cancleOrder: function (orderno) {
+      return $http({
+        method: 'PUT',
+        data: {orderNumber : orderno},
+        url: webservices.adminCancleOrder
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
+    },
+
   }
 }]);

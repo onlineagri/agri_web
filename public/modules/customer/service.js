@@ -133,6 +133,16 @@ app.factory('customerService',['$http', function ($http) {
           return response;
       }).catch(function () {
       });
+    },
+
+    getCombos: function(){
+      return $http({
+        method: 'GET',
+        url: webservices.getCombos
+      }).then(function (response) {
+          return response;
+      }).catch(function () {
+      });
     }
   }
 }]);

@@ -1,0 +1,111 @@
+<div ng-include="'/staticViews/customerHeader.html'"></div>
+<section class="combo-detail with-light-bg" ng-init="getComboDetail()">
+
+    <div class="container">
+        <a href="#!/customer/dashboard" class="btn btn-primary md-4" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</a>
+        <hr>
+        <div class="row">
+            <div class="col-md-8 rest-detail-contents">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card combo-detail-card mb-3">
+                            <div class="row">
+                                <div class="col-lg-5 combo-image">
+                                    <img ng-if="!combo.imageName" src="images/combodefault.jpg" alt="" class="img-fluid">
+                                    <img ng-if="combo.imageName" src="{{combo.imageName}}" alt="" class="img-fluid">
+                                </div>
+                                
+                                <div class="col-lg-7">
+                                    <h3 class="combo-name">{{combo.name}}</h3>
+                                    <p class="products">
+                                        <span class="icon mr-1">
+                                            
+                                        </span>
+                                        {{comboProducts}}
+                                    </p>
+                                    <div class="d-flex">
+                                        <p class="price">
+                                            <span class="original-price mr-1"><s><i class="fas fa-rupee-sign"></i>{{combo.actualPrice}}</s></span>
+                                            
+                                        </p>
+                                        <span class="deal-price text-right"><i class="fas fa-rupee-sign"></i>{{combo.price}}</span>
+                                        
+                                    </div>
+                                    <div class="float-right">
+                                        <div class="d-flex justify-content-between align-items-end mb-2 ">
+                                            <span class="discountCombo">{{combo.comboDiscount}}% off</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between">
+                                        <span><div ng-stars="ratings.avgrating ? ratings.avgrating : 0" ng-stars-max="5" ng-stars-readonly class="stars"></div>({{ratings.mycount ? ratings.mycount: 0}}) </span>
+                                    </div>
+                                    <button class="btn btn-primary float-right" ng-click="addToCart(combo)">ADD TO CART </button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card combo-filter mb-3">
+                            <div ng-bind-html='combo.description'></div>
+                            <h5>This combo comes with products:</h5>
+                            <table class="tablecomboproducts">
+                                <tr ng-repeat="prod in combo.products">
+                                    <td>{{prod.name}}</td>
+                                    <td><i class="fas fa-rupee-sign"></i>{{prod.price}}</td>
+                                    <td><i  uib-popover-template="'comboProduct'" popover-title="Restaurant Timings" type="button" class="fa fa-clock-o" aria-hidden="true" popover-trigger="'mouseenter'" popover-placement="bottom" popover-class="popoverSet"></i></td>
+                                </tr>
+                            </table>
+                            <hr/>
+                            <h5>Reviews:</h5>
+                            <div style="overflow-y: scroll; height:100px;">
+                                <span ng-repeat="revie in ratings.reviews"><span ng-stars="revie.rating" ng-stars-max="5" ng-stars-readonly class="stars"></span><h5 style="font-size: 10px;">{{revie.review}}</h5><hr></span>
+                            </div>
+                            <h5>Rate your purchase:</h5>
+                            <div class="col-sm-12 col-lg-8 col-md-8">
+                                <span><div class="stars" ng-stars="rating" ></div>
+                                <textarea class="col-sm-12 col-lg-12 col-md-12" rows="4" cols="50" placeholder="Write Review" ng-model="review" name="review"/><br/>
+                                <button class="btn btn-primary" ng-click="submitReview(rating, review)">Submit</button>
+                            </span>
+                        </div>
+                        <hr>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 offers-sidebar">
+            <h4 class="offers-title mb-4">More Combos</h4>
+            <div class="col-md-12 card deals mb-3" ng-repeat="combo in moreCombos track by $index">
+          <div class="deal-details align-items-start">
+            <div class="card-image">
+              <img ng-if="combo.imageName" src="{{combo.imageName}}" alt="" class="img-fluid">
+              <img ng-if="!combo.imageName" src="images/combodefault.jpg" alt="" class="img-fluid">
+            </div>
+            <div class="card-body">
+              <h5 class="combo-name"><a href="#!/combo/detail/{{combo._id}}"> {{combo.name}}</a></h5>
+              <!-- <h6 class="deal-on">Daily Product</h6> -->
+              <p ng-bind-html="combo.description | limitTo: 250">...</p>
+              <div class="d-flex justify-content-between">
+                <div class="price">
+                  <span class="original-price mr-1"><s><i class="fas fa-rupee-sign"></i>{{combo.actualPrice}}</s></span>
+                  <span class="deal-price"><i class="fas fa-rupee-sign"></i>{{combo.price}}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-end mb-2">
+                  <span class="discount">{{combo.comboDiscount}}% off</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-between deal-card-footer">
+            <a href="javascript:void(0)" class="btn btn-primary" ng-click="addToCart(combo)">Add to Cart</a>
+          </div>
+        </div>
+        <div ng-if="moreCombos.length > 10">
+        <a href="#!/allcombos" class="btn">All Combos</a>
+      </div>
+        </div>
+    </div>
+</div>
+</section>

@@ -11,12 +11,15 @@
 	  deliveryCharges : {type: String},
 	  customerName : {type: String},
 	  customerPhone : {type: String},
+	  customerEmail : {type: String},
 	  tax: {type: Number},
 	  customerId: {type: String},
 	  product: {type: Array}, 
-	  status: { type: Boolean, default: true }, 
+	  status: { type: String, default: 'placed' }, 
 	  isDeleted: { type: Boolean, default: false},
-	  specialRequest : {type: String}
+	  specialRequest : {type: String},
+	  amountPaid : {type: Number},
+	  cust_id : {type: String}
 	},{ timestamps: { createdAt: 'created_at' } });
 	
 	const Order = mongoose.model('Orders', OrderSchema);

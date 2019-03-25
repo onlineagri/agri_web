@@ -93,7 +93,7 @@ app.controller('userLoginController', ['$scope', 'userService','toaster','$local
     $scope.changePassword = function(otp,password){
         var data = {
             password: password,
-            id: otp
+            otp: otp
         }
 
         userService.changePassword(data).then(function(response){

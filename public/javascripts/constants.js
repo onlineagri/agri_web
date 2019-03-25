@@ -21,10 +21,23 @@ var webservices = {
     "getProductsCombo" : baseUrl + "/admin/comboproducts",
     "addCombo" : baseUrl + "/admin/combo",
     "getComboById" : baseUrl + "/admin/combo",
-    
+     
     
     
     "getNewProducts" : baseUrl + "/product/getnewproducts",
+    "getCombos" : baseUrl + "/product/combos",
+    "getComboDetail" : baseUrl + "/product/combo",
+    "productDetails" : baseUrl + "/product/details",
+    "getMoreCombos" : baseUrl + "/product/getmorecombo",
+    "addToCart" : baseUrl + "/product/addtocart",
+    "getCustAddress" : baseUrl + "/user/getaddress",
+    "getAllCombos" : baseUrl + "/product/combo",
+    "getProductDetail" : baseUrl + "/product/details",
+    "getMoreProducts" : baseUrl + "/product/moreproducts",
+    "getCategoryProducts" : baseUrl + "/product/allproducts",
+    "adminCancleOrder" :  baseUrl + "/admin/ordercancle",
+
+
     "getFamrmerList" : baseUrl + "/admin/farmer/list",
     "getProduct" : baseUrl + "/product/getproduct",
     "addToCart" : baseUrl + "/product/addtocart",
@@ -35,7 +48,7 @@ var webservices = {
     "getOrder" : baseUrl + "/order/getorder",
     "getOrders" : baseUrl + "/order/getorders",
     "getProductCategories" : baseUrl + "/product/getproductcategories",
-    "getCategoryProducts" : baseUrl + "/product/getcategoryproducts",
+    // "getCategoryProducts" : baseUrl + "/product/getcategoryproducts",
     "getOrders": baseUrl + "/admin/order",
     "getOrderById": baseUrl + "/admin/order",
     "userForgotPass" : baseUrl + "/api/forgotpass",
@@ -64,7 +77,7 @@ var webservices = {
     "getUserDetails" : baseUrl + "/user/customer",
     "updateProfile" : baseUrl + "/user/customer",
     "updatePassword": baseUrl + "/user/updatepassword",
-    "getCustAddress" : baseUrl + "/user/getaddress",
+    
     "sendContactEmail" : baseUrl + "/api/sendcontactemail",
     "cancleOrder" : baseUrl + "/order/cancleorder",
     "getCms" : baseUrl + "/cms/getcms",

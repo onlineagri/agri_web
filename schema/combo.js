@@ -1,3 +1,5 @@
+ const mongoosePaginate = require('mongoose-paginate');
+
  module.exports = function(mongoose){
 	const Schema = mongoose.Schema;
 	const ComboSchema = new Schema({
@@ -17,6 +19,8 @@
 	  isDeleted: { type: Boolean, default: false}
 	},{ timestamps: { createdAt: 'created_at' } });
 	
+	ComboSchema.plugin(mongoosePaginate);
 	const Combo = mongoose.model('Combos', ComboSchema);
 	return Combo;
 }
+

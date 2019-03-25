@@ -763,282 +763,7 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
         $uibModalInstance.dismiss('cancel');
     };
 }])
-
-
-.controller('clothingMenuController', ['$scope', 'adminService', 'toaster', '$localStorage', '$location', 'NgTableParams', '$routeParams', '$route','SweetAlert', function($scope, adminService, toaster, $localStorage, $location, NgTableParams, $routeParams, $route, SweetAlert) {
-
-    $scope.menu = {};
-    var _selected;
-
-    $scope.selected = undefined;
-    $scope.stockTypes = ["kg","item"];
-   
-
-    $scope.getCategories = function(){
-        adminService.getCategories().then(function(response){
-            $scope.categoryList = response.data.data;
-        }).catch(function(response) {
-            toaster.pop({
-                type: 'error',
-                title: '',
-                body: "Something went wrong"
-            });
-        });
-    }
-
-    $scope.getProviderList = function(){
-        adminService.getProviderList().then(function(response){
-            $scope.providerList = response.data.data;
-        }).catch(function(response) {
-            toaster.pop({
-                type: 'error',
-                title: '',
-                body: "Something went wrong"
-            });
-        });
-    }
-
-    $scope.uploadImage = function(files) {
-        $scope.showMsg = false;
-        if (files.length > 0) {
-            $scope.selectedImg = true;
-        } else {
-            $scope.selectedImg = false;
-        }
-
-        if (!$scope.$$phase) {
-            $scope.$apply();
-        }
-    }
-
-    $scope.getClothingMenuList = function(category){
-        // console.log("getCategories");
-        adminService.getMenuList(category).then(function(response){
-            if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
-                var categoryArray = response.data.data;
-                $scope.tableParams = new NgTableParams({
-                    // initial grouping
-                    group: {
-                        type: "desc"
-                    }
-                }, {
-                    dataset: categoryArray,
-                    groupOptions: {
-                        isExpanded: false
-                    }
-                });
-            } else {
-                toaster.pop({
-                    type: 'error',
-                    title: '',
-                    body: response.data.message
-                });
-            }
-        }).catch(function(response) {
-            toaster.pop({
-                type: 'error',
-                title: '',
-                body: "Something went wrong"
-            });
-        });
-
-    }
-
-    $scope.addClothingMenu = function(menu){
-        if (document.getElementById("image").files[0] && $scope.selectedImg) {
-            var imgElem = document.getElementById("image").files[0];
-            var reader = new FileReader();
-            reader.readAsDataURL(imgElem);
-            reader.onload = function(onLoadEvent) {
-                if (onLoadEvent.target.result) {
-                    var image = new Image();
-                    image.src = onLoadEvent.target.result;
-                    image.onload = function() {
-                        $scope.menu["image"] = onLoadEvent.target.result;
-                        // console.log('category', category);
-                        adminService.addMenu($scope.menu).then(function(response){
-                            if(response.data.code == 200){
-                                SweetAlert.swal("", response.data.message, "success");
-                                $location.path('/admin/menu/Clothing');
-                            } else {
-                                SweetAlert.swal("", response.data.message, "warning");
-                            }
-                        }).catch(function(response) {
-                            toaster.pop({
-                                type: 'error',
-                                title: '',
-                                body: "Something went wrong"
-                            });
-                        });
-                    }
-                }
-            }
-        }else{
-            adminService.addMenu($scope.menu).then(function(response){
-                if(response.data.code == 200){
-                    SweetAlert.swal("", response.data.message, "success");
-                    $location.path('/admin/menulist');
-                } else {
-                    SweetAlert.swal("", response.data.message, "warning");
-                }
-            }).catch(function(response) {
-                toaster.pop({
-                    type: 'error',
-                    title: '',
-                    body: "Something went wrong"
-                });
-            });
-        }
-    }
-
-    $scope.getMenuById = function(){
-        var id = $routeParams.id;
-        adminService.getMenuById(id).then(function(response){
-                if(response.data.code == 200){
-                    $scope.menu = response.data.data;
-                } else {
-                    toaster.pop({
-                        type: 'error',
-                        title: '',
-                        body: response.data.message
-                    });
-                }
-            }).catch(function(response) {
-                toaster.pop({
-                    type: 'error',
-                    title: '',
-                    body: "Something went wrong"
-                });
-            });
-    }
-
-
-    $scope.deleteMenu = function(id){
-        SweetAlert.swal({
-                title: "Are you sure?",
-                text: "You are deleting this customer?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, delete customer",
-                closeOnConfirm: false
-            },
-            function(isConfirm) {
-                if (isConfirm) {
-                    adminService.deleteMenu(id).then(function(response) {
-                        if (response.data.code == 200) {
-                            SweetAlert.swal("", response.data.message, "success");
-                            $route.reload('/admin/menulist');
-                        } else {
-                            SweetAlert.swal("", response.data.message, "warning");
-                        }
-                    }).catch(function(response) {
-                        toaster.pop({
-                            type: 'error',
-                            title: '',
-                            body: "Something went wrong"
-                        });
-                    });
-                }
-            });
-    }
-
-    $scope.updateMenu = function(menu){
-        if (document.getElementById("image").files[0] && $scope.selectedImg) {
-            var imgElem = document.getElementById("image").files[0];
-            var reader = new FileReader();
-            reader.readAsDataURL(imgElem);
-            reader.onload = function(onLoadEvent) {
-                if (onLoadEvent.target.result) {
-                    var image = new Image();
-                    image.src = onLoadEvent.target.result;
-                    image.onload = function() {
-                        $scope.menu["image"] = onLoadEvent.target.result;
-                        // console.log('category', category);
-                        adminService.updateMenu($scope.menu).then(function(response){
-                            if(response.data.code == 200){
-                                SweetAlert.swal("", response.data.message, "success");
-                                $location.path('/admin/menulist');
-                            } else {
-                                SweetAlert.swal("", response.data.message, "warning");
-                            }
-                        }).catch(function(response) {
-                            toaster.pop({
-                                type: 'error',
-                                title: '',
-                                body: "Something went wrong"
-                            });
-                        });
-                    }
-                }
-            }
-        }else{
-            adminService.updateMenu($scope.menu).then(function(response){
-                if(response.data.code == 200){
-                    SweetAlert.swal("", response.data.message, "success");
-                    $location.path('/admin/menulist');
-                } else {
-                    SweetAlert.swal("", response.data.message, "warning");
-                }
-            }).catch(function(response) {
-                toaster.pop({
-                    type: 'error',
-                    title: '',
-                    body: "Something went wrong"
-                });
-            });
-        }
-    }
-
-    $scope.addClothingMenu = function(menu){
-        $scope.menu.image = [];
-        if (document.getElementById("image").files && $scope.selectedImg) {
-            var imgElem = document.getElementById("image").files;
-            
-            for(var i =0; i < imgElem.length; i++){
-                var reader = new FileReader();
-                reader.readAsDataURL(imgElem[i]);
-                reader.onload = function(onLoadEvent) {
-                    if (onLoadEvent.target.result) {
-                        var image = new Image();
-                        image.src = onLoadEvent.target.result;
-                        image.onload = function() {
-                            $scope.menu.image.push(onLoadEvent.target.result);
-                        }
-                    }
-                }
-            }
-        }
-        adminService.addClothingMenu($scope.menu).then(function(response){
-            if(response.data.code == 200){
-                toaster.pop({
-                    type: 'success',
-                    title: '',
-                    body: response.data.message
-                });
-                $location.path('/admin/menulist');
-            } else {
-                toaster.pop({
-                    type: 'error',
-                    title: '',
-                    body: response.data.message
-                });
-            }
-        }).catch(function(response) {
-            toaster.pop({
-                type: 'error',
-                title: '',
-                body: "Something went wrong"
-            });
-        });      
-    }
-
-}]).controller('adminCustomerController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, SweetAlert) {
+.controller('adminCustomerController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, SweetAlert) {
     $scope.states = [{
         name: "Andhra Pradesh"
     }, {
@@ -1194,7 +919,7 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
     }
 
     $scope.updateUser = function(user){
-        adminService.adminUpdateCustomer(user).then(function(response){
+        adminService.adminUpdateCustomer($scope.user).then(function(response){
             if(response.data.code == 200){
                 SweetAlert.swal("", response.data.message, "success");
                 $location.path('/admin/customers')
@@ -1362,6 +1087,14 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
             console.log(response);
         });
 
+    }
+
+    $scope.cancleOrder = function(orderNo){
+        adminService.cancleOrder(orderNo).then(function(response){
+            SweetAlert.swal("", response.data.message, "success");
+        }).catch(function(response){
+            console.log(response);
+        });
     }
 
 }]).controller('contentManagementController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage, SweetAlert) {

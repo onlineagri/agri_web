@@ -7,7 +7,7 @@
 		<h3 class="text-center" style="margin-top: 10px;">Manage Orders</h3>
 		<table ng-table="tableParams" class="table table-bordered table-hover" show-filter="true" style="margin-top: 55px;">
 			<tr class="text-center" ng-repeat="order in $data">
-				<td title="'Order Number'" filter="{ name: 'text'}" sortable="'orderNumber'" ng-bind="order.orderId"></td>
+				<td title="'Order Number'" filter="{ orderNumber: 'text'}" sortable="'orderNumber'" ng-bind="order.orderNumber"></td>
 				<td title="'User Name'" ng-bind="order.customerName">
 				</td>
 				<td title="'Price'" ng-bind="order.amountPaid">
@@ -17,8 +17,8 @@
 				<td title="'Ordered On'" ng-bind="order.created_at | date">
 				</td>
 				<td title="'Actions'">
-					<a href="#!/admin/order/update/{{order.orderId}}" alt="Click to view" title="Click to view"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;
-					<a href="javascript:void(0)" alt="Click to delete" title="Click to delete"><i class="fa fa-trash" aria-hidden="true" ng-click="deleteMenu(order._id)"></i></a>
+					<a href="#!/admin/order/update/{{order.orderNumber}}" alt="Click to view" title="Click to view"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;
+					<a href="javascript:void(0)" alt="Click to Cancle" title="Click to Cancle"><i class="fa fa-ban" aria-hidden="true" ng-click="cancleOrder(order.orderNumber)"></i></a>
 				</td>
 			</tr>
 		</table>

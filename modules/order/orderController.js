@@ -1,17 +1,19 @@
-var mongoose = require("mongoose");
-var db = require("../../db.js");
-var CategoryModel = db.CategoryModel();
-var UserModel = db.UserModel();
-var AgricultureModel = db.AgricultureModel();
-var CartModel = db.CartModel();
-var OrderModel = db.OrderModel();
-var SystemParamsModel = db.SystemParamsModel();
-var common = require("../../config/common.js");
-var async =require('async');
-var lodash = require('lodash');
-var moment = require('moment');
+const mongoose = require("mongoose");
+const db = require("../../db.js");
+const CategoryModel = db.CategoryModel();
+const UserModel = db.UserModel();
+const AgricultureModel = db.AgricultureModel();
+const CartModel = db.CartModel();
+const OrderModel = db.OrderModel();
+const SystemParamsModel = db.SystemParamsModel();
+const ProductModel = db.ProductModel();
+const ComboModel = db.ComboModel();
+const common = require("../../config/common.js");
+const async =require('async');
+const lodash = require('lodash');
+const moment = require('moment');
 
-var eventEmmiters = require('../../config/eventEmmiters.js');
+var smsSender = require('../../config/textLocal.js');
 
 exports.placeOrder = function(req, res){
 	if(!common.isValid(req.user) || !common.isValid(req.user.id)){
@@ -23,6 +25,7 @@ exports.placeOrder = function(req, res){
 		res.json({code: 400, message: "Parameters missing"});
 		return;
 	}
+
 	let cartId = req.body.cartId;
 	let cartData = {};
 	let systemData = {};
@@ -31,6 +34,8 @@ exports.placeOrder = function(req, res){
 	let delivery_charge = 0;
 	let discount = 0;
 	let oid;
+	let deliveryAddress = "";
+	let orderNumber = "";
 	async.series([
 		function(callback){
 			CartModel.findOne({_id: cartId}, function(err, cdata){
@@ -100,7 +105,7 @@ exports.placeOrder = function(req, res){
 			if(!common.isValid(custData.address) && !common.isValid(req.body.deliveryAddress)){
 				callback("Enter delivery address OR ,Please update your address in customer profile section");
 			} else {
-				custData.address = common.isValid(req.body.deliveryAddress) ? req.body.deliveryAddress : custData.address;
+				deliveryAddress = common.isValid(req.body.deliveryAddress) ? req.body.deliveryAddress : custData.deliveryAddresses;
 				callback();
 			}
 		},
@@ -115,16 +120,17 @@ exports.placeOrder = function(req, res){
 
 			  return text;
 			}
-			let orderNumber = "TAONLINE" + makeid();
+			orderNumber = "TAONLINE" + makeid();
 
 			var orderData = {
-				orderId : orderNumber,
-				orderNetAmount : parseFloat(cartData.orderNetAmount),
-				gst_tax : parseFloat(gst_tax),
-				delivery_charge : parseFloat(delivery_charge),
-				delivery_address : custData.address,
+				cust_id : custData.userId,
+				orderNumber : orderNumber,
+				totalCost : parseFloat(cartData.orderNetAmount),
+				tax : parseFloat(gst_tax),
+				deliveryCharges : parseFloat(delivery_charge),
+				deliveryAddress : deliveryAddress,
 				discount : discount,
-				products : cartData.products,
+				product : cartData.products,
 				customerName : req.user.fullName,
 				customerEmail : custData.email,
 				customerPhone : custData.phoneNumber,
@@ -143,8 +149,14 @@ exports.placeOrder = function(req, res){
 				} else {
 					let orderUrl = common.default_set.HOST + "/orderdetails/" + orderNumber;
 					orderData['orderUrl']  = orderUrl;
-					eventEmmiters.emit('order_status', orderData);
 					oid = data._id;
+					let sData = {
+						customerPhone : orderData.customerPhone,
+						orderNumber : orderData.orderNumber,
+						status : 'Placed',
+						amountPaid : orderData.amountPaid
+					}
+					smsSender.orderStatusUpdate(sData)
 					callback();
 				}
 			})
@@ -154,20 +166,31 @@ exports.placeOrder = function(req, res){
 				if(err){
 					console.log("dberror placeOrder", err);
 				} 
-				eventEmmiters.emit('order_status_provider', data);
+				let placeSms = {
+					customerPhone : custData.phoneNumber,
+					orderNumber : orderNumber,
+					status : 'Placed',
+					amountPaid : (parseFloat(cartData.orderNetAmount) + parseFloat(gst_tax) + parseFloat(delivery_charge)).toFixed(2)
+				}
+				smsSender.adminOrderSms(placeSms);
 				callback();
 			})
 		},
 		function(callback){
 	        async.each(cartData.products, function(item, cb) {
-	            AgricultureModel.updateOne({
-	                _id: mongoose.Types.ObjectId(item.id)
-	            },{ "$inc": { "remainingQuantity": - item.quantity} }, function(err, menuData) {
-	            	if(err){
-	            		console.log("dberror placeOrder", err);
-	            	}
-	            	cb();
-	            })
+	        	if(item.type == 'product'){
+	        		ProductModel.updateOne({
+		                _id: mongoose.Types.ObjectId(item.id)
+		            },{ "$inc": { "quantity_remaining": - item.quantity} }, function(err, menuData) {
+		            	if(err){
+		            		console.log("dberror placeOrder", err);
+		            	}
+		            	cb();
+		            })
+	        	} else {
+	        		cb();
+	        	}
+	            
 	        },function(err){
 	        	callback();
 	        })
@@ -184,20 +207,60 @@ exports.placeOrder = function(req, res){
 function checkCartValidity(cartData,callback) {
 	async.each(cartData.products, function(item, cb){
 		if(item.id){
-			AgricultureModel.findOne({_id: mongoose.Types.ObjectId(item.id), status: true, isDeleted: false}, function(err, menuData){
-				if(err){
-					console.log("dberror placeOrder", err);
-					cb();
-				} else {
-					if(common.isValid(menuData) && lodash.isEmpty(menuData) == false){
-						if(item.quantity > menuData.remainingQuantity || menuData.remainingQuantity <=0){
+			if(item.type == 'product'){
+				ProductModel.findOne({_id: mongoose.Types.ObjectId(item.id), status: 'active', isDeleted: false}, function(err, menuData){
+					if(err){
+						console.log("dberror placeOrder", err);
+						cb();
+					} else {
+						if(common.isValid(menuData) && lodash.isEmpty(menuData) == false){
+							if(item.quantity > menuData.quantity_remaining || menuData.quantity_remaining <=0){
+								lodash.remove(cartData.products, {id: item.id});
+								let netAmount = lodash.sumBy(cartData.products, function(o) { return parseInt(o.quantity) * parseFloat(o.price) });
+
+								cartData.orderNetAmount = netAmount;
+								CartModel.update({ _id: cartData._id }, { $set: cartData}, function(err, data){
+									if(err){
+										console.log("dberror checkCartValidity", err);
+										cb("Internal server error");
+									} else {	
+										cb("Some Items may expire");
+									}
+								})
+							} else {
+								cb();
+							}
+						} else {
 							lodash.remove(cartData.products, {id: item.id});
-							let netAmount = lodash.sumBy(cartData.products, function(o) { return parseInt(o.quantity) * parseFloat(o.dealPrice) });
+							let netAmount = lodash.sumBy(cartData.products, function(o) { return parseInt(o.quantity) * parseFloat(o.price) });
 
 							cartData.orderNetAmount = netAmount;
 							CartModel.update({ _id: cartData._id }, { $set: cartData}, function(err, data){
 								if(err){
-									console.log("dberror updateCart", err);
+									console.log("dberror checkCartValidity", err);
+									cb("Internal server error");
+								} else {	
+									cb("Some Items may expire");
+								}
+							})
+						}
+					}
+				})
+			} else {
+				ComboModel.findOne({_id: mongoose.Types.ObjectId(item.id), status: 'active', isDeleted: false}, function(err, comboData){
+					if(err){
+						console.log("dberror placeOrder", err);
+						cb();
+					} else {
+						if(!common.isValid(comboData) && lodash.isEmpty(comboData) == true){
+							
+							lodash.remove(cartData.products, {id: item.id});
+							let netAmount = lodash.sumBy(cartData.products, function(o) { return parseInt(o.quantity) * parseFloat(o.price) });
+
+							cartData.orderNetAmount = netAmount;
+							CartModel.update({ _id: cartData._id }, { $set: cartData}, function(err, data){
+								if(err){
+									console.log("dberror checkCartValidity", err);
 									cb("Internal server error");
 								} else {	
 									cb("Some Items may expire");
@@ -206,24 +269,12 @@ function checkCartValidity(cartData,callback) {
 						} else {
 							cb();
 						}
-					} else {
-						lodash.remove(cartData.products, {id: item.id});
-						let netAmount = lodash.sumBy(cartData.products, function(o) { return parseInt(o.quantity) * parseFloat(o.dealPrice) });
-
-						cartData.orderNetAmount = netAmount;
-						CartModel.update({ _id: cartData._id }, { $set: cartData}, function(err, data){
-							if(err){
-								console.log("dberror updateCart", err);
-								cb("Internal server error");
-							} else {	
-								cb("Some Items may expire");
-							}
-						})
 					}
-				}
-			})
+				})
+			}
+			
 		} else {
-			cb();
+			cb('Invalid cart data');
 		}
 	}, function(err){
 		if(err){
@@ -289,7 +340,7 @@ exports.cancleOrder = function(req, res){
 	}
 	let currentDate = moment().format();
 	let beforeHour = moment().subtract(1, 'hours').format();
-	OrderModel.findOneAndUpdate({$and:[{orderId : orderId }, {created_at:{$lte: currentDate }},{created_at:{$gte: beforeHour}}]}, { $set: { status: 'Cancelled'}}, {new: true}, function (err, data) {
+	OrderModel.findOneAndUpdate({$and:[{orderNumber : orderId }, {created_at:{$lte: currentDate }},{created_at:{$gte: beforeHour}}]}, { $set: { status: 'Cancelled'}}, {new: true}, function (err, data) {
       if (err) {
         console.log("dberror cancleOrder", err);
         res.json({

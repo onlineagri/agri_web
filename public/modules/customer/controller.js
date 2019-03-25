@@ -8,26 +8,37 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
         $location.path('/customer/login');
     }
     $scope.rating = 5;
-
+    $scope.user = {};
+    $scope.user.address = {};
     $scope.getProductCat = function(){
         var pathParams = $routeParams.category;
         $scope.productCategory = pathParams;
     }
 
+    $scope.getCombos = function(){
+        customerService.getCombos().then(function(response){
+            if(response.data.code == 200){
+                $scope.combos = response.data.data;
+            } else {
+                toaster.pop({
+                    type: 'error',
+                    title: '',
+                    body: response.data.message
+                });
+            }
+        }).catch(function(response) {
+            toaster.pop({
+                type: 'error',
+                title: '',
+                body: "Something went wrong"
+            });
+        });
+    }
+
     $scope.getNewProducts = function(){
         customerService.getNewProducts().then(function(response){
             if(response.data.code == 200){
-                $scope.newProducts = response.data.data.data;
-                $scope.imageUrl = response.data.data.imageUrl;
-                $(document).ready(function(){
-                  $("#news-slider").owlCarousel({
-                        items : 3,
-                        itemsDesktop : [1199,3],
-                        itemsMobile : [600,1],
-                        pagination :true,
-                        autoPlay : true
-                    });
-                });
+                $scope.nProducts = response.data.data;
             } else {
                 toaster.pop({
                     type: 'error',
@@ -67,18 +78,12 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
         });
     }
 
-    $scope.addToCart = function(product){
+    $scope.addToCart = function(item, type){
         var product = {
-            id : product._id,
-            name : product.name,
-            category_name : product.categoryName,
-            providerName : product.brand,
-            priceEachItem : product.priceEachItem,
-            stockType : product.stockType,
+            id : item._id,
+            name : item.name,
             quantity : 1,
-            providerId : product.providerId,
-            providerEmail : product.providerEmail,
-            dealPrice : product.dealPrice
+            type : type
         }
 
         customerService.addToCart(product).then(function(response){
@@ -100,7 +105,6 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
             });
         });
     }
-
     /*function getCustomerCart(){
         customerService.getCustomerCart().then(function(response){
             if(response.data.code == 200){
@@ -118,9 +122,7 @@ app.controller('customerController', ['$scope', 'customerService','toaster','$lo
     $scope.getCategories = function(){
         customerService.getCategories().then(function(response){
             if(response.data.code == 200){
-               
-                $scope.productCategories = response.data.data.data;
-                $scope.imageUrlCat = response.data.data.imageUrl;
+                $scope.productCategories = response.data.data;
             } else {
                 toaster.pop({
                     type: 'error',

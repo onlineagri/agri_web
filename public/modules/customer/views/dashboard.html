@@ -1,20 +1,85 @@
 <div ng-include="'/staticViews/customerHeader.html'"></div>
+
+<section class="listing with-light-bg" ng-init="getCombos()">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 offers-sidebar mb-12">
+        <h4 class="corousalheading mb-4">Best Deal Combos</h4>
+        <div class="row">
+        <div class="col-md-4 col-sm card deals mb-3" ng-repeat="combo in combos track by $index">
+          <div class="deal-details align-items-start">
+            <div class="card-image">
+              <img ng-if="combo.imageName" src="{{combo.imageName}}" alt="" class="img-fluid">
+              <img ng-if="!combo.imageName" src="images/combodefault.jpg" alt="" class="img-fluid">
+            </div>
+            <div class="card-body">
+              <h5 class="combo-name"><a href="#!/combo/detail/{{combo._id}}"> {{combo.name}}</a></h5>
+              <!-- <h6 class="deal-on">Daily Product</h6> -->
+              <p ng-bind-html="combo.description | limitTo: 250">...</p>
+              <div class="d-flex justify-content-between">
+                <div class="price">
+                  <span class="original-price mr-1"><s><i class="fas fa-rupee-sign"></i>{{combo.actualPrice}}</s></span>
+                  <span class="deal-price"><i class="fas fa-rupee-sign"></i>{{combo.price}}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-end mb-2">
+                  <span class="discount">{{combo.comboDiscount}}% off</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-between deal-card-footer">
+            <a href="javascript:void(0);" class="btn btn-primary" ng-click="addToCart(combo, 'combo')">Add to Cart</a>
+          </div>
+        </div>
+      </div>
+      <div ng-if="combos.length > 10">
+        <a href="#!/allcombos" class="btn">All Combos</a>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
 <div class="container" ng-init="getNewProducts()" style="margin-top: 20px;">
-  <div class="row">
-     <h2 class="col-md-12 corousalheading"> Newly Arrived</h2>
-     <hr/>
-    <div class="col col-md-3 col-lg-3" ng-repeat="product in newProducts" style="margin-top: 20px;">
-      <div class="card mb-4">
-        <img ng-if="imageUrl" class="card-img-top" src="{{imageUrl}}/{{product.imageName}}" alt="{{product.name}}">
-        <!-- <img  class="card-img-top" src="images/default.jpg" alt="{{product.name}}"> -->
-        <span ng-if="product.isOrganic" class="organic-top-right">Organic</span>
-        <div class="card-body">
-          <h5 class="card-title">{{product.name}}</h5>
-          <p class="card-text" style="font-size: 18px;"><i class="fas fa-rupee-sign"></i> <b>{{product.priceEachItem}}/{{product.stockType}}</p>
-          <a href="#!/product/{{product.categoryName}}/{{product._id}}" class="btn btn-outline-dark btn-sm">Details</a>
+  <div class="row newProducts">
+    <h2 class="col-md-12 corousalheading"> Newly Arrived</h2>
+
+    <!-- <div class="row"> -->
+      <div class="col-md-12 col-lg-12">
+        <div class="row">
+        <div class="col-md-4 card product-menu mb-3" ng-repeat="product in nProducts">
+          <div class="d-flex menu-row">
+            <div class="card-image">
+              <img ng-if="product.imageName" src="{{product.imageName}}" alt="" class="img-fluid">
+              <img ng-if="!product.imageName" src="images/productdefault.png" alt="" class="img-fluid">
+              <div ng-if="product.isChemicalfree" class="nameOnimage" style="background-color: green; color: white; ">Chemical Free</div>
+            </div>
+            
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-2">
+                <h5 class="menu-name"><a href="#!/product/{{product.cat_id}}/{{product._id}}">{{product.name}}</a></h5>
+                <span class="price"><i class="fas fa-rupee-sign"></i>{{product.price}}/{{product.stockType}}</span>
+              </div>
+              
+              <p class="menu-desc" ng-bind-html="product.description | limitTo: 150"></p>
+              
+              <p class="category">
+                <span class="icon">
+                  <img src="https://img.icons8.com/ios/24/000000/category.png">
+                </span>
+                {{product.category_name}}
+              </p>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between cart-group">
+            <a href="javascript:void(0)" class="btn btn-primary" ng-click="addToCart(product, 'product')">Add to Cart</a>
+            <h5 class="menu-name">Available Quantity: {{product.quantity_remaining}}</h5>
+          </div>
         </div>
       </div>
     </div>
+    
   </div>
 </div>
 
@@ -23,12 +88,13 @@
     <h2 class="col-md-12 corousalheading">All Categories</h2>
      <hr/>
     <div class="col col-md-3 col-lg-3" ng-repeat="category in productCategories" style="margin-top: 20px;">
-      <div class="card mb-4">
-        <a href="#!/category/{{category._id}}/subcategory"><img  class="card-img-top" src="{{imageUrlCat}}/{{category.imageName}}" alt="{{category.name}}"></a>
-        <div class="card-body">
-          <h5 class="card-title"><a href="#!/category/{{category._id}}/subcategory">{{category.name}}</a></h5>
-        </div>
+      <div class="category-image"><a href="#!/products/{{category.cat_id}}">
+        <img ng-if="category.imageName" src="{{category.imageName}}" alt="" class="img-fluid">
+        <img ng-if="!category.imageName" src="images/aboutback.jpg" alt="" class="img-fluid">
+        <div class="nameOnimageCentre"> {{category.name}}</div>
+      </a>
       </div>
     </div>
   </div>
 </div>
+

@@ -1,8 +1,8 @@
 <header class="header" ng-controller="staticController">
   <div class="container">
     <nav class="navbar navbar-expand-md navbar-dark">
-      <a class="navbar-brand" href="#">
-        <img src="/images/frontlogo.png" alt="Logo" style="height: 57px;">
+      <a class="navbar-brand" href="#">dailyDeals
+        <!-- <img src="/images/frontlogo.png" alt="Logo" style="height: 57px;"> -->
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -22,7 +22,7 @@
             <a href="#!/contactus" class="nav-link">Contact Us</a>
           </li>
           <li class="nav-item" ng-if="!userLogin">
-            <a href="#!/user/login" class="btn btn-success">Login</a>
+            <a href="#!/user/login" class="btn" style="font-weight: bold; color: #330000; font-size: 18px;">Login / Signup</a>
           </li>
           <li class="nav-item dropdown" ng-if="userLogin">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="javascript:void(0);" role="button" aria-haspopup="true" aria-expanded="false">{{firstName}}</a>

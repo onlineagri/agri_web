@@ -1,0 +1,103 @@
+<div ng-include="'/staticViews/customerHeader.html'"></div>
+<section class="combo-detail with-light-bg" ng-init="getProductDetail()">
+
+    <div class="container">
+        <a href="#!/customer/dashboard" class="btn btn-primary md-4" ><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</a>
+        <hr>
+        <div class="row">
+            <div class="col-md-7 rest-detail-contents">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card combo-detail-card mb-3">
+                            <div class="row">
+                                <div class="col-lg-5 combo-image">
+                                    <img ng-if="!product.imageName" src="images/productdefault.png" alt="" class="img-fluid">
+                                    <img ng-if="product.imageName" src="{{product.imageName}}" alt="" class="img-fluid">
+                                </div>
+                                
+                                <div class="col-lg-7">
+                                    <h3 class="combo-name">{{product.name}}</h3>
+                                    <p class="products"  ng-bind-html="product.description | limitTo: 150">
+                                    </p>
+                                    <div class="d-flex">
+                                        <span class="deal-price"><i class="fas fa-rupee-sign"></i>{{product.price}}/{{product.stockType}}</span>
+                                        <div class="col-md-10 float-right">
+                                        <span class="deal-price float-right">Quantity: {{product.quantity_remaining}}</span>
+                                    </div>
+                                        
+                                    </div>
+                                     <div class="float-right" ng-if="product.isChemicalfree">
+                                        <div class="d-flex justify-content-between align-items-end mb-2 ">
+                                            <span class="discountCombo">Chemical Free</span>
+                                        </div>
+                                    </div> 
+                                    
+                                    <div class="d-flex justify-content-between">
+                                        <span><div ng-stars="ratings.avgrating ? ratings.avgrating : 0" ng-stars-max="5" ng-stars-readonly class="stars"></div>({{ratings.mycount ? ratings.mycount: 0}}) </span>
+                                    </div>
+                                    <button class="btn btn-primary float-right" ng-click="addToCart(product)">ADD TO CART </button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card combo-filter mb-3">
+                            <div ng-bind-html='combo.description'></div>
+                            <h5>Product Specifications:</h5>
+                            <p ng-bind-html="product.description"></p>
+                            <hr/>
+                            <h5>Reviews:</h5>
+                            <div style="overflow-y: scroll; height:100px;">
+                                <span ng-repeat="revie in ratings.reviews"><span ng-stars="revie.rating" ng-stars-max="5" ng-stars-readonly class="stars"></span><h5 style="font-size: 10px;">{{revie.review}}</h5><hr></span>
+                            </div>
+                            <h5>Rate your purchase:</h5>
+                            <div class="col-sm-12 col-lg-8 col-md-8">
+                                <span><div class="stars" ng-stars="rating" ></div>
+                                <textarea class="col-sm-12 col-lg-12 col-md-12" rows="4" cols="50" placeholder="Write Review" ng-model="review" name="review"/><br/>
+                                <button class="btn btn-primary" ng-click="submitReview(rating, review)">Submit</button>
+                            </span>
+                        </div>
+                        <hr>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 offers-sidebar" style="overflow-y: scroll; height:900px;">
+            <h4 class="offers-title mb-4">More Products</h4>
+            <div class="col-md-12 card product-menu mb-4" ng-repeat="product in moreProducts" style="width: 100%;">
+          <div class="d-flex menu-row">
+            <div class="card-image">
+              <img ng-if="product.imageName" src="{{product.imageName}}" alt="" class="img-fluid">
+              <img ng-if="!product.imageName" src="images/productdefault.png" alt="" class="img-fluid">
+              <div ng-if="product.isChemicalfree" class="nameOnimage" style="background-color: green; color: white; ">Chemical Free</div>
+            </div>
+            
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-2">
+                <h5 class="menu-name"><a href="#!/product/{{product.cat_id}}/{{product._id}}">{{product.name}}</a></h5>
+                <span class="price"><i class="fas fa-rupee-sign"></i>{{product.price}}/{{product.stockType}}</span>
+              </div>
+              
+              <p class="menu-desc" ng-bind-html="product.description | limitTo: 150"></p>
+              
+              <p class="category">
+                <span class="icon">
+                  <img src="https://img.icons8.com/ios/24/000000/category.png">
+                </span>
+                {{product.category_name}}
+              </p>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between cart-group">
+            <a href="javascript:void(0)" class="btn btn-primary" ng-click="addToCart(product, 'product')">Add to Cart</a>
+            <h5 class="menu-name">Available Quantity: {{product.quantity_remaining}}</h5>
+          </div>
+        </div>
+        <div ng-if="moreProducts.length > 10">
+        <a href="#!/products/{{cartIds}}" class="btn">More Products</a>
+      </div>
+        </div>
+    </div>
+</div>
+</section>

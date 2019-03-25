@@ -1,0 +1,50 @@
+<div ng-include="'/staticViews/customerHeader.html'"></div>
+
+<section class="listing with-light-bg" ng-init="getCombos()">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 offers-sidebar mb-12">
+        <h4 class="corousalheading mb-4">Best Deal Combos</h4>
+        <a class="btn btn-primary mb-4" href="#!/customer/dashboard"><i class="fa fa-arrow-left" aria-hidden="true"></i>
+Back</a>
+        <div class="row">
+        <div class="col-md-4 card deals mb-3" ng-repeat="combo in combos track by $index">
+          <div class="deal-details align-items-start">
+            <div class="card-image">
+              <img ng-if="combo.imageName" src="{{combo.imageName}}" alt="" class="img-fluid">
+              <img ng-if="!combo.imageName" src="images/combodefault.jpg" alt="" class="img-fluid">
+            </div>
+            <div class="card-body">
+              <h5 class="combo-name"><a href="#!/combo/detail/{{combo._id}}"> {{combo.name}}</a></h5>
+              <!-- <h6 class="deal-on">Daily Product</h6> -->
+              <p ng-bind-html="combo.description | limitTo: 250">...</p>
+              <div class="d-flex justify-content-between">
+                <div class="price">
+                  <span class="original-price mr-1"><s><i class="fas fa-rupee-sign"></i>{{combo.actualPrice}}</s></span>
+                  <span class="deal-price"><i class="fas fa-rupee-sign"></i>{{combo.price}}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-end mb-2">
+                  <span class="discount">{{combo.comboDiscount}}% off</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-between deal-card-footer">
+            <a href="javascript:void(0);" class="btn btn-primary" ng-click="addToCart(combo, 'combo')">Add to Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<div class="col-md-12 text-center">
+  <button ng-disabled="currentPage == 1" ng-click="currentPage=currentPage-1; getCombos()" class="btn btn-primary">
+  Previous
+  </button>
+  {{currentPage}}/{{numberOfPages}}
+  <button ng-disabled="currentPage >= numberOfPages" ng-click="currentPage=currentPage+1; getCombos()" class="btn btn-primary">
+  Next
+  </button>
+</div>

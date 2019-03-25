@@ -13,7 +13,7 @@ body {
     color: #333333; }
 
 .header {
-  background-color: #ff0066; }
+  background-color: #3385ff; }
   .header .navbar-dark {
     padding: .5rem 1rem 1rem 1rem; }
     .header .navbar-dark .navbar-nav .nav-item.dropdown .dropdown-menu .dropdown-item {
@@ -22,7 +22,7 @@ body {
       font-size: 15px; }
       .header .navbar-dark .navbar-nav .nav-item.dropdown .dropdown-menu .dropdown-item:hover {
         background-color: transparent;
-        color: #ff0066; }
+        color: #3385ff; }
       .header .navbar-dark .navbar-nav .nav-item.dropdown .dropdown-menu .dropdown-item:after {
         content: "";
         position: absolute;
@@ -34,11 +34,12 @@ body {
       .header .navbar-dark .navbar-nav .nav-item.dropdown .dropdown-menu .dropdown-item:last-of-type:after {
         display: none; }
     .header .navbar-dark .navbar-nav .nav-item.active .nav-link {
-      color: #f7d71d;
+      color: #ffffff;
       font-weight: 600; }
     .header .navbar-dark .navbar-nav .nav-item .nav-link {
       color: #ffffff;
-      font-size: 15px; }
+      font-size: 18px;
+      font-weight: bold; }
     .header .navbar-dark .navbar-nav .nav-item .signup-btn {
       margin-top: 15px; }
 
@@ -56,7 +57,7 @@ section.customer-top-banner {
     font-size: 35px;
     margin-bottom: 25px; }
     section.customer-top-banner .left-text-section h1 span {
-      color: #ff0066; }
+      color: #3385ff; }
   section.customer-top-banner .left-text-section h4 {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
@@ -78,7 +79,7 @@ section.customer-top-banner {
         section.customer-top-banner .left-text-section form .search-cover .form-control:focus {
           box-shadow: none; }
       section.customer-top-banner .left-text-section form .search-cover .search-btn {
-        background-color: #ff0066;
+        background-color: #3385ff;
         padding: 6px 15px;
         border-radius: 0 4px 4px 0; }
   section.customer-top-banner .left-text-section .app-download-links .ios {
@@ -109,7 +110,7 @@ section.introduction {
     section.introduction .right-column .section-title .green {
       color: #669900; }
     section.introduction .right-column .section-title .pink {
-      color: #ff0066; }
+      color: #3385ff; }
 
 
 
@@ -197,7 +198,7 @@ section.reviews .container-fluid {
 ------------------------*/
 @media only screen and (min-width: 768px) {
   .header {
-    background-color: #ff0066; }
+    background-color: #3385ff; }
     .header .navbar-dark {
       padding: .5rem 1rem 0.5rem 1rem; }
       .header .navbar-dark .navbar-nav .nav-item {
@@ -296,4 +297,5 @@ section.reviews .container-fluid {
       font-size: 36px; }
     section.download-app .right-column .info {
       font-size: 1.2rem; } }
+
 

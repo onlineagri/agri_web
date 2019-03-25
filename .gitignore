@@ -35,7 +35,9 @@ agri_web/public/bower_components/
 # Typescript v1 declaration files
 
 # config files
+config/*
 agri_web/config/default.js* 
+agri_web/config/textLocal.js*
 
 typings/
 
@@ -57,6 +59,4 @@ typings/
 !.elasticbeanstalk/*.global.yml
 
 # CSV file
-taecout-webapp/uploads/*
-!taecout-webapp/uploads/orderPdf.html
 uploads/*

@@ -4,9 +4,9 @@
 	  review: { type: String},
 	  rating: { type: Number},
 	  userId: mongoose.Schema.Types.ObjectId,
-	  productId : mongoose.Schema.Types.ObjectId,
+	  itemId : mongoose.Schema.Types.ObjectId,
 	  userName : { type: String},
-	  productName : {type: String},
+	  itemName : {type: String},
 	  status: {type: Boolean, default: true},
 	  isDeleted : {type: Boolean, default: false}
 

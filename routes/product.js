@@ -4,6 +4,16 @@ var productController = require("../modules/product/productController.js");
 
 /* GET home page. */
 router.get('/getnewproducts', productController.getNewProducts);
+router.get('/combos', productController.getCombos);
+router.get('/combo/:id', productController.getComboDetails);
+router.get('/details/:id', productController.productDetails);
+router.get('/getmorecombo/:id', productController.getMoreCombos);
+router.get('/combo/:pageno/:pagesize', productController.getAllCombos);
+router.get('/details/:catid/:id', productController.getProductDetails);
+router.get('/moreproducts/:catid/:id', productController.getMoreProducts);
+router.post('/allproducts', productController.allProducts)
+
+
 router.get('/getproduct/:id', productController.getproduct);
 router.post('/addtocart', productController.addToCart);
 router.get('/cart', productController.getCustomerCart);

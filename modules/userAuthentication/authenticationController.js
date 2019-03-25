@@ -173,7 +173,7 @@ exports.forgotpass = function(req, res){
     }
 
     UserModel.findOne({
-        email: params.phoneNumber,
+        phoneNumber: params.phoneNumber,
         isDeleted: false,
         role: params.role,
         status : 'active'
@@ -214,11 +214,12 @@ exports.forgotpass = function(req, res){
 
 function forgotPassSms(data, callback){
     let otpParams = {
+        type : 'forgotPass',
         phoneNumber : '91' + data.phoneNumber,
         verificationCode : data.token
     }
     textLocal.sendOtp(otpParams, function(serr){
-        if(err){
+        if(serr){
             callback(serr);
         } else {
             callback();
@@ -244,11 +245,13 @@ exports.changePassword = function(req, res){
         } else {
             if (common.isValid(data)) {
                 let password = db.generateHash(userParam.password);
-                UserModel.updateOne({_id: userParam.id}, {$set: {password: password }}, function(err, succ){
+                UserModel.updateOne({_id: data._id}, {$set: {password: password }}, function(err, succ){
                     if(err){
                         res.json({code:400, message:"Internal server error"});
                     } else {
-                        UserModel.updateOne({_id: userParam.id}, {$unset: {passwordToken: 1 }});
+                        UserModel.updateOne({_id: data._id}, {$unset: {passwordToken: 1 }}, function(err){
+                            console.log(err,"this is error passwordToken reset");
+                        });
                         res.json({code:200, message:"Success", data:[]})
                     }
                 })

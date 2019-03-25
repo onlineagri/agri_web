@@ -4,6 +4,7 @@ var UserModel = db.UserModel();
 var SystemParamsModel = db.SystemParamsModel();
 var common = require("../../config/common.js");
 var async = require('async');
+const Joi = require('joi');
 
 
 exports.getUser = function(req, res){
@@ -27,11 +28,7 @@ exports.getUser = function(req, res){
         lastName: 1,
         email: 1,
         phoneNumber: 1,
-        streetAddress: 1,
-        city: 1,
-        state: 1,
-        country: 1,
-        pincode: 1,
+        deliveryAddresses: 1,
         address: 1
     }, function(err, data) {
     	if(err){
@@ -55,32 +52,85 @@ exports.updateProfile = function(req, res){
 		return;
 	}
 	
-	if(!common.isValid(userData.firstName) || !common.isValid(userData.lastName) || !common.isValid(userData.email) || !common.isValid(userData.streetAddress) || !common.isValid(userData.city) || !common.isValid(userData.state) || !common.isValid(userData.country) || !common.isValid(userData.pincode)){
-		res.json({code: 400, message: "Please enter all the required details"});
-		return;
-	}
+	async.series([
+		function(callback) {
+			delete userData.deliveryAddresses;
+			userData.role = req.user.role;
+			callback();
+		},
+		function(callback){
+			const schema = Joi.object().keys({
+				_id : Joi.string(),
+				phoneNumber : Joi.string(),
+                firstName: Joi.string().required(),
+                lastName : Joi.string().required(),
+                email : Joi.string().allow().optional(),
+                address : Joi.object().keys({
+                	society : Joi.string().required(),
+                    wing : Joi.string().optional(),
+                    flatNo : Joi.string().required(),
+                    city : Joi.string().required(),
+                    state : Joi.string().required(),
+                    pincode : Joi.string().required()
+                }),
+                role : Joi.string().valid(['customer']).required()
+            });
+            Joi.validate(userData, schema, function(err){
+                if(err){
+                    console.log(err);
+                    callback('Some Parameters are invalid or missing');
+                } else {
+                    callback();
+                }
+            });
+		},
 
-	let userParam = {
-		firstName : common.capitalizeFirstLetter(userData.firstName),
-		lastName : common.capitalizeFirstLetter(userData.lastName),
-		email : userData.email,
-		streetAddress : userData.streetAddress,
-		city : userData.city,
-		state : userData.state,
-		country : userData.country,
-		pincode : userData.pincode
-	}
-
-	userParam.address = userParam.streetAddress + ", " + userParam.city + ", " + userParam.state + ", " + userParam.country + ", " + userParam.pincode; 
-
-	UserModel.update({_id: req.user.id}, userParam, function(err, data) {
-		if(err){
-			console.log("dberror getUser", updateProfile);
-    		res.json({code: 400, message : "Internal server error"});
-		} else {
-			res.json({code: 200, message : "Profile Saved successfully"});
+		function(callback){
+			let wing = '';
+			let society = (userData.address.society).substring(0,6);
+			let flatNo = (userData.address.flatNo);
+			if(common.isValid(userData.address.wing)){
+				wing = (userData.address.wing).substring(0,1);
+			}
+			let userId = society + flatNo + ( common.isValid(wing) ? wing : '');
+			userData.userId = userId;
+			userData.deliveryAddress = flatNo + " " + (common.isValid(userData.address.wing) ? userData.address.wing : '') + userData.address.society + " " + userData.address.city + " " + userData.address.state + " " + userData.address.pincode;
+			callback();
+		},
+		function(callback) {
+			let userParam = {
+				firstName : common.capitalizeFirstLetter(userData.firstName),
+				lastName : common.capitalizeFirstLetter(userData.lastName),
+				email : userData.email,
+				address : {
+					society : userData.address.society,
+					flatNo : userData.address.flatNo,
+					wing : userData.address.wing || '',
+					city : userData.address.city,
+					state : userData.address.state,
+					pincode : userData.address.pincode
+				},
+				role : userData.role,
+				deliveryAddresses : userData.deliveryAddress,
+				userId : userData.userId
+			};
+			UserModel.update({_id: req.user.id}, userParam, function(err, data) {
+				if(err){
+					console.log("dberror updateProfile", err);
+		    		callback('Internal server error');
+				} else {
+					callback();
+				}
+			})
 		}
-	})
+		], function(err){
+			if(err){
+				res.json({code:400, message: err});
+			} else {
+				res.json({code:200, message: 'Profile successfully updated'});
+			}
+		})
+
 }
 
 exports.updatePassword = function(req, res) {
@@ -150,7 +200,7 @@ exports.getAddress = function(req, res){
 			console.log("dberror getAddress", err);
 			res.json({code: 400, message: err});
 		} else {
-			res.json({code:200, message: "Success", data: {address : data.address}});
+			res.json({code:200, message: "Success", data: data.address});
 		}
 	})
 }

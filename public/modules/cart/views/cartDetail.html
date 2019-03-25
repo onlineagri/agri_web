@@ -20,12 +20,12 @@
         </thead>
         <tbody>
           <tr ng-repeat="item in cart.products">
-            <td>{{item.name}}</td>
+            <td>{{item.name}}({{item.type}})</td>
             <td>{{item.quantity}}</td>
             <td><input type="number" name="quantity" id="quantity" ng-model="item.quantity" placeholder="Enter qunatity" ng-blur="updateCart(item,'quantityUpdate')" min="1" max="1000"></td>
             <td>{{item.remainingQuantity}}{{item.stockType}}</td>
-            <td>&#x20b9;{{item.dealPrice}}/{{item.stockType}}</td>
-            <td>&#x20b9;{{item.quantity * item.dealPrice}}/{{item.stockType}}</td>
+            <td>&#x20b9;{{item.price}}/{{item.stockType}}</td>
+            <td>&#x20b9;{{item.quantity * item.price}}/{{item.stockType}}</td>
             <td><i class="fa fa-times" aria-hidden="true" ng-click="updateCart(item,'delete')"></i></td>
           </tr>
           <tr>
@@ -68,9 +68,9 @@
         <textarea class="col-sm-12 col-md-8"  ng-model="cart.specialRequest" placeholder="Enter Special request, may charges applicable " cols="10" rows="2" name="specialRequest" id="specialRequest"></textarea>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-12">
-      <a class="col-sm-4 col-md-4 cartButtons  btn btn-primary" href="#!/customer/dashboard">More Shopping</a>
+      <a class="col-sm-4 col-md-4 cartButtons  btn btn-info" href="#!/customer/dashboard">More Shopping</a>
       <button type="button" class="col-sm-4 col-md-4 cartButtons  btn btn-secondary" ng-click="clearCart()">Clear Cart</button>
-      <button ng-disabled="!validCart || blockPurchase" type="button" class="col-sm-4 col-md-4 cartButtons  btn btn-success" ng-click="placeOrder(cart)">Place Order</button>
+      <button ng-disabled="!validCart || blockPurchase" type="button" class="col-sm-4 col-md-4 cartButtons  btn btn-primary" ng-click="placeOrder(cart)">Place Order</button>
     </div>
       <div style="color: green;">{{deliveryHint}}</div>
     </div >

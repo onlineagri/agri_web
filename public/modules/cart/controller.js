@@ -14,7 +14,8 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
     function getCustAddress(){
         cartService.getCustAddress().then(function(response){
             if(response.data.code == 200){
-                $scope.custaddress = response.data.data.address; 
+               var address = response.data.data;
+               $scope.custaddress = address.flatNo + " " + address.society + " " + (address.wing ? address.wing :" ") + " " + address.city + " " + address.state + " " + address.pincode;     
             } 
         }).catch(function(response) {
             toaster.pop({
@@ -51,13 +52,13 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
 
 
     $scope.updateCart = function(item,type){
-    	var type = type;
     	var cartId = $routeParams.id;
     	var itemUpdate = {
     		type : type,
     		cartId:cartId,
     		itemId: item.id,
-    		quantity: (item.quantity < 0 || item.quantity == null) ? 1 : item.quantity
+    		quantity: (item.quantity < 0 || item.quantity == null) ? 1 : item.quantity,
+            itemType : item.type
     	}
 
     	cartService.updateCart(itemUpdate).then(function(response){
@@ -149,7 +150,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
             $scope.orderAmountHint = "";
             $scope.blockPurchase = false;
         }
-        $scope.orderNetAmount = parseInt($scope.cart.orderNetAmount) + getDelivery() + getGst();
+        $scope.orderNetAmount = parseFloat($scope.cart.orderNetAmount) + getDelivery() + getGst();
         return $scope.orderNetAmount;
     }
 

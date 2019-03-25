@@ -112,7 +112,27 @@ app.config(function($routeProvider, $httpProvider) {
         controller : "comboController",
         templateUrl : "../modules/admin/views/updateCombo.html"
     })
-   
+
+    .when("/combo/detail/:id", {
+        controller : "userComboController",
+        templateUrl : "../modules/combo/views/detail.html"
+    })
+    
+    .when("/allcombos", {
+        controller : "userComboController",
+        templateUrl : "../modules/combo/views/allcombos.html"
+    })
+    .when("/product/:catid/:id", {
+        controller : "userProductController",
+        templateUrl : "../modules/product/views/detail.html"
+    })
+    .when("/products/:catid", {
+        controller : "userProductController",
+        templateUrl : "../modules/product/views/products.html"
+    })
+
+
+
 
     .when("/product/:category/:id", {
         controller : "customerController",

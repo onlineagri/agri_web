@@ -582,8 +582,9 @@ font-family: 'Libre Baskerville', serif;
 }
 
 footer {
-  background-color: #000;
-  height: 10%;
+  /*background-color: #000;*/
+  /*height: 100%;*/
+  /*position: absolute;*/
 }
 
 .organic-top-right {
@@ -603,4 +604,8 @@ footer {
   color: #fff;
   font-family: 'Pacifico', cursive;
   font-size: 24px;
+}
+#main-wrapper {
+    padding: 0 0 100px;
+    position: relative;
 }

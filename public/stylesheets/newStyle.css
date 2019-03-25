@@ -1,0 +1,464 @@
+/*Customer dashboard start*/
+
+
+.card {
+    padding: 8px;
+    border: none;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    margin-right: 14px;
+}
+
+ section.offers-sidebar .card.deals .deal-details {
+    display: flex;
+    flex-wrap: nowrap;
+    margin-right: 5px;
+}
+
+section.offers-sidebar .card.deals .card-image {
+    margin-right: 8px;
+    margin-bottom: 8px;
+    overflow: hidden
+}
+
+section.offers-sidebar .card.deals .card-image img {
+    border-radius: 4px
+}
+
+section.offers-sidebar .card.deals .card-body p {
+    font-size: 13px;
+    margin-bottom: 7px
+}
+section.offers-sidebar .card.deals .card-body .combo-name {
+    font-size: 18px;
+    margin-bottom: 2px
+}
+
+section.offers-sidebar .card.deals .card-body .deal-on {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px
+}
+
+section.offers-sidebar .card.deals .card-body .price .original-price {
+    color: gray
+}
+
+ section.offers-sidebar .card.deals .card-body .price .deal-price {
+    color: #5fa037
+}
+
+section .offers-sidebar .card.deals .discount {
+    padding: 3px 10px;
+    background-color: #5fa037;
+    color: #ffffff;
+    border-radius: 3px
+}
+
+ section.offers-sidebar .card.deals .offerdt {
+    font-size: 11px;
+    padding: 5px 0;
+    border-top: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da
+}
+
+ section.offers-sidebar .card.deals .form-control {
+    width: 50%;
+    font-size: 14px
+}
+section.align-items-start {
+    -ms-flex-align: start!important;
+    align-items: flex-start!important;
+}
+
+
+ section.offers-sidebar .card.deals .discount {
+    padding: 3px 10px;
+    background-color: #5fa037;
+    color: #ffffff;
+    border-radius: 3px;
+}
+
+section.listing .card .card-image {
+    margin-bottom: 8px;
+    border-radius: 4px;
+    overflow: hidden
+}
+
+section.listing .card .card-image img {
+    width: 100%
+}
+
+section.listing .card .card-body {
+    padding: 0
+}
+
+section.listing .card .card-body p {
+    font-size: 14px
+}
+
+section.listing .card .card-body a {
+    text-decoration: none
+}
+section.listing .card .card-body .combo-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333
+}
+
+section.listing .card .card-body .cuisine {
+    position: relative;
+    padding-left: 22px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ced4da;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #666666
+}
+
+section.listing .card .card-body .cuisine .icon {
+    position: absolute;
+    left: 0;
+    top: 0
+}
+
+section.listing .card .card-body .status {
+    font-size: 13px;
+    color: #5fa037
+}
+
+section.listing .card .card-body .address {
+    font-weight: 600;
+    margin-bottom: 3px;
+    position: relative;
+    padding-left: 18px
+}
+
+section.listing .card .card-body .address svg {
+    position: absolute;
+    top: 3px;
+    left: 0
+}
+
+section.listing .card .card-body .address svg path {
+    fill: #5fa037
+}
+
+section.listing .card .card-body .ratings li {
+    font-size: 12px
+}
+
+section.listing .card .card-body .ratings li:last-of-type {
+    font-size: 14px
+}
+
+section.listing .card .card-body .price-range {
+    font-size: 14px
+}
+
+section.listing .card .distance {
+    font-size: 13px;
+    display: block;
+    width: 69px
+}
+
+.newProducts .product-menu .menu-row {
+    min-height: 120px;
+    margin-bottom: 10px
+}
+
+.newProducts .product-menu .card-image {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    min-width: 200px;
+    overflow: hidden
+}
+
+.newProducts .product-menu .card-image img {
+    border-radius: 4px;
+    width: 100%
+}
+
+.newProducts .product-menu .card-body {
+    padding: 0
+}
+
+.newProducts .product-menu .menu-name {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 0
+}
+
+.newProducts .product-menu .price {
+    display: block;
+    width: 80px;
+    text-align: right;
+    font-weight: 600;
+    color: #5fa037;
+    line-height: 18px
+}
+
+.newProducts .product-menu .menu-desc {
+    line-height: 16px;
+    font-size: 13px;
+    color: #999999
+}
+
+.newProducts .product-menu .category {
+    color: #5fa037
+}
+
+.newProducts .product-menu .cart-group {
+    border-top: 1px solid #ced4da;
+    padding-top: 10px
+}
+
+.newProducts .product-menu .cart-group .form-control {
+    width: 50%;
+    font-size: 14px
+}
+
+.nameOnimage {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+.nameOnimageCentre{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.category-image {
+    margin-bottom: 8px;
+    border-radius: 4px;
+    overflow: hidden
+}
+
+.category-image img {
+    width: 100%
+}
+
+/*end*/
+
+/*combo Detail start*/
+
+section.combo-detail {
+    padding: 50px 0
+}
+
+section.combo-detail p {
+    font-size: 14px;
+    margin-bottom: 10px
+}
+
+section.combo-detail p svg path {
+    fill: #5fa037
+}
+
+section.combo-detail .rest-detail-contents {
+    margin-bottom: 35px
+}
+
+section.combo-detail .combo-detail-card {
+    padding: 15px
+}
+
+section.combo-detail .combo-detail-card .combo-image {
+    margin-bottom: 15px
+}
+
+section.combo-detail .combo-detail-card .combo-image img {
+    border-radius: 4px;
+    width: 100%
+}
+
+section.combo-detail .combo-detail-card .phone svg {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1)
+}
+
+section.combo-detail .combo-detail-card .price-range,
+section.combo-detail .combo-detail-card .status {
+    position: relative;
+    padding-left: 15px
+}
+
+section.combo-detail .combo-detail-card .price-range:after,
+section.combo-detail .combo-detail-card .status:after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 8px;
+    height: 5px;
+    width: 5px;
+    background-color: #a5a2a2;
+    border-radius: 5px
+}
+
+section.combo-detail .combo-detail-card .status {
+    font-weight: 600
+}
+
+section.combo-detail .combo-detail-card .status.open {
+    color: #5fa037
+}
+
+section.combo-detail .combo-detail-card .status.close {
+    color: #5fa037
+}
+
+section.combo-detail .combo-name {
+    font-weight: 700
+}
+
+section.combo-detail .products {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ced4da;
+    font-size: 14px
+}
+
+section.combo-detail .address {
+    font-size: 14px;
+    position: relative;
+    padding-left: 18px;
+    margin-bottom: 10px
+}
+
+section.combo-detail .address svg {
+    position: absolute;
+    left: 0;
+    top: 3px
+}
+
+section.combo-detail .distance {
+    font-size: 14px;
+    width: 80px
+}
+
+section.combo-detail .ratings {
+    font-size: 14px
+}
+
+section.combo-detail .combo-filter {
+    padding: 15px 15px 9px 15px
+}
+
+section.combo-detail .combo-filter .filters {
+    list-style-type: none;
+    padding-left: 0;
+    display: flex;
+    min-width: 100%;
+    overflow-x: inherit;
+    flex-wrap: wrap;
+    min-height: inherit;
+    padding-top: 0;
+    margin-bottom: 0
+}
+
+section.combo-detail .combo-filter .filters span {
+    font-size: 14px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    padding: 0.35rem 0.8rem;
+    background-color: #ffffff;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    cursor: pointer;
+    text-align: center
+}
+
+section.combo-detail .combo-filter .filters span.active {
+    background-color: #5fa037;
+    border-color: #5fa037;
+    color: #ffffff
+}
+
+section.combo-detail .restaurant-menu .menu-row {
+    min-height: 120px;
+    margin-bottom: 10px
+}
+
+section.combo-detail .restaurant-menu .card-image {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    min-width: 135px;
+    overflow: hidden
+}
+
+section.combo-detail .restaurant-menu .card-image img {
+    border-radius: 4px;
+    width: 100%
+}
+
+section.combo-detail .restaurant-menu .card-body {
+    padding: 0
+}
+
+section.combo-detail .restaurant-menu .menu-name {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 0
+}
+
+section.combo-detail .restaurant-menu .price {
+    display: block;
+    width: 80px;
+    text-align: right;
+    font-weight: 600;
+    color: #5fa037;
+    line-height: 18px
+}
+
+section.combo-detail .restaurant-menu .menu-desc {
+    line-height: 16px;
+    font-size: 13px;
+    color: #999999
+}
+
+section.combo-detail .restaurant-menu .category {
+    color: #5fa037
+}
+
+section.combo-detail .restaurant-menu .cart-group {
+    border-top: 1px solid #ced4da;
+    padding-top: 10px
+}
+
+section.combo-detail .restaurant-menu .cart-group .form-control {
+    width: 50%;
+    font-size: 14px
+}
+
+.discountCombo {
+    padding: 3px 10px;
+    background-color: #5fa037;
+    color: #ffffff;
+    border-radius: 3px
+}
+.stars {
+  color:yellow;
+}
+
+.tablecomboproducts {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+.tablecomboproduct td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.tablecomboproduct tr:nth-child(even) {
+  background-color: #dddddd;
+}
+/*end*/

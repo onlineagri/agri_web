@@ -9,7 +9,7 @@
         <h4 class="text-center">Order Details</h4>
         <div class="row justify-content-center">
           <div class="col-md-6">
-            <div class="col-md-12">Order Number: {{order.orderId}}</div>
+            <div class="col-md-12">Order Number: {{order.orderNumber}}</div>
             
           </div>
           <div class="col-md-6">
@@ -27,7 +27,7 @@
             
           </div>
           <div class="col-md-6">
-            <div class="col-md-12">Address: {{order.delivery_address}}</div>
+            <div class="col-md-12">Address: {{order.deliveryAddress}}</div>
           </div>
           <div class="col-md-6">
             <div class="col-md-12">Special Request: {{order.specialRequest}}</div>
@@ -35,10 +35,13 @@
           <div class="col-md-6">
             <div class="col-md-12">Order Status: {{order.status}}</div>
             <div class="col-md-12">
-              <a href="javascript:void(0);" ng-click="orderStatus(order.orderId, order.status)" ng-class="{disabled: process}"><i class="fa fa-box-open" aria-hidden="true"></i></a> 
-              <a href="javascript:void(0);" ng-click="orderStatus(order.orderId, order.status)" ng-class="{disabled: delivery}"><i class="fa fa-truck" aria-hidden="true"></i></a> 
-              <a href="javascript:void(0);" ng-click="orderStatus(order.orderId, order.status)" ng-class="{disabled: complete}"><i class="fa fa-copyright" aria-hidden="true"></i></a>
+              <a href="javascript:void(0);" ng-click="orderStatus(order.orderNumber, order.status)" ng-class="{disabled: process}"><i class="fa fa-box-open" aria-hidden="true"></i></a> 
+              <a href="javascript:void(0);" ng-click="orderStatus(order.orderNumber, order.status)" ng-class="{disabled: delivery}"><i class="fa fa-truck" aria-hidden="true"></i></a> 
+              <a href="javascript:void(0);" ng-click="orderStatus(order.orderNumber, order.status)" ng-class="{disabled: complete}"><i class="fa fa-copyright" aria-hidden="true"></i></a>
             </div>
+          </div>
+          <div class="col-md-6">
+            <div class="col-md-12">Unique_Id: {{order.cust_id}}</div>
           </div>
         </div>
         <table class="table">
@@ -52,12 +55,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="item in order.products">
+            <tr ng-repeat="item in order.product">
               <td>{{item.name}}</td>
               <td>{{item.quantity}}</td>
               
-              <td>&#x20b9;{{item.dealPrice}}/{{item.stockType}}</td>
-              <td>&#x20b9;{{item.quantity * item.dealPrice}}/{{item.stockType}}</td>
+              <td>&#x20b9;{{item.price}}/{{item.stockType}}</td>
+              <td>&#x20b9;{{item.quantity * item.price}}/{{item.stockType}}</td>
               
             </tr>
             <tr>
