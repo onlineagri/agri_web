@@ -1571,35 +1571,45 @@ exports.getUsers = function(req, res){
 }
 
 exports.getBusinessPersons = function(req, res) {
-    UserModel.aggregate([{
-        $match: {
-            $and: [{
-                role: {
-                    $ne: "admin"
-                }
-            }, {
-                role: {
-                    $ne: "customer"
-                }
-            }, {
-                isDeleted: false
-            }]
-        }
-    }]).exec(function(err, data) {
-        if (err) {
-            console.log('dberror getBusinessPersons', err);
-            res.json({
-                code: 400,
-                message: "Internal Server Error"
-            });
-        } else {
-            res.json({
-                code: 200,
-                message: "Users Fetched Successfuly",
-                data: data
-            });
-        }
-    });
+    UserModel.find({
+                $and: [{
+                    role: {
+                        $ne: "admin"
+                    }
+                },
+                {
+                    role: {
+                        $ne: "customer"
+                    }
+                }, {
+                    isDeleted: false
+                }]
+        })
+        .select({
+            '_id': 1,
+            'firstName': 1,
+            'lastName': 1,
+            'status': 1,
+            'created_at': 1,
+            'email': 1,
+            'phoneNumber': 1,
+            'address': 1,
+            'role': 1
+        })
+        .exec(function(err, data) {
+            if (err) {
+                res.json({
+                    code: 400,
+                    message: "Internal Server Error"
+                });
+            } else {
+                res.json({
+                    code: 200,
+                    message: "Users Fetched Successfuly",
+                    data: data
+                });
+            }
+        });
 }
 
 exports.adminAddBusinessPerson = function(req, res){
@@ -1629,16 +1639,12 @@ exports.adminAddBusinessPerson = function(req, res){
                 lastName : userData.lastName,
                 phoneNumber : userData.phoneNumber,
                 status : "active",
-                role : userData.role,
-                about: userData.about
+                role : userData.role
             }
             if(common.isValid(userData.email))
                 businessPerson["email"] = userData.email;
             if(common.isValid(userData.streetAddress)){
                 businessPerson["streetAddress"] = userData.streetAddress;
-                businessPerson["deliveryAddresses"] = [{
-                    address: userData.streetAddress + " " + (common.isValid(userData.city) ? userData.city : "") + " " + (common.isValid(userData.state) ? userData.state : "") + " " + (common.isValid(userData.country) ? userData.country : "") + " " + (common.isValid(userData.pincode) ? userData.pincode : "")
-                }]
             }
             if(common.isValid(userData.city))
                 businessPerson["city"] = userData.city;
@@ -1696,7 +1702,7 @@ exports.getBusinessPerson = function(req, res) {
                 name: data.state
             };
             let businessPersonData = {
-                '_id': data._id,
+                'id': data._id,
                 'firstName': data.firstName,
                 'lastName': data.lastName,
                 'status': data.status,
@@ -1706,10 +1712,8 @@ exports.getBusinessPerson = function(req, res) {
                 'city': data.city,
                 'state': state,
                 'pincode': data.pincode,
-                'deliveryAddresses': data.deliveryAddresses,
                 'country': data.country,
-                'role': data.role,
-                'about': data.about
+                'role': data.role
             }
             res.json({
                 code: 200,
@@ -1721,12 +1725,33 @@ exports.getBusinessPerson = function(req, res) {
 
 exports.adminUpdateBusinessPerson = function(req, res){
     let userData = req.body;
-    if(!common.isValid(userData._id) || !common.isValid(userData.firstName) || !common.isValid(userData.lastName) || !common.isValid(userData.phoneNumber)){
-        res.json({code: 400, message:"Parameters missing"});
+
+    if (!common.isValid(userData._id)) {
+        res.send({
+            code: 400,
+            message: 'Paramter is missing'
+        });
         return;
     }
+
+    const schema = Joi.object().keys({
+        firstName: Joi.string().optional(),
+        lastName: Joi.string().optional(),
+        phoneNumber: Joi.string().optional(),
+        role : Joi.string().required()
+    });
+
     let custData;
     async.series([
+        function(callback){
+            Joi.validate(userData, schema, function(err){
+                if(err){
+                    callback('Some Parameters are invalid or missing');
+                } else {
+                    callback();
+                }
+            }).unknown();
+        },
         function(callback){
             UserModel.findOne({_id: userData._id, role: userData.role}, function(err, data){
                 if(err){
@@ -1745,7 +1770,8 @@ exports.adminUpdateBusinessPerson = function(req, res){
         function(callback){
             let businessPerson = {
                 firstName : userData.firstName,
-                lastName : userData.lastName
+                lastName : userData.lastName,
+                role: userData.role
             }
             if(common.isValid(userData.email))
                 businessPerson["email"] = userData.email;
@@ -1762,10 +1788,6 @@ exports.adminUpdateBusinessPerson = function(req, res){
                 businessPerson["pincode"] = userData.pincode;
             if(common.isValid(userData.status) && lodash.includes(["active", "inRegistration", "suspended"], userData.status))
                 businessPerson["status"] = userData.status;
-            if (common.isValid(userData.role))
-                businessPerson["role"] = userData.role;
-            if (common.isValid(userData.about))
-                businessPerson["about"] = userData.about;
 
             UserModel.update({_id: userData._id}, { $set: businessPerson}, function(err, data){
                 if(err){
@@ -1786,8 +1808,7 @@ exports.adminUpdateBusinessPerson = function(req, res){
             } else {
                 res.json({
                     code: 200,
-                    message: "Business Person Updated Successfuly",
-                    data: []
+                    message: "Business Person Updated Successfuly"
                 });
             }
         })
