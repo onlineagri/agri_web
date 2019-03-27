@@ -6,7 +6,7 @@ var textLocal = require("../../config/textLocal.js");
 var async = require("async");
 const nodemailer = require('nodemailer');
 const eventEmmiters = require('../../config/eventEmmiters.js');
-const joi = require('joi');
+const Joi = require('joi');
 
 let transporter = nodemailer.createTransport({
     service:'gmail', // true for 465, false for other ports
