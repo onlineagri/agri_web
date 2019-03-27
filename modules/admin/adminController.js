@@ -1071,52 +1071,6 @@ exports.adminDeleteCustomer = function(req, res) {
     })
 }
 
-exports.getMenuList = function(req, res) {
-    let category = req.params.category;
-    if(!common.isValid(category)){
-        res.json({code:400, message:'Invalid request'});
-        return;
-    }
-
-    switch(category){
-        case 'Agriculture':
-            getAgriMenuList(function(err, data){
-                if(err){
-                    res.json({code:400, message: err});
-                } else {
-                    res.json({code:200, message: 'Success', data: data});
-                }
-            });
-            break;
-        case 'Clothing':
-            getClothingMenuList(function(err, data){
-                if(err){
-                    res.json({code:400, message: err});
-                } else {
-                    res.json({code:200, message: 'Success', data: data});
-                }
-            });
-            break;
-        default:
-            res.json({code:400, message:'No matching Ctaegory Found'})
-    }	
-}
-
-exports.addMenu = function(req, res){
-	let menuParams = req.body;
-    let categoryName = menuParams.category.name;
-	if(categoryName === 'Agriculture'){
-        addAgriMenu(menuParams, function(err){
-            if(err){
-                res.json({code:400, message: err});
-            } else {
-                res.json({code:200, message: 'Product Added Successfuly'});
-            }
-        })
-    }
-
-}
-
 exports.getOrder = function(req, res){
     let orderId = req.params.id;
     if(!common.isValid(orderId)){
@@ -1576,35 +1530,45 @@ exports.getUsers = function(req, res){
 }
 
 exports.getBusinessPersons = function(req, res) {
-    UserModel.aggregate([{
-        $match: {
-            $and: [{
-                role: {
-                    $ne: "admin"
-                }
-            }, {
-                role: {
-                    $ne: "customer"
-                }
-            }, {
-                isDeleted: false
-            }]
-        }
-    }]).exec(function(err, data) {
-        if (err) {
-            console.log('dberror getBusinessPersons', err);
-            res.json({
-                code: 400,
-                message: "Internal Server Error"
-            });
-        } else {
-            res.json({
-                code: 200,
-                message: "Users Fetched Successfuly",
-                data: data
-            });
-        }
-    });
+    UserModel.find({
+                $and: [{
+                    role: {
+                        $ne: "admin"
+                    }
+                },
+                {
+                    role: {
+                        $ne: "customer"
+                    }
+                }, {
+                    isDeleted: false
+                }]
+        })
+        .select({
+            '_id': 1,
+            'firstName': 1,
+            'lastName': 1,
+            'status': 1,
+            'created_at': 1,
+            'email': 1,
+            'phoneNumber': 1,
+            'address': 1,
+            'role': 1
+        })
+        .exec(function(err, data) {
+            if (err) {
+                res.json({
+                    code: 400,
+                    message: "Internal Server Error"
+                });
+            } else {
+                res.json({
+                    code: 200,
+                    message: "Users Fetched Successfuly",
+                    data: data
+                });
+            }
+        });
 }
 
 exports.adminAddBusinessPerson = function(req, res){
@@ -1634,16 +1598,12 @@ exports.adminAddBusinessPerson = function(req, res){
                 lastName : userData.lastName,
                 phoneNumber : userData.phoneNumber,
                 status : "active",
-                role : userData.role,
-                about: userData.about
+                role : userData.role
             }
             if(common.isValid(userData.email))
                 businessPerson["email"] = userData.email;
             if(common.isValid(userData.streetAddress)){
                 businessPerson["streetAddress"] = userData.streetAddress;
-                businessPerson["deliveryAddresses"] = [{
-                    address: userData.streetAddress + " " + (common.isValid(userData.city) ? userData.city : "") + " " + (common.isValid(userData.state) ? userData.state : "") + " " + (common.isValid(userData.country) ? userData.country : "") + " " + (common.isValid(userData.pincode) ? userData.pincode : "")
-                }]
             }
             if(common.isValid(userData.city))
                 businessPerson["city"] = userData.city;
@@ -1701,7 +1661,7 @@ exports.getBusinessPerson = function(req, res) {
                 name: data.state
             };
             let businessPersonData = {
-                '_id': data._id,
+                'id': data._id,
                 'firstName': data.firstName,
                 'lastName': data.lastName,
                 'status': data.status,
@@ -1711,10 +1671,8 @@ exports.getBusinessPerson = function(req, res) {
                 'city': data.city,
                 'state': state,
                 'pincode': data.pincode,
-                'deliveryAddresses': data.deliveryAddresses,
                 'country': data.country,
-                'role': data.role,
-                'about': data.about
+                'role': data.role
             }
             res.json({
                 code: 200,
@@ -1726,12 +1684,33 @@ exports.getBusinessPerson = function(req, res) {
 
 exports.adminUpdateBusinessPerson = function(req, res){
     let userData = req.body;
-    if(!common.isValid(userData._id) || !common.isValid(userData.firstName) || !common.isValid(userData.lastName) || !common.isValid(userData.phoneNumber)){
-        res.json({code: 400, message:"Parameters missing"});
+
+    if (!common.isValid(userData._id)) {
+        res.send({
+            code: 400,
+            message: 'Paramter is missing'
+        });
         return;
     }
+
+    const schema = Joi.object().keys({
+        firstName: Joi.string().optional(),
+        lastName: Joi.string().optional(),
+        phoneNumber: Joi.string().optional(),
+        role : Joi.string().required()
+    });
+
     let custData;
     async.series([
+        function(callback){
+            Joi.validate(userData, schema, function(err){
+                if(err){
+                    callback('Some Parameters are invalid or missing');
+                } else {
+                    callback();
+                }
+            }).unknown();
+        },
         function(callback){
             UserModel.findOne({_id: userData._id, role: userData.role}, function(err, data){
                 if(err){
@@ -1750,7 +1729,8 @@ exports.adminUpdateBusinessPerson = function(req, res){
         function(callback){
             let businessPerson = {
                 firstName : userData.firstName,
-                lastName : userData.lastName
+                lastName : userData.lastName,
+                role: userData.role
             }
             if(common.isValid(userData.email))
                 businessPerson["email"] = userData.email;
@@ -1767,10 +1747,6 @@ exports.adminUpdateBusinessPerson = function(req, res){
                 businessPerson["pincode"] = userData.pincode;
             if(common.isValid(userData.status) && lodash.includes(["active", "inRegistration", "suspended"], userData.status))
                 businessPerson["status"] = userData.status;
-            if (common.isValid(userData.role))
-                businessPerson["role"] = userData.role;
-            if (common.isValid(userData.about))
-                businessPerson["about"] = userData.about;
 
             UserModel.update({_id: userData._id}, { $set: businessPerson}, function(err, data){
                 if(err){
@@ -1791,8 +1767,7 @@ exports.adminUpdateBusinessPerson = function(req, res){
             } else {
                 res.json({
                     code: 200,
-                    message: "Business Person Updated Successfuly",
-                    data: []
+                    message: "Business Person Updated Successfuly"
                 });
             }
         })
@@ -2015,205 +1990,6 @@ exports.updateDeliveryCharges = function(req, res){
                 data: []
             });
         }
-    });
-}
-
-function getAgriMenuList(callback){
-    AgricultureModel.find({isDeleted: false}, {type:1})
-    .select({'_id': 1, 'name': 1, 'description':1, 'status': 1, 'quantity': 1, 'remainingQuantity' : 1, 'priceEachItem': 1, 'categoryName': 1, 'farmerName':1})
-    .exec(function(err, data){
-        if(err){
-            console.log("dberror getAgriMenuList", err);
-            callback("Internal Server Error");
-        } else {
-            if(data.length){
-                callback(false, data)
-            } else {
-                callback("No products found")
-            }
-        }
-    })
-}
-
-function getClothingMenuList(callback){
-    ClothingModel.find({isDeleted: false}, {type:1})
-    .select({'_id': 1, 'name': 1, 'description':1, 'status': 1, 'quantity': 1, 'remainingQuantity' : 1, 'priceEachItem': 1, 'categoryName': 1, 'providerName':1})
-    .exec(function(err, data){
-        if(err){
-            console.log("dberror getClothingMenuList", err);
-            callback("Internal Server Error");
-        } else {
-            if(data.length){
-                callback(false, data)
-            } else {
-                callback("No products found")
-            }
-        }
-    })
-}
-
-function addAgriMenu(menuParams, cb){
-    let saveParams = {};
-    var uploadFileName;
-    async.series([
-        function(callback) {
-            saveParams = {
-                categoryName : menuParams.category.name,
-                categoryId : mongoose.Types.ObjectId(menuParams.category._id),
-                name : common.capitalizeFirstLetter(menuParams.name),
-                description : menuParams.description,
-                status : menuParams.status,
-                quantity : menuParams.quantity,
-                farmerId : mongoose.Types.ObjectId(menuParams.farmer._id),
-                priceEachItem : menuParams.applicationPrice,
-                farmerPrice: menuParams.farmerPrice,
-                dealPrice : common.isValid(menuParams.dealPrice) ? menuParams.dealPrice: menuParams.applicationPrice,
-                farmerName : menuParams.farmer.name,
-                stockType: menuParams.stockType,
-                brand : common.isValid(menuParams.brand) ? menuParams.brand : menuParams.farmer.name,
-                type: common.capitalizeFirstLetter(menuParams.type),
-                isOrganic : menuParams.isOrganic,
-                holesaleprice : menuParams.holesaleprice,
-                holesalequantity : menuParams.holesalequantity,
-                farmerEmail : menuParams.farmer.email
-
-            }
-            callback();
-            
-        },
-        function(callback) {
-            //validation for unique
-            if (!common.isValid(menuParams._id)) {
-                AgricultureModel.findOne({
-                    name: menuParams.name,
-                    isDeleted: false
-                }, function(err, category) {
-                    if (err) {
-                        console.log("dberror addAgriMenu", err);
-                        callback("Internal server error");
-                    } else {
-                        if (common.isValid(category)) {
-                            callback("This menu is already available");
-                        } else {
-                            callback();
-                        }
-                    }
-                })
-            } else {
-                callback();
-            }
-        },
-        function(callback) {
-           var imageName = menuParams.image;
-           if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
-               var imageTypeRegularExpression = /\/(.*?)$/;
-               var file = {};
-               var fileName = common.slugify(menuParams.name) + "_" + new Date().getTime();
-               var imageBuffer = common.decodeBase64Image(menuParams.image);
-               if (imageBuffer == "err") {
-                   callback('Not a valid image type');
-               } else {
-                   var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
-                   if (common.isValidImageType(imageTypeDetected.input)) {
-                       var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
-                       sharp(imageBuffer.data)
-                            .resize(512, 312)
-                            .toFile(userUploadedImagePath, (err, info) => {
-                                if (err) {
-                                    console.log('error sharp', err);
-                                    callback('Unable to upload image')
-                                } else {
-                                    // console.log('image info', info);
-                                    file.path = userUploadedImagePath,
-                                    file.name = fileName + '.' + imageTypeDetected[1],
-                                    file.type = imageTypeDetected.input
-
-                                    var productBucket = common.default_set.AGRI_PROD_BUCKET;
-                                    common.verifyBucket(productBucket, function() {
-                                        common.uploadFile(file, productBucket, function(err) {
-                                            if (err) {
-                                                fs.unlink(userUploadedImagePath);
-                                                return callback(err);
-                                            } else {
-                                                uploadFileName = file.name;
-                                                saveParams.imageName = uploadFileName;
-                                                fs.unlink(userUploadedImagePath);
-                                                callback();
-                                            }
-                                        });
-                                    });
-                                }
-                            });
-                   } else {
-                       callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
-                   }
-               }
-           } else {
-               callback();
-           }
-        },
-        function(callback){
-            var meanQuantiy = 0;
-            var meanRemainQty = 0;
-            if (common.isValid(menuParams._id)) {
-                AgricultureModel.findOne({_id: menuParams._id}).select({'_id': 1, 'quantity': 1, 'remainingQuantity': 1}).exec(function(err, data){
-                    if (err) {
-                        console.log('dberror addAgriMenu', err);
-                        callback('Internal server error');
-                    } else{
-                        if(common.isValid(menuParams.remainingQuantity)){
-                            if (menuParams.remainingQuantity == 0) {
-                                saveParams['remainingQuantity'] = menuParams.quantity;
-                            } else {
-                                if (data.quantity > menuParams.quantity) {
-                                    meanQuantiy = data.quantity - menuParams.quantity;
-                                    meanRemainQty = menuParams.remainingQuantity - meanQuantiy;
-                                    saveParams['remainingQuantity'] = meanRemainQty;
-                                }
-                                if (data.quantity < menuParams.quantity) {
-                                    meanQuantiy = menuParams.quantity - data.quantity;
-                                    meanRemainQty = menuParams.remainingQuantity + meanQuantiy;
-                                    saveParams['remainingQuantity'] = meanRemainQty;
-                                }
-                            }
-                        }
-                        callback();
-                    }
-                });
-            } else {            
-                saveParams['remainingQuantity'] = menuParams.quantity;
-                callback();
-            }
-        },
-        function(callback){
-            if(!common.isValid(menuParams._id)){
-                let menuData = new AgricultureModel(saveParams);
-                menuData.save(function(err, data){
-                    if(err){
-                        console.log("dberror addAgriMenu", err);
-                        callback("Internal server error");
-                    } else {
-                        callback();
-                    }
-                })
-            } else {
-                let id = menuParams._id;
-                AgricultureModel.update({_id: id}, { $set: saveParams}, function(err, data){
-                    if(err){
-                        console.log("dberror addAgriMenu", err);
-                        callback("Internal server error");
-                    } else {
-                        callback();
-                    }
-                })
-            }
-        }
-    ], function(err) {
-        if(err){
-            cb(err);
-        } else {
-            cb(false, "Success")
-        }  
     });
 }
 

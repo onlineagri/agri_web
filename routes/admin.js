@@ -24,7 +24,7 @@ router.get('/comboproducts', adminController.comboProducts);
 router.post('/combo', adminController.addCombo);
 router.get('/combo/:id', adminController.getComboById);
 router.delete('/combo/:id', adminController.deleteComboById);
-router.put('/ordercancle', adminController.cancleOrder);
+// router.put('/ordercancle', adminController.cancleOrder);
 
 
 // router.get('/farmer/list', adminController.getFarmerList);
