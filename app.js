@@ -35,6 +35,19 @@ app.use(logger('dev'));
 app.use(bodyParser.json({
     limit: '10mb'
 }));
+app.use(function (req, res, next) {
+    // CORS headers
+    res.header('Access-Control-Allow-Origin', '*'); // restrict it to the required domain
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    // Set custom headers for CORS
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With,If-Modified-Since');
+
+    if (req.method == 'OPTIONS') {
+        res.status(200).end();
+    } else {
+        next();
+    }
+});
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -49,6 +62,9 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
   done(null, user);
 });
+
+
+
 
 app.use('/admin', passport.authenticate('authentication', {
     session: false

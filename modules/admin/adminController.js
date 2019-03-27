@@ -30,9 +30,11 @@ exports.addCategory = function(req, res){
         },
         function(callback) {
             const schema = Joi.object().keys({
+                _id: Joi.string().optional(),
                 name: Joi.string().required(),
                 status: Joi.string().valid(['active', 'inactive']).required(),
                 image: Joi.string(),
+                imageName: Joi.string(),
                 cat_id : Joi.string().alphanum().min(6).max(10).required()
             });
             Joi.validate(categoryParams, schema, function(err){
@@ -102,20 +104,21 @@ exports.addCategory = function(req, res){
                                     file.path = userUploadedImagePath,
                                     file.name = fileName + '.' + imageTypeDetected[1],
                                     file.type = imageTypeDetected.input;
-                                    var categoryBucket = common.default_set.DEALSTICK_CATEGORY_BUCKET;
-                                    common.verifyBucket(categoryBucket, function() {
-                                        common.uploadFile(file, categoryBucket, function(err) {
+                                    var categoryBucket = common.default_set.CATEGORY_BUCKET;
+                                    //common.verifyBucket(categoryBucket, function() {
+                                        common.uploadFile(file, categoryBucket, function(err, data) {
+                                            console.log(err, data);
                                             if (err) {
                                                 fs.unlink(userUploadedImagePath);
                                                 return callback(err);
                                             } else {
                                                 uploadFileName = file.name;
-                                                saveParams.imageName = uploadFileName;
+                                                saveParams.imageName = "https://s3.ap-south-1.amazonaws.com/prodcategory/" + file.name;
                                                 fs.unlink(userUploadedImagePath);
                                                 callback();
                                             }
                                         });
-                                    });
+                                    //});
                                 }
                             });
                    } else {
@@ -191,7 +194,7 @@ exports.getCategoryById = function(req, res) {
 				name: data.name,
 				status: data.status,
 				cat_id : data.cat_id,
-				imageName: common.default_set.S3_ENDPOINT+ common.default_set.DEALSTICK_CATEGORY_BUCKET + "/" +data.imageName
+				imageName: data.imageName
 			}
 			res.json({code: 200, message:"Category Fetched Successfuly", data: resdata});
 		}
@@ -307,20 +310,20 @@ exports.addProduct = function(req, res) {
                                     file.name = fileName + '.' + imageTypeDetected[1];
                                     file.type = imageTypeDetected.input;
 
-                                    var productBucket = common.default_set.PROD_BUCKET;
-                                    common.verifyBucket(productBucket, function() {
+                                    var productBucket = common.default_set.PRODUCT_BUCKET;
+                                    //common.verifyBucket(productBucket, function() {
                                         common.uploadFile(file, productBucket, function(err) {
                                             if (err) {
                                                 fs.unlink(userUploadedImagePath);
                                                 return callback(err);
                                             } else {
                                                 uploadFileName = file.name;
-                                                productData.imageName = uploadFileName;
+                                                productData.imageName = "http://s3.ap-south-1.amazonaws.com/prodproduct/" + file.name;
                                                 fs.unlink(userUploadedImagePath);
                                                 callback();
                                             }
                                         });
-                                    });
+                                    //});
                                 }
                             });
                     } else {
@@ -436,7 +439,7 @@ exports.getProductById = function(req, res) {
                 price_range : data.price_range,
                 isChemicalfree : data.isChemicalfree,
                 isDaily : data.isDaily,
-                imageName: common.default_set.S3_ENDPOINT+ common.default_set.AGRI_PROD_BUCKET + "/" +data.imageName,
+                imageName: data.imageName,
                 stockType: data.stockType,
                 quantity_remaining: data.quantity_remaining,
                 prod_id : data.prod_id
@@ -517,7 +520,7 @@ exports.updateProduct = function(req, res) {
                                     file.name = fileName + '.' + imageTypeDetected[1];
                                     file.type = imageTypeDetected.input;
 
-                                    var productBucket = common.default_set.PROD_BUCKET;
+                                    var productBucket = common.default_set.PRODUCT_BUCKET;
                                     common.verifyBucket(productBucket, function() {
                                         common.uploadFile(file, productBucket, function(err) {
                                             if (err) {
@@ -525,7 +528,7 @@ exports.updateProduct = function(req, res) {
                                                 return callback(err);
                                             } else {
                                                 uploadFileName = file.name;
-                                                productData.imageName = uploadFileName;
+                                                productData.imageName = "http://s3.ap-south-1.amazonaws.com/prodproduct/" + file.name;
                                                 fs.unlink(userUploadedImagePath);
                                                 callback();
                                             }
@@ -737,20 +740,20 @@ exports.addCombo = function(req, res){
                                     file.name = fileName + '.' + imageTypeDetected[1];
                                     file.type = imageTypeDetected.input;
 
-                                    var productBucket = common.default_set.PROD_BUCKET;
-                                    common.verifyBucket(productBucket, function() {
+                                    var productBucket = common.default_set.PRODUCT_BUCKET;
+                                    //common.verifyBucket(productBucket, function() {
                                         common.uploadFile(file, productBucket, function(err) {
                                             if (err) {
                                                 fs.unlink(userUploadedImagePath);
                                                 return callback(err);
                                             } else {
                                                 uploadFileName = file.name;
-                                                comboParam.imageName = uploadFileName;
+                                                comboParam.imageName = "http://s3.ap-south-1.amazonaws.com/prodproduct/" + file.name;;
                                                 fs.unlink(userUploadedImagePath);
                                                 callback();
                                             }
                                         });
-                                    });
+                                    //});
                                 }
                             });
                     } else {
@@ -785,7 +788,9 @@ exports.addCombo = function(req, res){
                     }
                 })
             } else {
-                ComboModel.update(comboParam, function(err){
+                let id = mongoose.Types.ObjectId(comboParam._id);
+                delete comboParam._id;
+                ComboModel.update({_id: id}, comboParam, function(err){
                     if(err){
                         console.log("dberror addCombo", err);
                         callback('Internal server error');
@@ -2210,4 +2215,44 @@ function addAgriMenu(menuParams, cb){
             cb(false, "Success")
         }  
     });
+}
+
+exports.cancleOrder = function(req, res){
+    let orderNumber = req.body.orderNumber;
+    if(!common.isValid(orderNumber)){
+        res.json({code:400, message:'Parameters missing'});
+        return;
+    }
+
+    OrderModel.findOneAndUpdate({$and:[{orderNumber : orderNumber }, {status:{$ne: 'Completed' }}]}, { $set: { status: 'Cancelled'}}, {new: true}, function (err, data) {
+        if(err){
+            console.log("dberror cancleOrder", err);
+            res.json({code: 400, message:'Internal Server error'});
+        } else {
+            let sData = {
+                customerPhone: data.customerPhone,
+                orderNumber: data.orderNumber,
+                status: 'Cancelled',
+                amountPaid: data.amountPaid
+            }
+            smsSender.orderStatusUpdate(sData);
+            updateProductQuantity(data.product);
+            res.json({code:200, message: 'This Cancled successfully'});
+        }
+    })
+}
+
+
+function updateProductQuantity(data){
+    async.eachSeries(data, function(item){
+        if(item.type == 'product'){
+            ProductModel.updateOne({
+                _id: mongoose.Types.ObjectId(item.id)
+            },{ "$inc": { "quantity_remaining": + item.quantity} }, function(err, menuData) {
+                if(err){
+                    console.log("dberror updateProductQuantity", err);
+                }
+            })
+        }
+    })
 }

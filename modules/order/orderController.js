@@ -349,6 +349,7 @@ exports.cancleOrder = function(req, res){
         })
       } else{
         if (common.isValid(data)) {
+        	updateProductQuantity(data.product);
             res.json({
                 code: 200,
                 message: 'Your order has been cancled successfully',
@@ -361,5 +362,19 @@ exports.cancleOrder = function(req, res){
         }
       }
     });
+}
+
+function updateProductQuantity(data){
+	async.eachSeries(data, function(item){
+		if(item.type == 'product'){
+			ProductModel.updateOne({
+                _id: mongoose.Types.ObjectId(item.id)
+            },{ "$inc": { "quantity_remaining": + item.quantity} }, function(err, menuData) {
+            	if(err){
+            		console.log("dberror updateProductQuantity", err);
+            	}
+            })
+		}
+	})
 }
 

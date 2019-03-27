@@ -1090,11 +1090,24 @@ app.controller('DashboardController', ['$scope', 'adminService','toaster','$loca
     }
 
     $scope.cancleOrder = function(orderNo){
-        adminService.cancleOrder(orderNo).then(function(response){
-            SweetAlert.swal("", response.data.message, "success");
-        }).catch(function(response){
-            console.log(response);
-        });
+        SweetAlert.swal({
+                title: "Are you sure?",
+                text: "You are Canceling this order?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, cancle order",
+                closeOnConfirm: false
+            },
+            function(isConfirm) {
+                if (isConfirm) {
+                    adminService.cancleOrder(orderNo).then(function(response){
+                        SweetAlert.swal("", response.data.message, "success");
+                    }).catch(function(response){
+                        console.log(response);
+                    });
+                }
+            });
     }
 
 }]).controller('contentManagementController', ['$scope', 'adminService','toaster','$location', 'NgTableParams', '$routeParams','$route','$localStorage','SweetAlert', function($scope, adminService, toaster, $location, NgTableParams, $routeParams, $route, $localStorage, SweetAlert) {
