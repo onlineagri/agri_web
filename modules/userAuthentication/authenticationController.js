@@ -69,7 +69,7 @@ exports.userRegister = function(req, res){
     let subCode = (userData.phoneNumber).substring(0,3);
     let num = Math.floor(1000 + Math.random() * 9000);
     let verificationCode = "" + subCode + num;
-
+    userData.verificationCode = verificationCode;
     async.series([
         function(callback){
             UserModel.findOne({phoneNumber: userData.phoneNumber, isDeleted : false, role: 'admin'}, function(err, data){
