@@ -1,6 +1,7 @@
 
 
- module.exports = function(mongoose){
+ module.exports = function(mongoose, common){
+ 	const Prefix = common.default_set.DB_PREFIX; 
 	const Schema = mongoose.Schema;
 	const cartSchema = new Schema({
 	  customerId: mongoose.Schema.Types.ObjectId,
@@ -15,6 +16,6 @@
 	},
 	{ timestamps: { createdAt: 'created_at' } });
 	
-	const Cart = mongoose.model('Cart', cartSchema);
+	const Cart = mongoose.model( Prefix +'Cart', cartSchema);
 	return Cart;
 }

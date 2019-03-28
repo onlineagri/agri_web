@@ -7,19 +7,17 @@ var bcrypt = require('bcrypt-nodejs');
 const SALT_WORK_FACTOR = 8;
 
 Mongoose.connect(common.default_set.mongoConnectionString);
-const users = require('./schema/users')(Mongoose);
-const categories = require('./schema/category')(Mongoose);
-const agriculture = require('./schema/agricultures')(Mongoose);
-const carts = require('./schema/cart')(Mongoose);
-const systemparams = require('./schema/systemparams')(Mongoose);
-const orders = require('./schema/order')(Mongoose);
-const cms = require('./schema/cms')(Mongoose);
-const subcategories = require('./schema/subCategory')(Mongoose);
-const reviews = require('./schema/review')(Mongoose);
-const marketing = require('./schema/marketing')(Mongoose);
-const clothing = require('./schema/clothings')(Mongoose);
-const product = require('./schema/products')(Mongoose);
-const combo = require('./schema/combo')(Mongoose);
+const users = require('./schema/users')(Mongoose, common);
+const categories = require('./schema/category')(Mongoose, common);
+const carts = require('./schema/cart')(Mongoose, common);
+const systemparams = require('./schema/systemparams')(Mongoose, common);
+const orders = require('./schema/order')(Mongoose, common);
+const cms = require('./schema/cms')(Mongoose, common);
+const subcategories = require('./schema/subCategory')(Mongoose, common);
+const reviews = require('./schema/review')(Mongoose, common);
+const marketing = require('./schema/marketing')(Mongoose, common);
+const product = require('./schema/products')(Mongoose, common);
+const combo = require('./schema/combo')(Mongoose, common);
 
 module.exports = {
     generateHash: function(password) {
@@ -33,9 +31,6 @@ module.exports = {
     },
     CategoryModel: function(){
     	return categories;
-    },
-    AgricultureModel: function(){
-        return agriculture;
     },
     CartModel: function(){
         return carts;
@@ -58,10 +53,6 @@ module.exports = {
 
     MarketingModel : function(){
         return marketing;
-    }, 
-
-    ClothingModel : function(){
-        return clothing;
     },
 
     ProductModel : function(){

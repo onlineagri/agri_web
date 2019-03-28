@@ -2,8 +2,9 @@
 <div class="container" ng-init="getCategoryProducts()" style="margin-top: 20px;">
   <div class="row newProducts">
     <h2 class="col-md-12 corousalheading"> Category Products</h2>
-
     <!-- <div class="row"> -->
+      <a class="btn btn-primary mb-4" href="#!/customer/dashboard"><i class="fa fa-arrow-left" aria-hidden="true"></i>
+Back</a>
       <div class="col-md-12 col-lg-12">
         <div class="row">
         <div class="col-md-4 card product-menu mb-3" ng-repeat="product in catProducts">
@@ -37,9 +38,12 @@
         </div>
       </div>
     </div>
-    
+    <div ng-if="!catProducts.length">
+        <h4 class="corousalheading mb-4">Currently no products, we are adding more products for you.</h4>
+      </div>
   </div>
 </div>
+
 <div class="col-md-12 text-center">
   <button ng-disabled="currentPage == 1" ng-click="currentPage=currentPage-1; getCombos()" class="btn btn-primary">
   Previous

@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const db = require("../../db.js");
 const CategoryModel = db.CategoryModel();
 const UserModel = db.UserModel();
-const AgricultureModel = db.AgricultureModel();
 const CartModel = db.CartModel();
 const OrderModel = db.OrderModel();
 const SystemParamsModel = db.SystemParamsModel();

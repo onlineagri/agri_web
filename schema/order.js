@@ -1,6 +1,7 @@
 
 
- module.exports = function(mongoose){
+ module.exports = function(mongoose, common){
+ 	const Prefix = common.default_set.DB_PREFIX;
 	const Schema = mongoose.Schema;
 	const OrderSchema = new Schema({
 	  orderNumber: {type: String},
@@ -22,7 +23,7 @@
 	  cust_id : {type: String}
 	},{ timestamps: { createdAt: 'created_at' } });
 	
-	const Order = mongoose.model('Orders', OrderSchema);
+	const Order = mongoose.model(Prefix + 'Orders', OrderSchema);
 	return Order;
 }
 

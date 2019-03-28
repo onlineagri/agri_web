@@ -2,7 +2,6 @@ var mongoose = require("mongoose");
 var db = require("../../db.js");
 var CategoryModel = db.CategoryModel();
 var UserModel = db.UserModel();
-var AgricultureModel = db.AgricultureModel();
 var CartModel = db.CartModel();
 var SubCategoryModel = db.SubCategoryModel();
 var ReviewModel = db.ReviewModel();

@@ -1,4 +1,5 @@
- module.exports = function(mongoose){
+ module.exports = function(mongoose, common){
+ 	const Prefix = common.default_set.DB_PREFIX;
 	const Schema = mongoose.Schema;
 	const SubCategorySchema = new Schema({
 	  categoryId : mongoose.Schema.Types.ObjectId,
@@ -10,6 +11,6 @@
 	  isDeleted: { type: Boolean, default: false}
 	},{ timestamps: { createdAt: 'created_at' } });
 	
-	const SubCategory = mongoose.model('SubCategorys', SubCategorySchema);
+	const SubCategory = mongoose.model(Prefix + 'SubCategorys', SubCategorySchema);
 	return SubCategory;
 }

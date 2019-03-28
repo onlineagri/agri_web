@@ -1,6 +1,7 @@
  const mongoosePaginate = require('mongoose-paginate');
 
- module.exports = function(mongoose){
+ module.exports = function(mongoose, common){
+ 	const Prefix = common.default_set.DB_PREFIX;
 	const Schema = mongoose.Schema;
 	const ComboSchema = new Schema({
 	  combo_id : {type: String},
@@ -20,7 +21,7 @@
 	},{ timestamps: { createdAt: 'created_at' } });
 	
 	ComboSchema.plugin(mongoosePaginate);
-	const Combo = mongoose.model('Combos', ComboSchema);
+	const Combo = mongoose.model(Prefix +'Combos', ComboSchema);
 	return Combo;
 }
 

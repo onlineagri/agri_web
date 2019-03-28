@@ -142,7 +142,7 @@ app.controller('userProductController', ['$scope', 'productService','toaster','$
 
     $scope.currentPage = 1;
     $scope.pageSize = 30;
-    $scope.categoryProducts = [];
+    $scope.catProducts = [];
     $scope.getCategoryProducts = function() {
         var data = {
             page : $scope.currentPage,

@@ -1,3 +1,4 @@
+process.env.NODE_ENV = process.env.NODE_ENV || 'local';
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -22,7 +23,7 @@ var marketing = require('./routes/marketing');
 
 
 var app = express();
-process.env.NODE_ENV = process.env.NODE_ENV || 'local';
+
 console.log('process.env.NODE_ENV' , process.env.NODE_ENV);
 
 // view engine setup

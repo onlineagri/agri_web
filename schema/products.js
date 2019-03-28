@@ -1,6 +1,7 @@
  const mongoosePaginate = require('mongoose-paginate');
 
-module.exports = function(mongoose){
+module.exports = function(mongoose, common){
+	const Prefix = common.default_set.DB_PREFIX;
 	const Schema = mongoose.Schema;
 	const ProductSchema = new Schema({
 	  prod_id : {type: String, required: true},
@@ -33,6 +34,6 @@ module.exports = function(mongoose){
     });
 	
 	ProductSchema.plugin(mongoosePaginate);
-	const Product = mongoose.model('Products', ProductSchema);
+	const Product = mongoose.model(Prefix + 'Products', ProductSchema);
 	return Product;
 }

@@ -1,4 +1,5 @@
- module.exports = function(mongoose){
+ module.exports = function(mongoose, common){
+ 	const Prefix = common.default_set.DB_PREFIX;
 	const Schema = mongoose.Schema;
 	const ReviewSchema = new Schema({
 	  review: { type: String},
@@ -13,6 +14,6 @@
 	},
 	{ timestamps: { createdAt: 'created_at' } });
 	
-	const Reviews = mongoose.model('Reviews', ReviewSchema);
+	const Reviews = mongoose.model(Prefix + 'Reviews', ReviewSchema);
 	return Reviews;
 }

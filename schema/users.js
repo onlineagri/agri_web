@@ -1,6 +1,7 @@
 
 
- module.exports = function(mongoose){
+ module.exports = function(mongoose, common){
+ 	const Prefix = common.default_set.DB_PREFIX;
 	const Schema = mongoose.Schema;
 	const UserSchema = new Schema({
 	  firstName: { type: String},
@@ -26,7 +27,7 @@
 	},
 	{ timestamps: { createdAt: 'created_at' } });
 	
-	const Users = mongoose.model('Users', UserSchema);
+	const Users = mongoose.model(Prefix + 'Users', UserSchema);
 	return Users;
 }
 

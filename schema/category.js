@@ -1,6 +1,8 @@
 
 
- module.exports = function(mongoose) {
+ module.exports = function(mongoose, common) {
+     const Prefix = common.default_set.DB_PREFIX;
+     console.log(Prefix,"Prefix");
      const Schema = mongoose.Schema;
      const CategorySchema = new Schema({
          cat_id: {
@@ -35,7 +37,7 @@
      });
 
 
-     const Category = mongoose.model('Categorys', CategorySchema);
+     const Category = mongoose.model(Prefix+'Categorys', CategorySchema);
      return Category;
  }
 

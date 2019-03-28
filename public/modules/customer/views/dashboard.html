@@ -1,5 +1,5 @@
 <div ng-include="'/staticViews/customerHeader.html'"></div>
-
+<hr/>
 <section class="listing with-light-bg" ng-init="getCombos()">
   <div class="container">
     <div class="row">
@@ -32,6 +32,9 @@
             <a href="javascript:void(0);" class="btn btn-primary" ng-click="addToCart(combo, 'combo')">Add to Cart</a>
           </div>
         </div>
+      </div>
+      <div ng-if="combos.length == 0">
+        <h4 class="corousalheading mb-4">Currently no combos, we are adding more combos for you.</h4>
       </div>
       <div ng-if="combos.length > 10">
         <a href="#!/allcombos" class="btn">All Combos</a>
@@ -79,6 +82,9 @@
         </div>
       </div>
     </div>
+    <div ng-if="nProducts.length == 0">
+        <h4 class="corousalheading mb-4">Currently no products, we are adding more products for you.</h4>
+      </div>
     
   </div>
 </div>
@@ -95,6 +101,9 @@
       </a>
       </div>
     </div>
+    <div ng-if="productCategories.length == 0">
+        <h4 class="corousalheading mb-4">Currently no catogories, we are adding more categories for you.</h4>
+      </div>
   </div>
 </div>
 

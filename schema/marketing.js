@@ -1,4 +1,5 @@
- module.exports = function(mongoose){
+ module.exports = function(mongoose, common){
+        const Prefix = common.default_set.DB_PREFIX;
 	const Schema = mongoose.Schema;
 	const MarketingSchema = new Schema({
         contentfor: {type: String},
@@ -10,6 +11,6 @@
         isDeleted: { type: Boolean, default: false}
 	},{ timestamps: { createdAt: 'created_at' } });
 	
-	const marketing = mongoose.model('marketing', MarketingSchema);
+	const marketing = mongoose.model(Prefix + 'marketing', MarketingSchema);
 	return marketing;
 }
