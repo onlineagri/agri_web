@@ -1,8 +1,7 @@
 
 
  module.exports = function(mongoose, common) {
-     const Prefix = common.default_set.DB_PREFIX;
-     console.log(Prefix,"Prefix");
+     const Prefix = common.default_set.DB_PREFIX || '';
      const Schema = mongoose.Schema;
      const CategorySchema = new Schema({
          cat_id: {

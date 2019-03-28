@@ -1,7 +1,7 @@
 
 
  module.exports = function(mongoose, common){
- 	const Prefix = common.default_set.DB_PREFIX; 
+ 	const Prefix = common.default_set.DB_PREFIX || ''; 
 	const Schema = mongoose.Schema;
 	const cartSchema = new Schema({
 	  customerId: mongoose.Schema.Types.ObjectId,
