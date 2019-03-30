@@ -73,7 +73,7 @@ app.controller('userLoginController', ['$scope', 'userService','toaster','$local
                     title: '',
                     body: response.data.message
                 });
-                $location.path("/user/verifyUser");
+                $location.path("/verifyUser");
             } else {
                 toaster.pop({
                     type: 'error',
