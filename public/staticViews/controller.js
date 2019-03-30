@@ -84,6 +84,7 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
     $scope.sendContactEmail = function(contact){
         customerService.sendContactEmail(contact).then(function(response){
             if(response.data.code == 200){
+                $scope.contact = {};
                 toaster.pop({
                     type: 'Success',
                     title: '',
