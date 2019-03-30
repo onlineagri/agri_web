@@ -119,7 +119,7 @@ exports.placeOrder = function(req, res){
 
 			  return text;
 			}
-			orderNumber = "TAONLINE" + makeid();
+			orderNumber = "DCONLINE" + makeid();
 
 			var orderData = {
 				cust_id : custData.userId,

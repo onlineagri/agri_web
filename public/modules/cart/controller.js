@@ -15,7 +15,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
         cartService.getCustAddress().then(function(response){
             if(response.data.code == 200){
                var address = response.data.data;
-               $scope.custaddress = address.flatNo + " " + address.society + " " + (address.wing ? address.wing :" ") + " " + address.city + " " + address.state + " " + address.pincode;     
+               $scope.custaddress = Object.keys(address).length != 0 ?  (address.flatNo + " " + address.society + " " + (address.wing ? address.wing :" ") + " " + address.city + " " + address.state + " " + address.pincode) : '';     
             } 
         }).catch(function(response) {
             toaster.pop({
@@ -164,33 +164,46 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
                 confirmButtonText: "Yes, Place Order!",
                 closeOnConfirm: false
             },
-            function(isConfirm) {
-                if(isConfirm){
-                    var orderData = {
-                        cartId: $routeParams.id,
-                        orderNetAmount: $scope.orderNetAmount,
-                        deliveryCharge: $scope.deliveryCharge,
-                        gstCharge: $scope.gstCharge,
-                        discount: $scope.discount
-                    }
-                    if(cartData.deliveryAddress){
-                        orderData["deliveryAddress"] = cartData.deliveryAddress;
-                    }
-                    if(cartData.specialRequest) {
-                        orderData["specialRequest"] = cartData.specialRequest;
-                    }
-                    cartService.placeOrder(orderData).then(function(response) {
-                        if (response.data.code == 200) {
-                            SweetAlert.swal("Your order placed sucessfully");
-                            $location.path("/customer/order/" + response.data.data.id)
-                        } else {
-                            SweetAlert.swal(response.data.message);
-                        }
-                    }).catch(function(response) {
-                        SweetAlert.swal("Something went wrong");
-                    });
+        function(isConfirm) {
+            if (isConfirm) {
+                if (Object.keys(cartData.deliveryAddress).length == 0) {
+                    var message = 'Please enter delivery address, <br><button  style="padding: 10px 10px 10px 10px; margin: 0; background-color: blue;"> <a href="#!/customer/profile/' + $localStorage.phoneNumber + '" style="color: white;" onclick="swal.close();">Go to profile</a></button><br>';
+                    SweetAlert.swal({
+                            title: "",
+                            html: true,
+                            text: message,
+                            type: "warning",
+                            showCancelButton: true,
+                            closeOnConfirm: false
+                        })
+                        // SweetAlert.swal("","Please enter delivery address","warning");
+                    return;
                 }
-            });
+                var orderData = {
+                    cartId: $routeParams.id,
+                    orderNetAmount: $scope.orderNetAmount,
+                    deliveryCharge: $scope.deliveryCharge,
+                    gstCharge: $scope.gstCharge,
+                    discount: $scope.discount
+                }
+                if (cartData.deliveryAddress) {
+                    orderData["deliveryAddress"] = cartData.deliveryAddress;
+                }
+                if (cartData.specialRequest) {
+                    orderData["specialRequest"] = cartData.specialRequest;
+                }
+                cartService.placeOrder(orderData).then(function(response) {
+                    if (response.data.code == 200) {
+                        SweetAlert.swal("Your order placed sucessfully");
+                        $location.path("/customer/order/" + response.data.data.id)
+                    } else {
+                        SweetAlert.swal(response.data.message);
+                    }
+                }).catch(function(response) {
+                    SweetAlert.swal("Something went wrong");
+                });
+            }
+        });
     }
 
 }])
