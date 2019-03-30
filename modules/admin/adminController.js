@@ -287,52 +287,52 @@ exports.addProduct = function(req, res) {
         },
         function(callback) {
             var imageName = productData.image;
-            if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
-                var imageTypeRegularExpression = /\/(.*?)$/;
-                var file = {};
-                var fileName = common.slugify(productData.name) + "_" + new Date().getTime();
-                var imageBuffer = common.decodeBase64Image(productData.image);
-                if (imageBuffer == "err") {
-                    callback('Not a valid image type');
-                } else {
-                    var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
-                    if (common.isValidImageType(imageTypeDetected.input)) {
-                        var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
-                        sharp(imageBuffer.data)
-                            .resize(512, 312)
-                            .toFile(userUploadedImagePath, (err, info) => {
-                                if (err) {
-                                    console.log('error sharp', err);
-                                    callback('Unable to upload image')
-                                } else {
-                                    // console.log('image info', info);
-                                    file.path = userUploadedImagePath;
-                                    file.name = fileName + '.' + imageTypeDetected[1];
-                                    file.type = imageTypeDetected.input;
+            // if (common.isValid(imageName) && !common.isEmptyString(imageName)) {
+            //     var imageTypeRegularExpression = /\/(.*?)$/;
+            //     var file = {};
+            //     var fileName = common.slugify(productData.name) + "_" + new Date().getTime();
+            //     var imageBuffer = common.decodeBase64Image(productData.image);
+            //     if (imageBuffer == "err") {
+            //         callback('Not a valid image type');
+            //     } else {
+            //         var imageTypeDetected = imageBuffer.type.match(imageTypeRegularExpression); //get image type
+            //         if (common.isValidImageType(imageTypeDetected.input)) {
+            //             var userUploadedImagePath = "./uploads/" + fileName + '.' + imageTypeDetected[1]; // tmp image path
+            //             sharp(imageBuffer.data)
+            //                 .resize(512, 312)
+            //                 .toFile(userUploadedImagePath, (err, info) => {
+            //                     if (err) {
+            //                         console.log('error sharp', err);
+            //                         callback('Unable to upload image')
+            //                     } else {
+            //                         // console.log('image info', info);
+            //                         file.path = userUploadedImagePath;
+            //                         file.name = fileName + '.' + imageTypeDetected[1];
+            //                         file.type = imageTypeDetected.input;
 
-                                    var productBucket = common.default_set.PRODUCT_BUCKET;
-                                    //common.verifyBucket(productBucket, function() {
-                                        common.uploadFile(file, productBucket, function(err) {
-                                            if (err) {
-                                                fs.unlink(userUploadedImagePath);
-                                                return callback(err);
-                                            } else {
-                                                uploadFileName = file.name;
-                                                productData.imageName = "http://s3.ap-south-1.amazonaws.com/prodproduct/" + file.name;
-                                                fs.unlink(userUploadedImagePath);
-                                                callback();
-                                            }
-                                        });
-                                    //});
-                                }
-                            });
-                    } else {
-                        callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
-                    }
-                }
-            } else {
+            //                         var productBucket = common.default_set.PRODUCT_BUCKET;
+            //                         //common.verifyBucket(productBucket, function() {
+            //                             common.uploadFile(file, productBucket, function(err) {
+            //                                 if (err) {
+            //                                     fs.unlink(userUploadedImagePath);
+            //                                     return callback(err);
+            //                                 } else {
+            //                                     uploadFileName = file.name;
+            //                                     productData.imageName = "http://s3.ap-south-1.amazonaws.com/prodproduct/" + file.name;
+            //                                     fs.unlink(userUploadedImagePath);
+            //                                     callback();
+            //                                 }
+            //                             });
+            //                         //});
+            //                     }
+            //                 });
+            //         } else {
+            //             callback('Uploaded file is not a valid image. Only JPG, PNG and GIF files are allowed.');
+            //         }
+            //     }
+            // } else {
                 callback();
-            }
+            // }
         },
         function(callback){
             var meanQuantiy = 0;

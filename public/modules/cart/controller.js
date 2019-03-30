@@ -15,7 +15,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
         cartService.getCustAddress().then(function(response){
             if(response.data.code == 200){
                var address = response.data.data;
-               $scope.custaddress = Object.keys(address).length != 0 ?  (address.flatNo + " " + address.society + " " + (address.wing ? address.wing :" ") + " " + address.city + " " + address.state + " " + address.pincode) : '';     
+               $scope.custaddress = (Object.keys(address).length === 0) ? '' : (address.flatNo + ", " + (address.wing ? address.wing :" ") + ", " + address.society + ", " + address.city + ", " + address.state + ", " + address.pincode);     
             } 
         }).catch(function(response) {
             toaster.pop({
@@ -32,7 +32,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
         cartService.getCart(cartId).then(function(response){
             if(response.data.code == 200){
                 $scope.cart = response.data.data;
-                $scope.cart.deliveryAddress = $scope.custaddress;
+                $scope.cart.deliveryAddress = $scope.custaddress ? $scope.custaddress : '';
                 // $scope.getAllTotal();
             } else {
                 toaster.pop({

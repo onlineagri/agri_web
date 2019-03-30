@@ -15,7 +15,7 @@
             <th>Stock Available</th>
             <th>Price/Item</th>
             <th>Total</th>
-            <th></th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -23,9 +23,9 @@
             <td>{{item.name}}({{item.type}})</td>
             <td>{{item.quantity}}</td>
             <td><input type="number" name="quantity" id="quantity" ng-model="item.quantity" placeholder="Enter qunatity" ng-blur="updateCart(item,'quantityUpdate')" min="1" max="1000"></td>
-            <td>{{item.remainingQuantity}}{{item.stockType}}</td>
+            <td>{{item.remainingQuantity}}{{" " +item.stockType}}</td>
             <td>&#x20b9;{{item.price}}/{{item.stockType}}</td>
-            <td>&#x20b9;{{item.quantity * item.price}}/{{item.stockType}}</td>
+            <td>&#x20b9;{{item.quantity * item.price}}</td>
             <td><i class="fa fa-times" aria-hidden="true" ng-click="updateCart(item,'delete')"></i></td>
           </tr>
           <tr>
@@ -52,7 +52,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>&#x20b9;<span ng-bind="getAllTotal()"></span></td>
+            <td ng-if="cart">&#x20b9;<span ng-bind="getAllTotal()"></span></td>
             <td></td>
           </tr>
           
