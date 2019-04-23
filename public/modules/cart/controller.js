@@ -129,13 +129,13 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
     }
 
     function getGst(){
-    	return $scope.gstCharge = $scope.cart.orderNetAmount * ($scope.gstTax/100);
+    	return $scope.gstCharge = parseFloat($scope.cart.orderNetAmount * ($scope.gstTax/100)).toFixed(2);
     }
 
     function getDelivery(){
         if($scope.cart.orderNetAmount <= $scope.deliveryPrice){
             $scope.deliveryHint = "Add more items for free delivery";
-            return $scope.deliveryCharge = $scope.cart.orderNetAmount * ($scope.deliveryPercent /100);
+            return $scope.deliveryCharge = parseFloat($scope.cart.orderNetAmount * ($scope.deliveryPercent /100)).toFixed(2);
         } else {
             $scope.deliveryHint = "";
             return $scope.deliveryCharge = 0;
@@ -150,7 +150,7 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
             $scope.orderAmountHint = "";
             $scope.blockPurchase = false;
         }
-        $scope.orderNetAmount = parseFloat($scope.cart.orderNetAmount) + getDelivery() + getGst();
+        $scope.orderNetAmount = parseFloat($scope.cart.orderNetAmount + getDelivery() + getGst()).toFixed(2);
         return $scope.orderNetAmount;
     }
 
