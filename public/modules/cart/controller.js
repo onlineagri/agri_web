@@ -150,7 +150,8 @@ app.controller('cartController', ['$scope', 'cartService','toaster','$localStora
             $scope.orderAmountHint = "";
             $scope.blockPurchase = false;
         }
-        $scope.orderNetAmount = parseFloat($scope.cart.orderNetAmount + getDelivery() + getGst()).toFixed(2);
+        $scope.orderNetAmount = parseFloat($scope.cart.orderNetAmount) + getDelivery() + getGst();
+        $scope.orderNetAmount = parseFloat($scope.orderNetAmount).toFixed(2);
         return $scope.orderNetAmount;
     }
 
