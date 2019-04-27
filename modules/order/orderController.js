@@ -349,6 +349,13 @@ exports.cancleOrder = function(req, res){
       } else{
         if (common.isValid(data)) {
         	updateProductQuantity(data.product);
+        	let cancelData = {
+        		customerPhone : data.customerPhone,
+				orderNumber : orderId,
+				status : 'Cancelled',
+				amountPaid : parseFloat(data.amountPaid).toFixed(2)
+        	}
+        	smsSender.adminOrderSms(cancelData);
             res.json({
                 code: 200,
                 message: 'Your order has been cancled successfully',
