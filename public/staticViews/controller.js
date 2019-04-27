@@ -134,4 +134,31 @@ app.controller('staticController', ['$scope','$localStorage','$location', 'custo
       // $location.hash();
       $anchorScroll('contactus');
     };
+
+    $scope.myInterval = 3500; // slider interval
+    $scope.noWrapSlides = false; // setting slider in loop
+
+    $scope.customerReviewsSlides = [
+        {
+            id: 1,
+            reviewTitle: 'Amazing',
+            reviewText: 'Very afforatables combos are availbale here. Grab your combo and enjoy the shopping',
+            image: 'images/user1.png',
+            name: 'Rajesh'
+        },
+        {
+            id: 2,
+            reviewTitle: 'Amazing',
+            reviewText: 'Quality products at very afforatable prices. Nice Service.',
+            image: 'images/user2.png',
+            name: 'Aditya'
+        },
+        {
+            id: 3,
+            reviewTitle: 'Amazing',
+            reviewText: 'Very afforatables combos are availbale here. Grab your combo and enjoy the shopping',
+            image: 'images/user3.png',
+            name: 'Geeta'
+        }
+    ];
 }]);

@@ -1,4 +1,4 @@
-var app = angular.module("agriApp", ["ngRoute","toaster", "ngAnimate", 'ngStorage','ngTable', 'ngSanitize', 'ui.bootstrap','oitozero.ngSweetAlert','ckeditor'])
+var app = angular.module("agriApp", ["ngRoute","toaster", "ngAnimate", 'ngStorage','ngTable', 'ngSanitize', 'ui.bootstrap','oitozero.ngSweetAlert','ckeditor','ngTouch'])
 .constant('lodash', window._)
 .run(['$rootScope', function ($rootScope) {
      $rootScope.lodash = window._;
