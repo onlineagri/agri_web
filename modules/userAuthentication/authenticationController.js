@@ -274,7 +274,7 @@ exports.sendContactEmail = function(req, res){
         '                  <td valign="top" align="center"  style="border-collapse: collapse; border-spacing: 0px; margin: 0px;"><a href="' + common.default_set.HOST + '" style="text-decoration: none;" target="_blank"><img width="600" vspace="0" hspace="0" border="0" style="' +
         '           width: 100%;' +
         '       max-width: 600px;' +
-        '     color: #000000; font-size: 13px; margin: 0; padding: 0; outline: none; text-decoration: none; 600 border: none; display: block;" title="" alt="f2h" src="' + common.default_set.HOST + '/assets/images/email_images/cover.jpg"></a></td>' +
+        '     color: #000000; font-size: 13px; margin: 0; padding: 0; outline: none; text-decoration: none; 600 border: none; display: block;" title="" alt="dealsatclick" src="' + common.default_set.HOST + '/assets/images/dealstickmoto.jpg"></a></td>' +
         '                </tr>' +
         '                   <tr>' +
         '    <td valign="top" align="left" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; padding-left: 6.25%; padding-right: 6.25%; width: 87.5%; font-size: 17px; font-weight: 400; line-height: 160%;' +

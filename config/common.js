@@ -117,7 +117,7 @@ exports.getEmailHeader = function() {
         '<td valign="top"  align="center" style="border-collapse: collapse;border-spacing: 0; margin: 0; padding: 0;"><table width="600" cellspacing="0" cellpadding="0" border="0" align="center" style="border-collapse: collapse; border-spacing: 0px; padding: 0px; width: inherit; max-width: 600px; background: rgb(255, 255, 255) none repeat scroll 0% 0%;">' +
         '<tbody>' +
         '<tr>' +
-        '<td valign="top" align="center" style="border-collapse: collapse; border-spacing: 0px; margin: 0px; padding: 20px 6.25%; width: 87.5%; background: #007bff none repeat scroll 0% 0%;"><a target="_blank" style="text-decoration: none;" href="' + default_set.HOST + '"><img width="200" vspace="0" hspace="0" height="" border="0" src="' + default_set.HOST + '/images/dealstickmoto.png" alt="deals@click" title="deals@click Logo" style="' +
+        '<td valign="top" align="center" style="border-collapse: collapse; border-spacing: 0px; margin: 0px; padding: 20px 6.25%; width: 87.5%; background: #007bff none repeat scroll 0% 0%;"><a target="_blank" style="text-decoration: none;" href="' + default_set.HOST + '"><img width="200" vspace="0" hspace="0" height="" border="0" src="' + default_set.HOST + '/images/frontlogo1.png" alt="deals@click" title="deals@click Logo" style="' +
         'color: #007bff;' +
         'font-size: 10px; margin: 0; padding: 0; outline: none; text-decoration: none; border: none; display: block;"></a></td>' +
         '</tr>';
