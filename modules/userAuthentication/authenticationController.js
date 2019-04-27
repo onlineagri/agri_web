@@ -9,7 +9,12 @@ const eventEmmiters = require('../../config/eventEmmiters.js');
 const Joi = require('joi');
 
 let transporter = nodemailer.createTransport({
-    service:'gmail', // true for 465, false for other ports
+        host: "mail.privateemail.com",
+        port: 465,
+        secureConnection: 'false',
+    tls: {
+        ciphers: 'SSLv3'
+    },
     auth: {
         user: common.default_set.EMAIL_FROM, // generated ethereal user
         pass: common.default_set.EMAIL_FROM_PASS // generated ethereal password
@@ -275,7 +280,7 @@ exports.sendContactEmail = function(req, res){
         '    <td valign="top" align="left" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; padding-left: 6.25%; padding-right: 6.25%; width: 87.5%; font-size: 17px; font-weight: 400; line-height: 160%;' +
         '    padding-top: 25px; ' +
         '   color: #000000;' +
-        '    font-family: sans-serif;">Dear  deals@clickTeam,<br/><br/>' + contactData.message + '<br/> Sender Name:'+ contactData.name +'<br/> Sender phoneNumber:'+contactData.phoneNumber+'</td>' +
+        '    font-family: sans-serif;">Dear  Deals@ClickTeam,<br/><br/>' + contactData.message + '<br/> <b>Sender Name:</b> '+ contactData.name +'<br/> <b>Sender phoneNumber: </b>'+contactData.phoneNumber+'<br/> <b>Sender Email: </b>'+contactData.contactData.email+'</td>' +
         '   </tr>' +
         '<tr>' +
         '    <td valign="top" align="left" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; padding-left: 6.25%; padding-right: 6.25%; width: 87.5%; font-size: 17px; font-weight: 400; line-height: 160%;' +
@@ -289,8 +294,8 @@ exports.sendContactEmail = function(req, res){
 
 
     let mailOptions = {
-        from: contactData.email, // sender address
-        to: 'me.dealstick@gmail.com', // list of receivers
+        from: common.default_set.EMAIL_FROM, // sender address
+        to: ['me.dealstick@gmail.com', common.default_set.EMAIL_FROM], // list of receivers
         subject: 'Connection Email', // Subject line
         text: 'Help request', // plain text body
         html: body // html body
