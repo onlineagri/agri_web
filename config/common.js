@@ -107,18 +107,18 @@ exports.getEmailHeader = function() {
         '<title>deals@click</title>' +
         '</head>' +
         '<body text="#555" marginwidth="0" marginheight="0" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; width: 100%; height: 100%;  text-size-adjust: 100%;  line-height: 100%;' +
-        ' color: #ff0066;" width="100%" leftmargin="0" bottommargin="0" rightmargin="0" topmargin="0">' +
+        ' color: #007bff;" width="100%" leftmargin="0" bottommargin="0" rightmargin="0" topmargin="0">' +
         '<table height="100%" width="100%" cellpadding="0" cellspacing="0" border="0">' +
         '<tr>' +
-        '<td valign="top" align="left" background="' + default_set.HOST + '/images/frontlogo.png" none repeat>' +
+        '<td valign="top" align="left" background="' + default_set.HOST + '/images/frontlogo1.png" none repeat>' +
         '<table width="100%" cellspacing="0" cellpadding="0" border="0" align="center" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; width: 100%;">' +
         '<tbody>' +
         '<tr>' +
         '<td valign="top"  align="center" style="border-collapse: collapse;border-spacing: 0; margin: 0; padding: 0;"><table width="600" cellspacing="0" cellpadding="0" border="0" align="center" style="border-collapse: collapse; border-spacing: 0px; padding: 0px; width: inherit; max-width: 600px; background: rgb(255, 255, 255) none repeat scroll 0% 0%;">' +
         '<tbody>' +
         '<tr>' +
-        '<td valign="top" align="center" style="border-collapse: collapse; border-spacing: 0px; margin: 0px; padding: 20px 6.25%; width: 87.5%; background: #ff0066 none repeat scroll 0% 0%;"><a target="_blank" style="text-decoration: none;" href="' + default_set.HOST + '"><img width="200" vspace="0" hspace="0" height="" border="0" src="' + default_set.HOST + '/images/homelogo.png" alt="deals@click" title="deals@click Logo" style="' +
-        'color: #ff0066;' +
+        '<td valign="top" align="center" style="border-collapse: collapse; border-spacing: 0px; margin: 0px; padding: 20px 6.25%; width: 87.5%; background: #007bff none repeat scroll 0% 0%;"><a target="_blank" style="text-decoration: none;" href="' + default_set.HOST + '"><img width="200" vspace="0" hspace="0" height="" border="0" src="' + default_set.HOST + '/images/frontlogo1.png" alt="deals@click" title="deals@click Logo" style="' +
+        'color: #007bff;' +
         'font-size: 10px; margin: 0; padding: 0; outline: none; text-decoration: none; border: none; display: block;"></a></td>' +
         '</tr>';
 }
