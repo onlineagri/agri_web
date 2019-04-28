@@ -68,9 +68,9 @@
         <textarea class="col-sm-12 col-md-8"  ng-model="cart.specialRequest" placeholder="Enter Special request, may charges applicable " cols="10" rows="2" name="specialRequest" id="specialRequest"></textarea>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-12">
-      <a class="col-sm-4 col-md-4 cartButtons  btn btn-info" href="#!/customer/dashboard">More Shopping</a>
-      <button type="button" class="col-sm-4 col-md-4 cartButtons  btn btn-secondary" ng-click="clearCart()">Clear Cart</button>
-      <button ng-disabled="!validCart || blockPurchase" type="button" class="col-sm-4 col-md-4 cartButtons  btn btn-primary" ng-click="placeOrder(cart)">Place Order</button>
+      <a class="col-sm-4 col-md-4 cartButtons  btn btn-info" style="margin-top: 5px;" href="#!/customer/dashboard">More Shopping</a>
+      <button type="button" class="col-sm-4 col-md-4 cartButtons  btn btn-secondary" style="margin-top: 5px;" ng-click="clearCart()">Clear Cart</button>
+      <button ng-disabled="!validCart || blockPurchase" type="button" class="col-sm-4 col-md-4 cartButtons  btn btn-primary" style="margin-top: 5px;" ng-click="placeOrder(cart)">Place Order</button>
     </div>
       <div style="color: green;">{{deliveryHint}}</div>
     </div >

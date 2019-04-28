@@ -474,8 +474,7 @@ input:checked + .slider:before {
 }
 
 .cartButtons {
-    
-    max-width: 32.50%;
+    max-width: 99.5%;
 }
 
 .cartImage {
