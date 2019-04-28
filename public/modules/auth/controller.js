@@ -6,6 +6,7 @@ app.controller('userLoginController', ['$scope', 'userService','toaster','$local
         $location.path("/customer/dashboard");
     } 
     $scope.userLogin = function(user){
+        user['role'] = 'customer';
     	userService.userLogin(user).then(function(response){
     		if(response.data.code == 200){
     			$localStorage.token = response.data.token;
