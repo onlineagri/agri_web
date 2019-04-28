@@ -473,8 +473,10 @@ input:checked + .slider:before {
   margin: 5px
 }
 
-.cartButtons {
-    max-width: 99.5%;
+.cartButtons { 
+    max-width: 32.50%;
+}
+@media only screen and (max-width:990px){.cartButtons{max-width: 99.5%;}
 }
 
 .cartImage {
