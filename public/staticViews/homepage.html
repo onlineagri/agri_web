@@ -1,122 +1,120 @@
-
 <section class="reviews" ng-if="isMarketing">
-    <div class="container">
-        <div class="row">
-            <div class="col col-sm-12 col-md-12 owl-carousel" id="owl-example" >
-                <div ng-repeat="content in marketingContents">
-                  <h2 class="section-title text-center">{{content.heading}}</h2>
-                  <div class="text-center" ng-bind-html="deliberatelyTrustDangerousSnippet(content.description)"></div>
-                </div>
-            </div>
+  <div class="container">
+    <div class="row">
+      <div class="col col-sm-12 col-md-12 owl-carousel" id="owl-example" >
+        <div ng-repeat="content in marketingContents">
+          <h2 class="section-title text-center">{{content.heading}}</h2>
+          <div class="text-center" ng-bind-html="deliberatelyTrustDangerousSnippet(content.description)"></div>
         </div>
+      </div>
     </div>
+  </div>
 </section>
-
 <section class="customer-top-banner">
   <div class="container">
-      <div class="row">
-          <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-              <div class="left-text-section">
-                  <h1>
-                      Happy <span>Farmer.</span><br>
-                      For Happy<span> Nation.</span></h1>
-
-                  <h4><span>Affordable, deals,</span> <span>while saving money and</span> <span>helping the locals.</span></h4>
-                  <div class="app-download-links d-flex">
-                      <a href="#!/user/register" class="btn" style="background-color: #28a745; color: #fff">JOIN US</a>&nbsp;&nbsp;
-                      <a class="btn" style="background-color: #28a745; color: #fff" ng-click="scrollContactUs();">Contact US</a>
-                  </div>
-   
-              </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <div class="left-text-section">
+          <h1>
+          Happy <span>Farmer.</span><br>
+          For Happy<span> Nation.</span></h1>
+          <h4><span>Affordable, deals,</span> <span>while saving money and</span> <span>helping the locals.</span></h4>
+          <div class="app-download-links d-flex">
+            <a href="#!/user/register" class="btn" style="background-color: #28a745; color: #fff">JOIN US</a>&nbsp;&nbsp;
+            <a class="btn" style="background-color: #28a745; color: #fff" ng-click="scrollContactUs();">Contact US</a>
           </div>
+          
+        </div>
       </div>
+    </div>
   </div>
   <img src="images/dairyproduct.png" alt="" class="banner-png">
 </section>
-
 <section class="introduction" >
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 left-column">
-                <img src="images/dealstickmoto.png" alt="" class="img-fluid">
-            </div>
-
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 right-column" ">
-                <h2 class="section-title"> What's <span class="green">Deals@</span><span class="pink">click</span>?</h2>
-                <p>Our primary motto behind this project is to provide the farmers and local businessmen a platform for ease of business, marketing and deliver great deals. We, as a team has taken a small initiative to give a helping hand to local Farmers and Businessmen by providing them justified deals. We assist them to create a solid and satisfactory customer base via Deals@click.</p>    
-            </div>
-        </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 left-column">
+        <img src="images/dealstickmoto.png" alt="" class="img-fluid">
+      </div>
+      <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 right-column" ">
+        <h2 class="section-title"> What's <span class="green">Deals@</span><span class="pink">click</span>?</h2>
+        <p style="font-weight: 600; font-size: 20px;">Our primary motto behind this project is to provide the local businessmen a
+          platform for ease of business, marketing and deliver great deals. India is digitizing
+          rapidly, but the he scenario with local businessmen and vendors are worsening
+          due to ignorance of adaptability with digitization. People often buy accessories
+          and luxuries at high or fixed prices from shopping malls, e-commerce website but
+          bargain heavily on local markets. Deals@click, therefore as a team has taken a
+          small initiative to give a helping hand to these people by providing them justified
+          deals. Also, we would assist them to create a solid and satisfactory customer base
+        via our platform.</p>
+      </div>
     </div>
+  </div>
 </section>
-
 <section class="reviews">
-    <div class="container-fluid">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12 text-center">
-                    <h2 class="section-title">Happy Faces</h2>
-                    <!-- <div uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
-                      <div uib-slide ng-repeat="review in customerReviewsSlides track by review.id" index="review.id">
-                        <img ng-src="{{review.image}}" style="margin:auto;">
-                        <div class="carousel-caption">
-                          <h4>Slide {{$index}}</h4>
-                          <p>{{review.reviewTitle}}</p>
-                        </div>
-                      </div>
-                    </div> -->
-                    <div uib-carousel active="active" id="carouselReviewControls" interval="myInterval" no-wrap="noWrapSlides" template-url="customer-review-template.html">
-                        <div uib-slide ng-repeat="review in customerReviewsSlides track by $index" index="$index">
-                            <p class="review-text"><b>{{review.reviewTitle}}</b>{{review.reviewText}}</p>
-                            <div class="reviewer">
-                                <div class="profile">
-                                    <img ng-src="{{review.image}}" alt="" width="80">
-                                </div>
-                            
-                                <h5 class="name">{{review.name}}</h5>
-                            </div>
-                        </div>
-                    </div>
+  <div class="container-fluid">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          <h2 class="section-title">Happy Faces</h2>
+          <!-- <div uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
+            <div uib-slide ng-repeat="review in customerReviewsSlides track by review.id" index="review.id">
+              <img ng-src="{{review.image}}" style="margin:auto;">
+              <div class="carousel-caption">
+                <h4>Slide {{$index}}</h4>
+                <p>{{review.reviewTitle}}</p>
+              </div>
+            </div>
+          </div> -->
+          <div uib-carousel active="active" id="carouselReviewControls" interval="myInterval" no-wrap="noWrapSlides" template-url="customer-review-template.html">
+            <div uib-slide ng-repeat="review in customerReviewsSlides track by $index" index="$index">
+              <p class="review-text"><b>{{review.reviewTitle}}</b>{{review.reviewText}}</p>
+              <div class="reviewer">
+                <div class="profile">
+                  <img ng-src="{{review.image}}" alt="" width="80">
                 </div>
+                
+                <h5 class="name">{{review.name}}</h5>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </section>
-
 <section class="join-us">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 right-column">
-                <h2 class="section-title"> What do we have for Customers?</h2>
-                <p style="font-weight: 600; font-size: 20px;">As they say “Save the best for the last”, deals@click make sure that these deals with the customers are fair and square providing them best of the services worth their every penny. Customers now do not need to search or wait for local markets to fill in on weekends as we provide them with the products and our services at their doorstep.</p>    
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 left-column">
-                <img src="images/customer2.png" alt="" class="img-fluid">
-            </div>
-        </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 right-column">
+        <h2 class="section-title"> What do we have for Customers?</h2>
+        <p style="font-weight: 600; font-size: 20px;">As they say “Save the best for the last”, Deals@click make sure that these deals with the customers are fair and square providing them best of the services worth their every penny. Customers now do not need to search or wait for local markets to fill in on weekends as we provide them with the variety of daily needs products and our services at their doorstep.</p>
+      </div>
+      <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 left-column">
+        <img src="images/customer2.png" alt="" class="img-fluid">
+      </div>
     </div>
+  </div>
 </section>
-
 <section class="join-us">
-    <div class="container">
-      <h2 class="section-title text-center">How it functions?</h2>
-        <div class="row text-center">
-
-            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 left-column">
-                <img src="images/choose.png" alt="" class="img-fluido" style="width: 45%; height: 150px;">
-                <p class="text-center">Visit and Choose</p>   
-            </div>
-            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 left-column">
-                <img src="images/cart1.png" alt="" class="img-fluido" style="width: 45%; height: 150px;">
-                <p class="text-center">Just Click and Grab</p>   
-            </div>
-             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 left-column">
-                <img src="images/delivery.png" alt="" class="img-fluido" style="width: 45%; height: 150px;">
-                <p class="text-center">Pay at Delivery</p>   
-            </div>
-        </div>
+  <div class="container">
+    <h2 class="section-title text-center">How it functions?</h2>
+    <div class="row text-center">
+      <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 left-column">
+        <img src="images/choose.png" alt="" class="img-fluido" style="width: 45%; height: 150px;">
+        <p class="text-center">Visit and Choose</p>
+      </div>
+      <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 left-column">
+        <img src="images/cart1.png" alt="" class="img-fluido" style="width: 45%; height: 150px;">
+        <p class="text-center">Just Click and Grab</p>
+      </div>
+      <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 left-column">
+        <img src="images/delivery.png" alt="" class="img-fluido" style="width: 45%; height: 150px;">
+        <p class="text-center">Pay at Delivery</p>
+      </div>
     </div>
+  </div>
 </section>
-
 <section id="contactus" class="jumbotron jumbotron-fluid">
   <div class="section-content">
     <h1 class="section-title text-center">Get in Touch with us</h1>
@@ -151,32 +149,31 @@
       </form>
     </div>
   </section>
-<section class="join-us">
+  <section class="join-us">
     <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 right-column">
-                <h2 class="section-title text-center">Areas of Operation</h2>
-
-                <p style="font-weight: 600; font-size: 24px;" class="text-center">
-                  <i class="fa fa-map-marker fa-5x" aria-hidden="true"></i><br/>
-                  South-East(Nagpur), Bhandara, Sakoli(Bhandara), Lakhani(Bhandara),
-                  Nawegaon/Bandh(Gondia)
-                </p>    
-            </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 right-column">
+          <h2 class="section-title text-center">Areas of Operation</h2>
+          <p style="font-weight: 600; font-size: 24px;" class="text-center">
+            <i class="fa fa-map-marker fa-5x" aria-hidden="true"></i><br/>
+            South-East(Nagpur), Bhandara, Sakoli(Bhandara), Lakhani(Bhandara),
+            Nawegaon/Bandh(Gondia)
+          </p>
         </div>
+      </div>
     </div>
-</section>
-<script id="customer-review-template.html" type="text/ng-template">
-    <div ng-mouseenter="pause()" ng-mouseleave="play()" class="carousel" ng-swipe-right="prev()" ng-swipe-left="next()">
-        <div class="carousel-inner-review" ng-transclude></div>
-        <a role="button" href class="carousel-control-prev" ng-click="prev()" ng-class="{ disabled: isPrevDisabled() }">
-            <span aria-hidden="true"><img ng-src="images/home-slider-left-arrow.png"></span>
-            <span class="sr-only">previous</span>
-        </a>
-        <a role="button" href class="carousel-control-next" ng-click="next()" ng-class="{ disabled: isNextDisabled() }">
-            <span aria-hidden="true"><img ng-src="images/home-slider-right-arrow.png"></span>
-            <span class="sr-only">next</span>
-        </a>
-    </div>
+  </section>
+  <script id="customer-review-template.html" type="text/ng-template">
+  <div ng-mouseenter="pause()" ng-mouseleave="play()" class="carousel" ng-swipe-right="prev()" ng-swipe-left="next()">
+    <div class="carousel-inner-review" ng-transclude></div>
+    <a role="button" href class="carousel-control-prev" ng-click="prev()" ng-class="{ disabled: isPrevDisabled() }">
+      <span aria-hidden="true"><img ng-src="images/home-slider-left-arrow.png"></span>
+      <span class="sr-only">previous</span>
+    </a>
+    <a role="button" href class="carousel-control-next" ng-click="next()" ng-class="{ disabled: isNextDisabled() }">
+      <span aria-hidden="true"><img ng-src="images/home-slider-right-arrow.png"></span>
+      <span class="sr-only">next</span>
+    </a>
+  </div>
 </div>
 </script>
